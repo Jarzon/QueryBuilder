@@ -4,11 +4,17 @@ namespace Jarzon;
 class QueryBuilder
 {
     protected $lastQuery;
+    protected $table;
 
 
-    public function __construct()
+    public function __construct(string $table)
     {
+        $this->table = $table;
+    }
 
+    public static function table(string $table)
+    {
+        return new self($table);
     }
 
     public function getSql(): string
@@ -16,9 +22,9 @@ class QueryBuilder
         return $this->lastQuery->getSql();
     }
 
-    public function select(string $table)
+    public function select(array $columns)
     {
-        $select = new Select($table);
+        $select = new Select($this->table, $columns);
 
         $this->lastQuery = $select;
 
