@@ -1,23 +1,22 @@
 # Query Builder
 
+WIP
+
 ## Install
 
 ```
-composer require jarzon/query-builder
+composer require jarzon/querybuilder
 ```
 
 ## Usage
 
 ```php
 <?php
-$builder = new Jarzon\QueryBuilder();
-
-$builder
-  ->select('users')
-  ->columns(['name'])
+$query = Jarzon\QueryBuilder::table('users')
+  ->select(['name'])
   ->where('id', '<', 30)
-    ->where('name', '!=', 'admin');
+  ->where('name', '!=', 'admin');
 
-// Output:
+// $query->getSql() output:
 // SELECT name FROM users WHERE id < 30 AND name != 'admin'
 ```
