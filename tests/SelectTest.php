@@ -28,6 +28,15 @@ class SelectTest extends TestCase
         $this->assertEquals('SELECT id, name, date, company AS companyName FROM users WHERE date < 30', $query->getSql());
     }
 
+    public function testWhereColumn()
+    {
+        $query = QueryBuilder::table('users')
+            ->select()
+            ->where('users.column', '=', 'users.anotherColumn');
+
+        $this->assertEquals('SELECT * FROM users WHERE users.column = users.anotherColumn', $query->getSql());
+    }
+
     public function testWithAlias()
     {
         $query = QueryBuilder::table('users')

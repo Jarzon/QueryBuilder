@@ -4,6 +4,7 @@ namespace Jarzon;
 class Select
 {
     protected $queryType = 'SELECT';
+    protected $workTables = [];
     protected $table = '';
     protected $columns = ['*'];
     protected $join = [];
@@ -15,6 +16,8 @@ class Select
     public function __construct(string $table, ?array $columns)
     {
         $this->table = $table;
+        $this->workTables[] = $table;
+
         if($columns !== null) {
             $this->columns = [];
             $this->addSelect($columns);
@@ -107,21 +110,31 @@ class Select
         $this->conditions[] = $condition;
     }
 
-    public function where($column, ?string $operator = null, $value = null)
+    protected function wrapString($value)
     {
         if(is_string($value)) {
-            $value = "'$value'";
+            $table = explode('.', $value);
+            if(count($table) === 1 || !in_array($table[0], $this->workTables)) {
+                return "'$value'";
+            }
         }
+
+        return $value;
+    }
+
+    public function where($column, ?string $operator = null, $value = null)
+    {
+        $value = $this->wrapString($value);
 
         $conditionsCount = count($this->conditions);
         if($conditionsCount > 0 && $this->conditions[$conditionsCount-1] != '(') {
-            $this->conditions[] = 'AND';
+            $this->addCondition('AND');
         }
 
         if(is_callable($column) && $column instanceof \Closure) {
-            $this->conditions[] = '(';
+            $this->addCondition('(');
             $column($this);
-            $this->conditions[] = ')';
+            $this->addCondition(')');
         } else {
             $this->addCondition(new Condition($column, $operator, $value));
         }
@@ -131,9 +144,7 @@ class Select
 
     public function or(string $column, string $operator, $value)
     {
-        if(is_string($value)) {
-            $value = "'$value'";
-        }
+        $value = $this->wrapString($value);
 
         $this->addCondition('OR');
 
