@@ -11,10 +11,13 @@ class Select
     protected $groupBy = [];
     protected $limit = [];
 
-    public function __construct(string $table, array $columns)
+    public function __construct(string $table, ?array $columns)
     {
         $this->table = $table;
-        $this->columns = $columns;
+        if($columns !== null) {
+            $this->columns = [];
+            $this->addSelect($columns);
+        }
 
         return $this;
     }
@@ -70,6 +73,24 @@ class Select
         }
 
         return $query;
+    }
+
+    public function addSelect($columns)
+    {
+        if(is_array($columns)) {
+            array_map(function ($key, $column) {
+                if(!is_int($key)) {
+                    $this->columns[$key] = $column;
+                } else {
+                    $this->columns[] = $column;
+                }
+
+            }, array_keys($columns), $columns);
+        } else {
+            $this->columns[] = $columns;
+        }
+
+        return $this;
     }
 
     protected function addCondition($condition)

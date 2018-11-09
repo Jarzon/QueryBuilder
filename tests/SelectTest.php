@@ -11,21 +11,21 @@ class SelectTest extends TestCase
     public function testSimpleSelect()
     {
         $query = QueryBuilder::table('users')
-            ->select(['id', 'name'])
+            ->select()
             ->where('date', '<', 30);
 
-        $this->assertEquals('SELECT id, name FROM users WHERE date < 30', $query->getSql());
+        $this->assertEquals('SELECT * FROM users WHERE date < 30', $query->getSql());
     }
 
     public function testAddSelect()
     {
         $query = QueryBuilder::table('users')
             ->select(['id', 'name'])
-            ->where('date', '<', 30);
+            ->where('date', '<', 30)
+            ->addSelect('date')
+            ->addSelect(['company' => 'companyName']);
 
-        $query->addSelect('date');
-
-        $this->assertEquals('SELECT id, name, date FROM users WHERE date < 30', $query->getSql());
+        $this->assertEquals('SELECT id, name, date, company AS companyName FROM users WHERE date < 30', $query->getSql());
     }
 
     public function testWithAlias()

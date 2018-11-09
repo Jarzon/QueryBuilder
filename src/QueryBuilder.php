@@ -22,8 +22,12 @@ class QueryBuilder
         return $this->lastQuery->getSql();
     }
 
-    public function select(array $columns)
+    public function select($columns = null)
     {
+        if($columns !== null && !is_array($columns)) {
+            $columns = [$columns];
+        }
+
         $select = new Select($this->table, $columns);
 
         $this->lastQuery = $select;
