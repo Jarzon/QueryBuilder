@@ -6,6 +6,7 @@ class Select
     protected $queryType = 'SELECT';
     protected $table = '';
     protected $columns = ['*'];
+    protected $join = [];
     protected $conditions = [];
     protected $orderBy = [];
     protected $groupBy = [];
@@ -35,6 +36,14 @@ class Select
         }, array_keys($this->columns), $this->columns));
 
         $query = "$this->queryType $columns FROM $this->table";
+
+        if(count($this->join) > 0) {
+            $joins = implode(' ', array_map(function($join) {
+                return $join->getSql();
+            }, $this->join));
+
+            $query .= " $joins";
+        }
 
         if(count($this->conditions) > 0) {
             $conditions = implode(' ', array_map(function($condition) {
@@ -203,6 +212,15 @@ class Select
         } else {
             $this->limit = [$offset, $select];
         }
+
+        return $this;
+    }
+
+    public function leftJoin(string $table, string $firstColumn, string $operator, string $secondColumn)
+    {
+        $this->workTables[] = $table;
+
+        $this->join[] = new Join('LEFT', $table, $firstColumn, $operator, $secondColumn);
 
         return $this;
     }

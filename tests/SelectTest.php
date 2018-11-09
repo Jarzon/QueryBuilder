@@ -167,4 +167,14 @@ class SelectTest extends TestCase
 
         $this->assertEquals('SELECT id, name AS username FROM users LIMIT 10, 20', $query->getSql());
     }
+
+    public function testBasicLeftJoin()
+    {
+        $query = QueryBuilder::table('users')
+            ->select(['id', 'name'])
+            ->leftJoin('accounts', 'accounts.user_id', '=', 'users.id')
+            ->where('date', '<', 30);
+
+        $this->assertEquals('SELECT id, name FROM users LEFT JOIN accounts ON accounts.user_id = users.id WHERE date < 30', $query->getSql());
+    }
 }
