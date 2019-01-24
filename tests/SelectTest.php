@@ -37,6 +37,16 @@ class SelectTest extends TestCase
         $this->assertEquals('SELECT * FROM users WHERE users.column = users.anotherColumn', $query->getSql());
     }
 
+    public function testComplexWhere()
+    {
+        $query = QueryBuilder::table('users')
+            ->select()
+            ->whereRaw('users.column', '>', '(users.anotherColumn - 5)');
+
+
+        $this->assertEquals('SELECT * FROM users WHERE users.column > (users.anotherColumn - 5)', $query->getSql());
+    }
+
     public function testWithAlias()
     {
         $query = QueryBuilder::table('users')

@@ -122,9 +122,11 @@ class Select
         return $value;
     }
 
-    public function where($column, ?string $operator = null, $value = null)
+    public function where($column, ?string $operator = null, $value = null, $isRaw = false)
     {
-        $value = $this->wrapString($value);
+        if(!$isRaw) {
+            $value = $this->wrapString($value);
+        }
 
         $conditionsCount = count($this->conditions);
         if($conditionsCount > 0 && $this->conditions[$conditionsCount-1] != '(') {
@@ -138,6 +140,13 @@ class Select
         } else {
             $this->addCondition(new Condition($column, $operator, $value));
         }
+
+        return $this;
+    }
+
+    public function whereRaw($column, ?string $operator = null, $value = null)
+    {
+        $this->where($column, $operator, $value, true);
 
         return $this;
     }
