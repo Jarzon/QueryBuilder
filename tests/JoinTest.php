@@ -10,7 +10,10 @@ class JoinTest extends TestCase
 {
     public function testBasicLeftJoin()
     {
-        $query = QueryBuilder::table('users')
+        $queryBuilder = new QueryBuilder(new PdoMock());
+
+        $query = $queryBuilder
+            ->table('users')
             ->select(['id', 'name'])
             ->leftJoin('accounts', 'accounts.user_id', '=', 'users.id')
             ->where('date', '<', 30);
@@ -20,7 +23,10 @@ class JoinTest extends TestCase
 
     public function testComplexLeftJoin()
     {
-        $query = QueryBuilder::table('users')
+        $queryBuilder = new QueryBuilder(new PdoMock());
+
+        $query = $queryBuilder
+            ->table('users')
             ->select(['id', 'name'])
             ->leftJoin('accounts', function ($join) {
                 $join

@@ -5,16 +5,18 @@ class QueryBuilder
 {
     protected $lastQuery;
     protected $table;
+    protected $pdo;
 
-
-    public function __construct(string $table)
+    public function __construct(object $pdo)
     {
-        $this->table = $table;
+        $this->pdo = $pdo;
     }
 
-    public static function table(string $table)
+    public function table(string $table)
     {
-        return new self($table);
+        $this->table = $table;
+
+        return $this;
     }
 
     public function getSql(): string
@@ -28,7 +30,7 @@ class QueryBuilder
             $columns = [$columns];
         }
 
-        $select = new Select($this->table, $columns);
+        $select = new Select($this->table, $columns, $this->pdo);
 
         $this->lastQuery = $select;
 

@@ -5,4 +5,5 @@ class QueryBase
 {
     protected $type = '';
     protected $table = '';
+    protected $pdo;
 }
