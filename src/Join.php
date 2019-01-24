@@ -1,28 +1,26 @@
 <?php
 namespace Jarzon;
 
-class Join
+class Join extends ConditionsQueryBase
 {
-    protected $type = '';
-    protected $table = '';
-    protected $firstColumn;
-    protected $operator;
-    protected $secondColumn;
-
-    public function __construct(string $type, $table, $firstColumn, $operator, $secondColumn)
+    public function __construct(string $type, $table, $worktables, $firstColumnOrCallback, $operator = null, $secondColumn = null)
     {
-        $this->type = $type;
+        $this->type = "$type JOIN";
 
-        $this->table = $table;
-        $this->firstColumn = $firstColumn;
-        $this->operator = $operator;
-        $this->secondColumn = $secondColumn;
+        $this->setTable($table);
+        $this->workTables = $worktables;
+
+        if($operator !== null) {
+            $this->addCondition(new Condition($firstColumnOrCallback, $operator, $secondColumn));
+        } else {
+            $firstColumnOrCallback($this);
+        }
 
         return $this;
     }
 
     public function getSql()
     {
-        return "$this->type JOIN $this->table ON $this->firstColumn $this->operator $this->secondColumn";
+        return "$this->type $this->table ON ".$this->getConditions();
     }
 }

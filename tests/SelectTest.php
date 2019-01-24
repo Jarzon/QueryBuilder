@@ -187,13 +187,30 @@ class SelectTest extends TestCase
         $this->assertEquals('SELECT id, name AS username FROM users LIMIT 10, 20', $query->getSql());
     }
 
-    public function testBasicLeftJoin()
+    public function testSubQueryAsSource()
+    {
+        $query = QueryBuilder::table('users')
+            ->select(['id', 'name' => 'username'])
+            ->limit(10, 20);
+
+        $this->assertEquals('SELECT id, name AS username FROM (SELECT id, name FROM users)', $query->getSql());
+    }
+
+    public function testSubQueryAsConditionValue()
     {
         $query = QueryBuilder::table('users')
             ->select(['id', 'name'])
-            ->leftJoin('accounts', 'accounts.user_id', '=', 'users.id')
             ->where('date', '<', 30);
 
-        $this->assertEquals('SELECT id, name FROM users LEFT JOIN accounts ON accounts.user_id = users.id WHERE date < 30', $query->getSql());
+        $this->assertEquals('SELECT id, name FROM users WHERE date < (SELECT min(date) as lowerDate FROM users)', $query->getSql());
+    }
+
+    public function testUnion()
+    {
+        $query = QueryBuilder::table('users')
+            ->select(['id', 'name'])
+            ->where('date', '<', 30);
+
+        $this->assertEquals('(SELECT id, name FROM users WHERE date > 30) UNION (SELECT id, name FROM users WHERE date < 100)', $query->getSql());
     }
 }

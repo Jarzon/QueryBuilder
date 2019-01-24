@@ -1,22 +1,19 @@
 <?php
 namespace Jarzon;
 
-class Select
+class Select extends ConditionsQueryBase
 {
-    protected $queryType = 'SELECT';
-    protected $workTables = [];
-    protected $table = '';
     protected $columns = ['*'];
     protected $join = [];
-    protected $conditions = [];
     protected $orderBy = [];
     protected $groupBy = [];
     protected $limit = [];
 
     public function __construct(string $table, ?array $columns)
     {
-        $this->table = $table;
-        $this->workTables[] = $table;
+        $this->type = 'SELECT';
+
+        $this->setTable($table);
 
         if($columns !== null) {
             $this->columns = [];
@@ -38,7 +35,7 @@ class Select
             return $output;
         }, array_keys($this->columns), $this->columns));
 
-        $query = "$this->queryType $columns FROM $this->table";
+        $query = "$this->type $columns FROM $this->table";
 
         if(count($this->join) > 0) {
             $joins = implode(' ', array_map(function($join) {
@@ -48,15 +45,7 @@ class Select
             $query .= " $joins";
         }
 
-        if(count($this->conditions) > 0) {
-            $conditions = implode(' ', array_map(function($condition) {
-                if(is_string($condition)) {
-                    return $condition;
-                }
-
-                return $condition->getSql();
-            }, $this->conditions));
-
+        if($conditions = $this->getConditions()) {
             $query .= " WHERE $conditions";
         }
 
@@ -105,105 +94,6 @@ class Select
         return $this;
     }
 
-    protected function addCondition($condition)
-    {
-        $this->conditions[] = $condition;
-    }
-
-    protected function wrapString($value)
-    {
-        if(is_string($value)) {
-            $table = explode('.', $value);
-            if(count($table) === 1 || !in_array($table[0], $this->workTables)) {
-                return "'$value'";
-            }
-        }
-
-        return $value;
-    }
-
-    public function where($column, ?string $operator = null, $value = null, $isRaw = false)
-    {
-        if(!$isRaw) {
-            $value = $this->wrapString($value);
-        }
-
-        $conditionsCount = count($this->conditions);
-        if($conditionsCount > 0 && $this->conditions[$conditionsCount-1] != '(') {
-            $this->addCondition('AND');
-        }
-
-        if(is_callable($column) && $column instanceof \Closure) {
-            $this->addCondition('(');
-            $column($this);
-            $this->addCondition(')');
-        } else {
-            $this->addCondition(new Condition($column, $operator, $value));
-        }
-
-        return $this;
-    }
-
-    public function whereRaw($column, ?string $operator = null, $value = null)
-    {
-        $this->where($column, $operator, $value, true);
-
-        return $this;
-    }
-
-    public function or(string $column, string $operator, $value)
-    {
-        $value = $this->wrapString($value);
-
-        $this->addCondition('OR');
-
-        $this->addCondition(new Condition($column, $operator, $value));
-
-        return $this;
-    }
-
-    public function between(string $column, $start, $end)
-    {
-        $this->addCondition(new BetweenCondition($column, $start, $end));
-
-        return $this;
-    }
-
-    public function notBetween(string $column, $start, $end)
-    {
-        $this->addCondition(new BetweenCondition($column, $start, $end, true));
-
-        return $this;
-    }
-
-    public function in(string $column, array $list)
-    {
-        $this->addCondition(new InCondition($column, $list));
-
-        return $this;
-    }
-
-    public function notIn(string $column, array $list)
-    {
-        $this->addCondition(new InCondition($column, $list, true));
-
-        return $this;
-    }
-
-    public function isNull(string $column)
-    {
-        $this->addCondition(new Condition($column, 'IS', null));
-
-        return $this;
-    }
-
-    public function isNotNull(string $column)
-    {
-        $this->addCondition(new Condition($column, 'IS NOT', null));
-
-        return $this;
-    }
-
     public function orderBy(string $column, string $order = '')
     {
         if($order === 'desc') {
@@ -236,11 +126,11 @@ class Select
         return $this;
     }
 
-    public function leftJoin(string $table, string $firstColumn, string $operator, string $secondColumn)
+    public function leftJoin(string $table, $firstColumnOrCallback, $operator = null, $secondColumn = null)
     {
         $this->workTables[] = $table;
 
-        $this->join[] = new Join('LEFT', $table, $firstColumn, $operator, $secondColumn);
+        $this->join[] = new Join('LEFT', $table, $this->workTables, $firstColumnOrCallback, $operator, $secondColumn);
 
         return $this;
     }
