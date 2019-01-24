@@ -5,6 +5,7 @@ class ConditionsQueryBase extends QueryBase
 {
     protected $conditions = [];
     protected $workTables = [];
+    protected $params = [];
 
     protected function setTable(string $table)
     {
@@ -15,7 +16,7 @@ class ConditionsQueryBase extends QueryBase
     public function where($column, ?string $operator = null, $value = null, $isRaw = false)
     {
         if(!$isRaw) {
-            $value = $this->wrapString($value);
+            $value = $this->param($value);
         }
 
         $conditionsCount = count($this->conditions);
@@ -43,7 +44,7 @@ class ConditionsQueryBase extends QueryBase
 
     public function or(string $column, string $operator, $value)
     {
-        $value = $this->wrapString($value);
+        $value = $this->param($value);
 
         $this->addCondition('OR');
 
@@ -54,14 +55,14 @@ class ConditionsQueryBase extends QueryBase
 
     public function between(string $column, $start, $end)
     {
-        $this->addCondition(new BetweenCondition($column, $start, $end));
+        $this->addCondition(new BetweenCondition($column, $this->param($start), $this->param($end)));
 
         return $this;
     }
 
     public function notBetween(string $column, $start, $end)
     {
-        $this->addCondition(new BetweenCondition($column, $start, $end, true));
+        $this->addCondition(new BetweenCondition($column, $this->param($start), $this->param($end), true));
 
         return $this;
     }
@@ -94,16 +95,17 @@ class ConditionsQueryBase extends QueryBase
         return $this;
     }
 
-    protected function wrapString($value)
+    protected function param($value)
     {
         if(is_string($value)) {
             $table = explode('.', $value);
-            if(count($table) === 1 || !in_array($table[0], $this->workTables)) {
-                return "'$value'";
+            if(count($table) > 1 && in_array($table[0], $this->workTables)) {
+                return $value;
             }
         }
 
-        return $value;
+        $this->params[] = $value;
+        return '?';
     }
 
     protected function addCondition($condition)

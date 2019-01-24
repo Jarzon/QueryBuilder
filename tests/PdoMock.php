@@ -2,8 +2,9 @@
 namespace Tests;
 class PdoMock extends \PDO
 {
-    public function __construct(string $dsn = '', string $username = '', string $passwd = '', array $options = [])
-    {
-        //parent::__construct($dsn, $username, $passwd, $options);
+    public function __construct(string $dsn = '', string $username = '', string $passwd = '', array $options = []){}
+
+    public function prepare($statement, $driver_options = null) {
+        return new PdoStatementMock();
     }
 }

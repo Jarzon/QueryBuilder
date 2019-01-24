@@ -18,7 +18,9 @@ class JoinTest extends TestCase
             ->leftJoin('accounts', 'accounts.user_id', '=', 'users.id')
             ->where('date', '<', 30);
 
-        $this->assertEquals('SELECT id, name FROM users LEFT JOIN accounts ON accounts.user_id = users.id WHERE date < 30', $query->getSql());
+        $query->exec(30);
+
+        $this->assertEquals('SELECT id, name FROM users LEFT JOIN accounts ON accounts.user_id = users.id WHERE date < ?', $query->getSql());
     }
 
     public function testComplexLeftJoin()
@@ -35,6 +37,6 @@ class JoinTest extends TestCase
             })
             ->where('date', '<', 30);
 
-        $this->assertEquals('SELECT id, name FROM users LEFT JOIN accounts ON account.user_id = users.id AND account.money > 100 WHERE date < 30', $query->getSql());
+        $this->assertEquals('SELECT id, name FROM users LEFT JOIN accounts ON account.user_id = users.id AND account.money > ? WHERE date < ?', $query->getSql());
     }
 }

@@ -12,7 +12,7 @@ class Select extends ConditionsQueryBase
     public function __construct(string $table, ?array $columns, object $pdo)
     {
         $this->type = 'SELECT';
-        $this->pdo;
+        $this->pdo = $pdo;
 
         $this->setTable($table);
 
@@ -119,9 +119,9 @@ class Select extends ConditionsQueryBase
     public function limit(int $offset, ?int $select = null)
     {
         if($select === null) {
-            $this->limit = [$offset];
+            $this->limit = [$this->param($offset)];
         } else {
-            $this->limit = [$offset, $select];
+            $this->limit = [$this->param($offset), $this->param($select)];
         }
 
         return $this;
@@ -134,5 +134,12 @@ class Select extends ConditionsQueryBase
         $this->join[] = new Join('LEFT', $table, $this->workTables, $firstColumnOrCallback, $operator, $secondColumn);
 
         return $this;
+    }
+
+    public function exec(...$params)
+    {
+        $query = parent::exec(...$params);
+
+        return $query->fetchAll();
     }
 }
