@@ -24,7 +24,7 @@ class QueryBuilder
         return $this->lastQuery->getSql();
     }
 
-    public function select($columns = null)
+    public function select($columns = null): Select
     {
         if($columns !== null && !is_array($columns)) {
             $columns = [$columns];
@@ -35,5 +35,18 @@ class QueryBuilder
         $this->lastQuery = $select;
 
         return $select;
+    }
+
+    public function insert($columns = []): Insert
+    {
+        if(!is_array($columns)) {
+            $columns = [$columns];
+        }
+
+        $insert = new Insert($this->table, $this->pdo, $columns);
+
+        $this->lastQuery = $insert;
+
+        return $insert;
     }
 }
