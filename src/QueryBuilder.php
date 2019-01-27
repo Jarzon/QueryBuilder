@@ -62,4 +62,17 @@ class QueryBuilder
 
         return $query;
     }
+
+    public function delete($columns = []): Delete
+    {
+        if(!is_array($columns)) {
+            $columns = [$columns];
+        }
+
+        $query = new Delete($this->table, $this->pdo, $columns);
+
+        $this->lastQuery = $query;
+
+        return $query;
+    }
 }
