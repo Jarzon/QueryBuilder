@@ -1,7 +1,7 @@
 <?php
 namespace Jarzon;
 
-class Update extends QueryBase
+class Update extends ConditionsQueryBase
 {
     protected $columns = [];
     protected $values = [];
@@ -53,6 +53,10 @@ class Update extends QueryBase
         }, array_keys($this->columns), $this->columns));
 
         $query = "$this->type {$this->table} SET $columns";
+
+        if($conditions = $this->getConditions()) {
+            $query .= " WHERE $conditions";
+        }
 
         return $query;
     }
