@@ -32,7 +32,7 @@ class JoinTest extends TestCase
             ->select(['id', 'name'])
             ->leftJoin('accounts', function ($join) {
                 $join
-                    ->where('account.user_id', '=', 'users.id')
+                    ->whereRaw('account.user_id', '=', 'users.id')
                     ->where('account.money', '>', 100);
             })
             ->where('date', '<', 30);

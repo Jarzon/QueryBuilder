@@ -9,6 +9,11 @@ class QueryBase
     protected $type = '';
     protected $table = '';
 
+    protected function setTable(string $table)
+    {
+        $this->table = $table;
+    }
+
     public function exec(...$params)
     {
         $this->lastStatement = $query = $this->pdo->prepare($this->getSql());

@@ -4,14 +4,7 @@ namespace Jarzon;
 class ConditionsQueryBase extends QueryBase
 {
     protected $conditions = [];
-    protected $workTables = [];
     protected $params = [];
-
-    protected function setTable(string $table)
-    {
-        $this->table = $table;
-        $this->workTables[] = $table;
-    }
 
     public function where($column, ?string $operator = null, $value = null, $isRaw = false)
     {
@@ -97,13 +90,6 @@ class ConditionsQueryBase extends QueryBase
 
     protected function param($value)
     {
-        if(is_string($value)) {
-            $table = explode('.', $value);
-            if(count($table) > 1 && in_array($table[0], $this->workTables)) {
-                return $value;
-            }
-        }
-
         $this->params[] = $value;
         return '?';
     }

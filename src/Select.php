@@ -129,9 +129,7 @@ class Select extends ConditionsQueryBase
 
     public function leftJoin(string $table, $firstColumnOrCallback, $operator = null, $secondColumn = null)
     {
-        $this->workTables[] = $table;
-
-        $this->join[] = new Join('LEFT', $table, $this->workTables, $firstColumnOrCallback, $operator, $secondColumn);
+        $this->join[] = new Join('LEFT', $table, $firstColumnOrCallback, $operator, $secondColumn);
 
         return $this;
     }

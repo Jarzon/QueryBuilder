@@ -38,7 +38,7 @@ class SelectTest extends TestCase
 
         $query = $queryBuilder->table('users')
             ->select()
-            ->where('users.column', '=', 'users.anotherColumn');
+            ->whereRaw('users.column', '=', 'users.anotherColumn');
 
         $this->assertEquals('SELECT * FROM users WHERE users.column = users.anotherColumn', $query->getSql());
     }
