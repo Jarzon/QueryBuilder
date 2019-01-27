@@ -30,11 +30,11 @@ class QueryBuilder
             $columns = [$columns];
         }
 
-        $select = new Select($this->table, $columns, $this->pdo);
+        $query = new Select($this->table, $columns, $this->pdo);
 
-        $this->lastQuery = $select;
+        $this->lastQuery = $query;
 
-        return $select;
+        return $query;
     }
 
     public function insert($columns = []): Insert
@@ -43,10 +43,23 @@ class QueryBuilder
             $columns = [$columns];
         }
 
-        $insert = new Insert($this->table, $this->pdo, $columns);
+        $query = new Insert($this->table, $this->pdo, $columns);
 
-        $this->lastQuery = $insert;
+        $this->lastQuery = $query;
 
-        return $insert;
+        return $query;
+    }
+
+    public function update($columns = []): Update
+    {
+        if(!is_array($columns)) {
+            $columns = [$columns];
+        }
+
+        $query = new Update($this->table, $this->pdo, $columns);
+
+        $this->lastQuery = $query;
+
+        return $query;
     }
 }
