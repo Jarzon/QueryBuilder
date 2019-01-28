@@ -4,7 +4,6 @@ namespace Jarzon;
 class ConditionsQueryBase extends QueryBase
 {
     protected $conditions = [];
-    protected $params = [];
 
     public function where($column, ?string $operator = null, $value = null, $isRaw = false)
     {
@@ -86,12 +85,6 @@ class ConditionsQueryBase extends QueryBase
         $this->addCondition(new Condition($column, 'IS NOT', null));
 
         return $this;
-    }
-
-    protected function param($value)
-    {
-        $this->params[] = $value;
-        return '?';
     }
 
     protected function addCondition($condition)

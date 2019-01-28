@@ -6,6 +6,8 @@ class QueryBase
     protected $pdo;
     protected $lastStatement;
 
+    protected $params = [];
+
     protected $type = '';
     protected $table = '';
 
@@ -25,5 +27,11 @@ class QueryBase
         $query->execute($params);
 
         return $query;
+    }
+
+    protected function param($value)
+    {
+        $this->params[] = $value;
+        return '?';
     }
 }
