@@ -44,7 +44,7 @@ class Update extends ConditionsQueryBase
     public function getSql()
     {
         $columns = implode(', ', array_map(function($column, $value) {
-            return "$column = {$this->param($value)}";
+            return "{$this->table}.$column = {$this->param($value, $column)}";
         }, array_keys($this->columns), $this->columns));
 
         $query = "$this->type {$this->table} SET $columns";

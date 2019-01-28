@@ -16,7 +16,7 @@ class SelectTest extends TestCase
             ->select()
             ->where('date', '<', 30);
 
-        $this->assertEquals('SELECT * FROM users WHERE date < ?', $query->getSql());
+        $this->assertEquals('SELECT * FROM users WHERE users.date < :date', $query->getSql());
     }
 
     public function testAddSelect()
@@ -29,7 +29,7 @@ class SelectTest extends TestCase
             ->addSelect('date')
             ->addSelect(['company' => 'companyName']);
 
-        $this->assertEquals('SELECT id, name, date, company AS companyName FROM users WHERE date < ?', $query->getSql());
+        $this->assertEquals('SELECT users.id, users.name, users.date, users.company AS companyName FROM users WHERE users.date < :date', $query->getSql());
     }
 
     public function testWhereColumn()
@@ -62,7 +62,19 @@ class SelectTest extends TestCase
         $query = $queryBuilder->table('users')
             ->select(['id', 'name' => 'username']);
 
-        $this->assertEquals('SELECT id, name AS username FROM users', $query->getSql());
+        $this->assertEquals('SELECT users.id, users.name AS username FROM users', $query->getSql());
+    }
+
+    public function testTableAlias()
+    {
+        $queryBuilder = new QueryBuilder(new PdoMock());
+
+        $query = $queryBuilder->table('users', 'U')
+            ->select(['id', 'name' => 'username'])
+            ->where('date', '<', 30)
+            ->where('name', '!=', 'Root');
+
+        $this->assertEquals("SELECT U.id, U.name AS username FROM users WHERE U.date < :date AND U.name != :name", $query->getSql());
     }
 
     public function testAndCondition()
@@ -74,7 +86,7 @@ class SelectTest extends TestCase
             ->where('date', '<', 30)
             ->where('name', '!=', 'Root');
 
-        $this->assertEquals("SELECT id, name AS username FROM users WHERE date < ? AND name != ?", $query->getSql());
+        $this->assertEquals("SELECT users.id, users.name AS username FROM users WHERE users.date < :date AND users.name != :name", $query->getSql());
     }
 
     public function testOrCondition()
@@ -86,7 +98,7 @@ class SelectTest extends TestCase
             ->where('date', '<', 30)
             ->or('name', '!=', 'Root');
 
-        $this->assertEquals("SELECT id, name AS username FROM users WHERE date < ? OR name != ?", $query->getSql());
+        $this->assertEquals("SELECT users.id, users.name AS username FROM users WHERE users.date < :date OR name != :name", $query->getSql());
     }
 
     public function testSubCondition()
@@ -95,13 +107,13 @@ class SelectTest extends TestCase
 
         $query = $queryBuilder->table('users')
             ->select(['id', 'name' => 'username'])
-            ->where('date', '<', 30)
+            ->where('date', '<', '01-01-2000')
             ->where(function ($q) {
                 $q->where('name', '!=', 'Root')
                     ->or('date', '<', '01-01-2000');
             });
 
-        $this->assertEquals("SELECT id, name AS username FROM users WHERE date < ? AND ( name != ? OR date < ? )", $query->getSql());
+        $this->assertEquals("SELECT users.id, users.name AS username FROM users WHERE users.date < :date1 AND ( users.name != :name OR users.date < :date2 )", $query->getSql());
     }
 
     public function testBetweenCondition()
@@ -112,7 +124,7 @@ class SelectTest extends TestCase
             ->select(['id', 'name' => 'username'])
             ->between('numberColumn', 10, 30);
 
-        $this->assertEquals('SELECT id, name AS username FROM users WHERE numberColumn BETWEEN ? AND ?', $query->getSql());
+        $this->assertEquals('SELECT users.id, users.name AS username FROM users WHERE users.numberColumn BETWEEN :numberColumn1 AND :numberColumn2', $query->getSql());
     }
 
     public function testNotBetweenCondition()
@@ -123,7 +135,7 @@ class SelectTest extends TestCase
             ->select(['id', 'name' => 'username'])
             ->notBetween('numberColumn', 10, 30);
 
-        $this->assertEquals('SELECT id, name AS username FROM users WHERE numberColumn NOT BETWEEN ? AND ?', $query->getSql());
+        $this->assertEquals('SELECT users.id, users.name AS username FROM users WHERE users.numberColumn NOT BETWEEN :numberColumn1 AND :numberColumn2', $query->getSql());
     }
 
     public function testInCondition()
@@ -134,7 +146,7 @@ class SelectTest extends TestCase
             ->select(['id', 'name' => 'username'])
             ->in('name', ['admin', 'mod']);
 
-        $this->assertEquals("SELECT id, name AS username FROM users WHERE name IN ('admin', 'mod')", $query->getSql());
+        $this->assertEquals("SELECT users.id, users.name AS username FROM users WHERE users.name IN ('admin', 'mod')", $query->getSql());
     }
 
     public function testNotInCondition()
@@ -145,7 +157,7 @@ class SelectTest extends TestCase
             ->select(['id', 'name' => 'username'])
             ->notIn('name', ['admin', 'mod']);
 
-        $this->assertEquals("SELECT id, name AS username FROM users WHERE name NOT IN ('admin', 'mod')", $query->getSql());
+        $this->assertEquals("SELECT users.id, users.name AS username FROM users WHERE users.name NOT IN ('admin', 'mod')", $query->getSql());
     }
 
     public function testIsNullCondition()
@@ -156,7 +168,7 @@ class SelectTest extends TestCase
             ->select(['id', 'name' => 'username'])
             ->isNull('name');
 
-        $this->assertEquals('SELECT id, name AS username FROM users WHERE name IS NULL', $query->getSql());
+        $this->assertEquals('SELECT users.id,users. name AS username FROM users WHERE users.name IS NULL', $query->getSql());
     }
 
     public function testIsNotNullCondition()
@@ -167,7 +179,7 @@ class SelectTest extends TestCase
             ->select(['id', 'name' => 'username'])
             ->isNotNull('name');
 
-        $this->assertEquals('SELECT id, name AS username FROM users WHERE name IS NOT NULL', $query->getSql());
+        $this->assertEquals('SELECT users.id, users.name AS username FROM users WHERE users.name IS NOT NULL', $query->getSql());
     }
 
     public function testOrderBy()
@@ -178,7 +190,7 @@ class SelectTest extends TestCase
             ->select(['id', 'name' => 'username'])
             ->orderBy('id');
 
-        $this->assertEquals('SELECT id, name AS username FROM users ORDER BY id', $query->getSql());
+        $this->assertEquals('SELECT users.id, users.name AS username FROM users ORDER BY users.id', $query->getSql());
     }
 
     public function testOrderByDesc()
@@ -189,7 +201,7 @@ class SelectTest extends TestCase
             ->select(['id', 'name' => 'username'])
             ->orderBy('id', 'desc');
 
-        $this->assertEquals('SELECT id, name AS username FROM users ORDER BY id DESC', $query->getSql());
+        $this->assertEquals('SELECT users.id, users.name AS username FROM users ORDER BY users.id DESC', $query->getSql());
     }
 
     public function testGroupBy()
@@ -200,7 +212,7 @@ class SelectTest extends TestCase
             ->select(['id', 'name' => 'username'])
             ->groupBy('id');
 
-        $this->assertEquals('SELECT id, name AS username FROM users GROUP BY id', $query->getSql());
+        $this->assertEquals('SELECT users.id, users.name AS username FROM users GROUP BY users.id', $query->getSql());
     }
 
     public function testLimit()
@@ -211,7 +223,7 @@ class SelectTest extends TestCase
             ->select(['id', 'name' => 'username'])
             ->limit(10);
 
-        $this->assertEquals('SELECT id, name AS username FROM users LIMIT ?', $query->getSql());
+        $this->assertEquals('SELECT users.id, users.name AS username FROM users LIMIT :limit1', $query->getSql());
     }
 
     public function testLimitOffset()
@@ -222,6 +234,6 @@ class SelectTest extends TestCase
             ->select(['id', 'name' => 'username'])
             ->limit(10, 20);
 
-        $this->assertEquals('SELECT id, name AS username FROM users LIMIT ?, ?', $query->getSql());
+        $this->assertEquals('SELECT users.id, users.name AS username FROM users LIMIT :limit1, :limit2', $query->getSql());
     }
 }

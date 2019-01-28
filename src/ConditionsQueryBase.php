@@ -7,9 +7,7 @@ class ConditionsQueryBase extends QueryBase
 
     public function where($column, ?string $operator = null, $value = null, $isRaw = false)
     {
-        if(!$isRaw) {
-            $value = $this->param($value);
-        }
+        $value = $this->param($value, $column, $isRaw);
 
         $conditionsCount = count($this->conditions);
         if($conditionsCount > 0 && $this->conditions[$conditionsCount-1] != '(') {

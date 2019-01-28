@@ -15,7 +15,7 @@ class JoinTest extends TestCase
         $query = $queryBuilder
             ->table('users')
             ->select(['id', 'name'])
-            ->leftJoin('accounts', 'accounts.user_id', '=', 'users.id')
+            ->leftJoin('accounts', 'user_id', '=', 'id')
             ->where('date', '<', 30);
 
         $query->exec(30);
@@ -33,10 +33,10 @@ class JoinTest extends TestCase
             ->leftJoin('accounts', function ($join) {
                 $join
                     ->whereRaw('account.user_id', '=', 'users.id')
-                    ->where('account.money', '>', 100);
+                    ->where('money', '>', 100);
             })
             ->where('date', '<', 30);
 
-        $this->assertEquals('SELECT id, name FROM users LEFT JOIN accounts ON account.user_id = users.id AND account.money > ? WHERE date < ?', $query->getSql());
+        $this->assertEquals('SELECT id, name FROM users LEFT JOIN accounts ON account.user_id = users.id AND account.money > :money WHERE date < :date', $query->getSql());
     }
 }

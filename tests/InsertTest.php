@@ -16,6 +16,6 @@ class InsertTest extends TestCase
             ->insert(['name', 'email'])
             ->values(['test', 'test@exemple.com']);
 
-        $this->assertEquals("INSERT INTO users(name, email) VALUES (?, ?)", $query->getSql());
+        $this->assertEquals("INSERT INTO users(name, email) VALUES (:name, :email)", $query->getSql());
     }
 }

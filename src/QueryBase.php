@@ -16,14 +16,20 @@ class QueryBase
         $this->table = $table;
     }
 
-    protected function param($value, bool $raw = false)
+    protected function param($value, $key = '?', bool $raw = false)
     {
         if($raw) {
             return $value;
         }
 
-        $this->params[] = $value;
-        return '?';
+        if($key !== '?') {
+            $key = ":$key";
+            $this->params[$key] = $value;
+        } else {
+            $this->params[] = $value;
+        }
+
+        return $key;
     }
 
     public function getLastStatement()

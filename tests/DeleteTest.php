@@ -16,6 +16,6 @@ class DeleteTest extends TestCase
             ->delete()
             ->where('name', '=', 'test');
 
-        $this->assertEquals("DELETE users WHERE name = ?", $query->getSql());
+        $this->assertEquals("DELETE users WHERE name = :name", $query->getSql());
     }
 }
