@@ -14,13 +14,6 @@ class Update extends ConditionsQueryBase
         $this->setTable($table);
 
         if($columns !== null) {
-
-            if(!array_key_exists(0, $columns)) {
-                $this->values(array_values($columns));
-                $columns = array_keys($columns);
-            }
-
-            $this->columns = [];
             $this->addColumn($columns);
         }
 
@@ -29,33 +22,29 @@ class Update extends ConditionsQueryBase
 
     public function values(array $values)
     {
-        $this->values = $values;
+        array_map(function ($value) {
+            $this->values[] = $value;
+        }, $values);
 
         return $this;
     }
 
-    public function getvalues(): array
+    public function getValues(): array
     {
         return $this->values;
     }
 
     public function addColumn(array $columns)
     {
-        if(is_array($columns)) {
-            array_map(function ($column) {
-                $this->columns[] = $column;
-            }, $columns);
-        } else {
-            $this->columns[] = $columns;
-        }
+        $this->columns += $columns;
 
         return $this;
     }
 
     public function getSql()
     {
-        $columns = implode(', ', array_map(function($key, $name) {
-            return "$name = ?";
+        $columns = implode(', ', array_map(function($column, $value) {
+            return "$column = {$this->param($value)}";
         }, array_keys($this->columns), $this->columns));
 
         $query = "$this->type {$this->table} SET $columns";
@@ -69,6 +58,12 @@ class Update extends ConditionsQueryBase
 
     public function exec(...$params)
     {
-        return parent::exec(...$params);
+        $this->lastStatement = $query = $this->pdo->prepare($this->getSql());
+
+        if(count($params) === 0) {
+            $params = $this->params;
+        }
+
+        return $query->execute($params);
     }
 }

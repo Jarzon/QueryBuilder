@@ -16,21 +16,12 @@ class QueryBase
         $this->table = $table;
     }
 
-    public function exec(...$params)
+    protected function param($value, bool $raw = false)
     {
-        $this->lastStatement = $query = $this->pdo->prepare($this->getSql());
-
-        if(count($params) === 0) {
-            $params = $this->params;
+        if($raw) {
+            return $value;
         }
 
-        $query->execute($params);
-
-        return $query;
-    }
-
-    protected function param($value)
-    {
         $this->params[] = $value;
         return '?';
     }

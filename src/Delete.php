@@ -59,8 +59,12 @@ class Delete extends ConditionsQueryBase
 
     public function exec(...$params)
     {
-        $query = parent::exec(...$params);
+        $this->lastStatement = $query = $this->pdo->prepare($this->getSql());
 
-        return $query->fetchAll();
+        if(count($params) === 0) {
+            $params = $this->params;
+        }
+
+        return $query->execute($params);
     }
 }

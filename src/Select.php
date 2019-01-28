@@ -136,7 +136,13 @@ class Select extends ConditionsQueryBase
 
     public function exec(...$params)
     {
-        $query = parent::exec(...$params);
+        $this->lastStatement = $query = $this->pdo->prepare($this->getSql());
+
+        if(count($params) === 0) {
+            $params = $this->params;
+        }
+
+        $query->execute($params);
 
         return $query->fetchAll();
     }
