@@ -18,15 +18,4 @@ class InsertTest extends TestCase
 
         $this->assertEquals("INSERT INTO users(name, email) VALUES (?, ?)", $query->getSql());
     }
-
-    public function testSelectIntoInsert()
-    {
-        $queryBuilder = new QueryBuilder(new PdoMock());
-
-        $query = $queryBuilder->table('users')
-            ->insert(['name', 'email'])
-            ->values(['test', 'test@exemple.com']);
-
-        $this->assertEquals("INSERT INTO users(name, email) SELECT (name, email) FROM users WHERE id = 1", $query->getSql());
-    }
 }

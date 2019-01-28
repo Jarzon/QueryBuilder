@@ -14,6 +14,12 @@ class Update extends ConditionsQueryBase
         $this->setTable($table);
 
         if($columns !== null) {
+
+            if(!array_key_exists(0, $columns)) {
+                $this->values(array_values($columns));
+                $columns = array_keys($columns);
+            }
+
             $this->columns = [];
             $this->addColumn($columns);
         }
@@ -28,17 +34,17 @@ class Update extends ConditionsQueryBase
         return $this;
     }
 
+    public function getvalues(): array
+    {
+        return $this->values;
+    }
+
     public function addColumn(array $columns)
     {
         if(is_array($columns)) {
-            array_map(function ($key, $column) {
-                if(!is_int($key)) {
-                    $this->columns[$key] = $column;
-                } else {
-                    $this->columns[] = $column;
-                }
-
-            }, array_keys($columns), $columns);
+            array_map(function ($column) {
+                $this->columns[] = $column;
+            }, $columns);
         } else {
             $this->columns[] = $columns;
         }
@@ -63,8 +69,6 @@ class Update extends ConditionsQueryBase
 
     public function exec(...$params)
     {
-        $query = parent::exec(...$params);
-
-        return $query->fetchAll();
+        return parent::exec(...$params);
     }
 }
