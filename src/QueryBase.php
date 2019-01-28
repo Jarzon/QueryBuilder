@@ -25,4 +25,9 @@ class QueryBase
         $this->params[] = $value;
         return '?';
     }
+
+    public function getLastStatement()
+    {
+        return $this->lastStatement;
+    }
 }
