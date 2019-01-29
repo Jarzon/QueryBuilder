@@ -26,6 +26,13 @@ class QueryBase
 
         if(is_string($key) && $key !== '?') {
             $key = ":$key";
+
+            if(array_key_exists($key, $this->params)) {
+                $keys = array_keys(array_keys($this->params), $key);
+
+                $key .= count($keys);
+            }
+
             $this->params[$key] = $value;
         } else {
             $this->params[] = $value;

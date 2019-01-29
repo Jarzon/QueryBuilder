@@ -113,7 +113,7 @@ class SelectTest extends TestCase
                     ->or('date', '<', '01-01-2000');
             });
 
-        $this->assertEquals("SELECT users.id, users.name AS username FROM users WHERE users.date < :date1 AND ( users.name != :name OR users.date < :date2 )", $query->getSql());
+        $this->assertEquals("SELECT users.id, users.name AS username FROM users WHERE users.date < :date AND ( users.name != :name OR users.date < :date2 )", $query->getSql());
     }
 
     public function testBetweenCondition()

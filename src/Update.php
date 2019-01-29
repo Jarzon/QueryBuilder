@@ -5,6 +5,7 @@ class Update extends ConditionsQueryBase
 {
     protected $columns = [];
     protected $values = [];
+    protected $query = null;
 
     public function __construct(string $table, ?string $tableAlias, object $pdo, ?array $columns = [])
     {
@@ -43,6 +44,10 @@ class Update extends ConditionsQueryBase
 
     public function getSql()
     {
+        if($this->query !== null) {
+            return $this->query;
+        }
+
         $columns = implode(', ', array_map(function($column, $value) {
             return "{$this->table}.$column = {$this->param($value, $column)}";
         }, array_keys($this->columns), $this->columns));
@@ -53,6 +58,7 @@ class Update extends ConditionsQueryBase
             $query .= " WHERE $conditions";
         }
 
+        $this->query = $query;
         return $query;
     }
 

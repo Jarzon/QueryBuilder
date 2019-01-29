@@ -23,11 +23,11 @@ class UpdateTest extends TestCase
         $queryBuilder = new QueryBuilder(new PdoMock());
 
         $query = $queryBuilder->table('users')
-            ->update(['name' => 'test', 'email' => 'test@exemple.com']);
+            ->update(['username' => 'test', 'mail' => 'test@exemple.com']);
 
         $query->exec();
 
-        $this->assertEquals([':name' => 'test', ':email' => 'test@exemple.com'], $query->getLastStatement()->params);
+        $this->assertEquals([':username' => 'test', ':mail' => 'test@exemple.com'], $query->getLastStatement()->params);
     }
 
     public function testWhere()
