@@ -6,12 +6,12 @@ class Insert extends QueryBase
     protected $columns = [];
     protected $values = [];
 
-    public function __construct(string $table, ?string $tableAlias, object $pdo, ?array $columns = [])
+    public function __construct(string $table, object $pdo, ?array $columns = [])
     {
         $this->type = 'INSERT INTO';
         $this->pdo = $pdo;
 
-        $this->setTable($table, $tableAlias);
+        $this->setTable($table, null);
 
         if($columns !== null) {
             $this->columns = [];
@@ -49,7 +49,7 @@ class Insert extends QueryBase
     public function getSql()
     {
         $columns = implode(', ', $this->columns);
-        $values = rtrim(str_repeat('?, ', count($this->columns)),", ");
+        $values = ':'.implode(', :', $this->columns);
 
         $query = "$this->type {$this->table}($columns) VALUES ($values)";
 

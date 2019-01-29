@@ -32,60 +32,58 @@ class ConditionsQueryBase extends QueryBase
         return $this;
     }
 
-    public function or(string $column, string $operator, $value)
+    public function or(string $column, string $operator, $value, $isRaw = false)
     {
-        $value = $this->param($value);
-
         $this->addCondition('OR');
 
-        $this->addCondition(new Condition($column, $operator, $value));
+        $this->addCondition(new Condition($this->columnAlias($column, $isRaw), $operator, $this->param($value, $column)));
 
         return $this;
     }
 
-    public function between(string $column, $start, $end)
+    public function between(string $column, $start, $end, $isRaw = false)
     {
-        $this->addCondition(new BetweenCondition($column, $this->param($start), $this->param($end)));
+        $this->addCondition(new BetweenCondition($this->columnAlias($column, $isRaw), $this->param($start, "{$column}1"), $this->param($end, "{$column}2")));
 
         return $this;
     }
 
-    public function notBetween(string $column, $start, $end)
+    public function notBetween(string $column, $start, $end, $isRaw = false)
     {
-        $this->addCondition(new BetweenCondition($column, $this->param($start), $this->param($end), true));
+        $this->addCondition(new BetweenCondition($this->columnAlias($column, $isRaw), $this->param($start, "{$column}1"), $this->param($end, "{$column}2"), true));
 
         return $this;
     }
 
-    public function in(string $column, array $list)
+    public function in(string $column, array $list, $isRaw = false)
     {
-        $this->addCondition(new InCondition($column, $list));
+        $this->addCondition(new InCondition($this->columnAlias($column, $isRaw), $list));
 
         return $this;
     }
 
-    public function notIn(string $column, array $list)
+    public function notIn(string $column, array $list, $isRaw = false)
     {
-        $this->addCondition(new InCondition($column, $list, true));
+        $this->addCondition(new InCondition($this->columnAlias($column, $isRaw), $list, true));
 
         return $this;
     }
 
-    public function isNull(string $column)
+    public function isNull(string $column, $isRaw = false)
     {
-        $this->addCondition(new Condition($column, 'IS', null));
+        $this->addCondition(new Condition($this->columnAlias($column, $isRaw), 'IS', null));
 
         return $this;
     }
 
-    public function isNotNull(string $column)
+    public function isNotNull(string $column, $isRaw = false)
     {
-        $this->addCondition(new Condition($column, 'IS NOT', null));
+        $this->addCondition(new Condition($this->columnAlias($column, $isRaw), 'IS NOT', null));
 
         return $this;
     }
 
-    protected function addCondition($condition)
+    protected function addCondition($condition, $isRaw = false)
     {
         $this->conditions[] = $condition;
     }

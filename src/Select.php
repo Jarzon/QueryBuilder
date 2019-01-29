@@ -127,9 +127,9 @@ class Select extends ConditionsQueryBase
     public function limit(int $offset, ?int $select = null)
     {
         if($select === null) {
-            $this->limit = [$this->param($offset)];
+            $this->limit = [$this->param($offset, 'limit1')];
         } else {
-            $this->limit = [$this->param($offset), $this->param($select)];
+            $this->limit = [$this->param($offset, 'limit1'), $this->param($select, 'limit2')];
         }
 
         return $this;

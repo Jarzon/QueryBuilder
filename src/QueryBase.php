@@ -24,7 +24,7 @@ class QueryBase
             return $value;
         }
 
-        if($key !== '?') {
+        if(is_string($key) && $key !== '?') {
             $key = ":$key";
             $this->params[$key] = $value;
         } else {

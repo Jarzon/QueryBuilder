@@ -98,7 +98,7 @@ class SelectTest extends TestCase
             ->where('date', '<', 30)
             ->or('name', '!=', 'Root');
 
-        $this->assertEquals("SELECT users.id, users.name AS username FROM users WHERE users.date < :date OR name != :name", $query->getSql());
+        $this->assertEquals("SELECT users.id, users.name AS username FROM users WHERE users.date < :date OR users.name != :name", $query->getSql());
     }
 
     public function testSubCondition()
@@ -168,7 +168,7 @@ class SelectTest extends TestCase
             ->select(['id', 'name' => 'username'])
             ->isNull('name');
 
-        $this->assertEquals('SELECT users.id,users. name AS username FROM users WHERE users.name IS NULL', $query->getSql());
+        $this->assertEquals('SELECT users.id, users.name AS username FROM users WHERE users.name IS NULL', $query->getSql());
     }
 
     public function testIsNotNullCondition()
@@ -188,7 +188,7 @@ class SelectTest extends TestCase
 
         $query = $queryBuilder->table('users')
             ->select(['id', 'name' => 'username'])
-            ->orderBy('id');
+            ->orderBy('users.id');
 
         $this->assertEquals('SELECT users.id, users.name AS username FROM users ORDER BY users.id', $query->getSql());
     }
@@ -199,7 +199,7 @@ class SelectTest extends TestCase
 
         $query = $queryBuilder->table('users')
             ->select(['id', 'name' => 'username'])
-            ->orderBy('id', 'desc');
+            ->orderBy('users.id', 'desc');
 
         $this->assertEquals('SELECT users.id, users.name AS username FROM users ORDER BY users.id DESC', $query->getSql());
     }
@@ -210,7 +210,7 @@ class SelectTest extends TestCase
 
         $query = $queryBuilder->table('users')
             ->select(['id', 'name' => 'username'])
-            ->groupBy('id');
+            ->groupBy('users.id');
 
         $this->assertEquals('SELECT users.id, users.name AS username FROM users GROUP BY users.id', $query->getSql());
     }

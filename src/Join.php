@@ -7,7 +7,7 @@ class Join extends ConditionsQueryBase
     {
         $this->type = "$type JOIN";
 
-        $this->setTable($table);
+        $this->setTable($table, null);
 
         if($operator !== null) {
             $this->addCondition(new Condition($firstColumnOrCallback, $operator, $secondColumn));

@@ -45,7 +45,7 @@ class QueryBuilder
             $columns = [$columns];
         }
 
-        $query = new Insert($this->table, $this->tableAlias, $this->pdo, $columns);
+        $query = new Insert($this->table, $this->pdo, $columns);
 
         $this->lastQuery = $query;
 
