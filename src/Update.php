@@ -23,11 +23,15 @@ class Update extends ConditionsQueryBase
     public function set(string $column, string $value)
     {
         $this->addColumn([$column => $value]);
+
+        return $this;
     }
 
     public function setRaw(string $column, string $value)
     {
         $this->addColumn([$column => $value], true);
+
+        return $this;
     }
 
     public function addColumn(array $columns, bool $isRaw = false)

@@ -18,6 +18,29 @@ class UpdateTest extends TestCase
         $this->assertEquals("UPDATE users SET users.name = :name, users.email = :email", $query->getSql());
     }
 
+    public function testSet()
+    {
+        $queryBuilder = new QueryBuilder(new PdoMock());
+
+        $query = $queryBuilder->table('users')
+            ->update()
+            ->set('name', 'test')
+            ->set('email', 'test@exemple.com');
+
+        $this->assertEquals("UPDATE users SET users.name = :name, users.email = :email", $query->getSql());
+    }
+
+    public function testSetRaw()
+    {
+        $queryBuilder = new QueryBuilder(new PdoMock());
+
+        $query = $queryBuilder->table('users')
+            ->update(['name' => 'test', 'email' => 'test@exemple.com'])
+            ->setRaw('updated', 'NOW()');
+
+        $this->assertEquals("UPDATE users SET users.name = :name, users.email = :email, users.updated = NOW()", $query->getSql());
+    }
+
     public function testExec()
     {
         $queryBuilder = new QueryBuilder(new PdoMock());
