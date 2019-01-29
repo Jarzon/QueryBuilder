@@ -4,7 +4,6 @@ namespace Jarzon;
 class Update extends ConditionsQueryBase
 {
     protected $columns = [];
-    protected $values = [];
     protected $query = null;
 
     public function __construct(string $table, ?string $tableAlias, object $pdo, ?array $columns = [])
@@ -21,22 +20,24 @@ class Update extends ConditionsQueryBase
         return $this;
     }
 
-    public function values(array $values)
+    public function set(string $column, string $value)
     {
-        array_map(function ($value) {
-            $this->values[] = $value;
-        }, $values);
-
-        return $this;
+        $this->addColumn([$column => $value]);
     }
 
-    public function getValues(): array
+    public function setRaw(string $column, string $value)
     {
-        return $this->values;
+        $this->addColumn([$column => $value], true);
     }
 
-    public function addColumn(array $columns)
+    public function addColumn(array $columns, bool $isRaw = false)
     {
+        if(!$isRaw) {
+            array_walk($columns, function(&$value, $column) {
+                $value = $this->param($value, $column);
+            });
+        }
+
         $this->columns += $columns;
 
         return $this;
@@ -48,8 +49,8 @@ class Update extends ConditionsQueryBase
             return $this->query;
         }
 
-        $columns = implode(', ', array_map(function($column, $value) {
-            return "{$this->table}.$column = {$this->param($value, $column)}";
+        $columns = implode(', ', array_map(function($column, $param) {
+            return "{$this->table}.$column = $param";
         }, array_keys($this->columns), $this->columns));
 
         $query = "$this->type {$this->table} SET $columns";
