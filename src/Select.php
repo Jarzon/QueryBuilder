@@ -9,12 +9,12 @@ class Select extends ConditionsQueryBase
     protected $groupBy = [];
     protected $limit = [];
 
-    public function __construct(string $table, ?array $columns, object $pdo)
+    public function __construct(string $table, ?string $tableAlias, ?array $columns, object $pdo)
     {
         $this->type = 'SELECT';
         $this->pdo = $pdo;
 
-        $this->setTable($table);
+        $this->setTable($table, $tableAlias);
 
         if($columns !== null) {
             $this->columns = [];
@@ -24,17 +24,25 @@ class Select extends ConditionsQueryBase
         return $this;
     }
 
-    public function getSql()
-    {
+    protected function getColumns() {
         $columns = implode(', ', array_map(function($key, $name) {
+            if($name === '*') return $name;
+
             $output = $name;
 
             if(is_int($key) === false) {
                 $output = "$key AS $name";
             }
 
-            return $output;
+            return $this->columnAlias($output);
         }, array_keys($this->columns), $this->columns));
+
+        return $columns;
+    }
+
+    public function getSql()
+    {
+        $columns = $this->getColumns();
 
         $query = "$this->type $columns FROM $this->table";
 

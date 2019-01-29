@@ -19,7 +19,7 @@ class ConditionsQueryBase extends QueryBase
             $column($this);
             $this->addCondition(')');
         } else {
-            $this->addCondition(new Condition($column, $operator, $value));
+            $this->addCondition(new Condition($this->columnAlias($column, $isRaw), $operator, $value));
         }
 
         return $this;

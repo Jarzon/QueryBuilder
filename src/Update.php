@@ -6,12 +6,12 @@ class Update extends ConditionsQueryBase
     protected $columns = [];
     protected $values = [];
 
-    public function __construct(string $table, object $pdo, ?array $columns = [])
+    public function __construct(string $table, ?string $tableAlias, object $pdo, ?array $columns = [])
     {
         $this->type = 'UPDATE';
         $this->pdo = $pdo;
 
-        $this->setTable($table);
+        $this->setTable($table, $tableAlias);
 
         if($columns !== null) {
             $this->addColumn($columns);

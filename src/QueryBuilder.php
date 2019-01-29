@@ -4,7 +4,8 @@ namespace Jarzon;
 class QueryBuilder
 {
     protected $lastQuery;
-    protected $table;
+    protected $table = '';
+    protected $tableAlias = null;
     protected $pdo;
 
     public function __construct(object $pdo)
@@ -12,9 +13,10 @@ class QueryBuilder
         $this->pdo = $pdo;
     }
 
-    public function table(string $table)
+    public function table(string $table, $tableAlias = null)
     {
         $this->table = $table;
+        $this->tableAlias = $tableAlias;
 
         return $this;
     }
@@ -30,7 +32,7 @@ class QueryBuilder
             $columns = [$columns];
         }
 
-        $query = new Select($this->table, $columns, $this->pdo);
+        $query = new Select($this->table, $this->tableAlias, $columns, $this->pdo);
 
         $this->lastQuery = $query;
 
@@ -43,7 +45,7 @@ class QueryBuilder
             $columns = [$columns];
         }
 
-        $query = new Insert($this->table, $this->pdo, $columns);
+        $query = new Insert($this->table, $this->tableAlias, $this->pdo, $columns);
 
         $this->lastQuery = $query;
 
@@ -56,7 +58,7 @@ class QueryBuilder
             $columns = [$columns];
         }
 
-        $query = new Update($this->table, $this->pdo, $columns);
+        $query = new Update($this->table, $this->tableAlias, $this->pdo, $columns);
 
         $this->lastQuery = $query;
 
@@ -69,7 +71,7 @@ class QueryBuilder
             $columns = [$columns];
         }
 
-        $query = new Delete($this->table, $this->pdo, $columns);
+        $query = new Delete($this->table, $this->tableAlias, $this->pdo, $columns);
 
         $this->lastQuery = $query;
 

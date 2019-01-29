@@ -40,7 +40,7 @@ class UpdateTest extends TestCase
 
         $query->exec();
 
-        $this->assertEquals("UPDATE users SET users.name = :name, users.email = :email WHERE id = :id", $query->getSql());
+        $this->assertEquals("UPDATE users SET users.name = :name, users.email = :email WHERE users.id = :id", $query->getSql());
 
         $this->assertEquals([':name' => 'test', ':email' => 'test@exemple.com', ':id' => 1], $query->getLastStatement()->params);
     }

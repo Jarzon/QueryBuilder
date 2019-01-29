@@ -6,12 +6,12 @@ class Insert extends QueryBase
     protected $columns = [];
     protected $values = [];
 
-    public function __construct(string $table, object $pdo, ?array $columns = [])
+    public function __construct(string $table, ?string $tableAlias, object $pdo, ?array $columns = [])
     {
         $this->type = 'INSERT INTO';
         $this->pdo = $pdo;
 
-        $this->setTable($table);
+        $this->setTable($table, $tableAlias);
 
         if($columns !== null) {
             $this->columns = [];

@@ -10,10 +10,12 @@ class QueryBase
 
     protected $type = '';
     protected $table = '';
+    protected $tableAlias = null;
 
-    protected function setTable(string $table)
+    protected function setTable(string $table, ?string $tableAlias)
     {
         $this->table = $table;
+        $this->tableAlias = $tableAlias;
     }
 
     protected function param($value, $key = '?', bool $raw = false)
@@ -30,6 +32,15 @@ class QueryBase
         }
 
         return $key;
+    }
+
+    public function columnAlias($column, $isRaw = false)
+    {
+        if($isRaw) {
+            return $column;
+        }
+
+        return ($this->tableAlias === null? $this->table: $this->tableAlias) . ".$column";
     }
 
     public function getLastStatement()
