@@ -48,7 +48,9 @@ class Delete extends ConditionsQueryBase
 
     public function getSql()
     {
-        $query = "$this->type {$this->table}";
+        $table = $this->getTable();
+
+        $query = "$this->type $table";
 
         if($conditions = $this->getConditions()) {
             $query .= " WHERE $conditions";

@@ -41,6 +41,11 @@ class QueryBase
         return $key;
     }
 
+    protected function getTable()
+    {
+        return "$this->table".(isset($this->tableAlias)? " $this->tableAlias": '');
+    }
+
     public function columnAlias($column, $isRaw = false)
     {
         if($isRaw) {

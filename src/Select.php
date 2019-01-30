@@ -44,7 +44,9 @@ class Select extends ConditionsQueryBase
     {
         $columns = $this->getColumns();
 
-        $query = "$this->type $columns FROM $this->table";
+        $table = $this->getTable();
+
+        $query = "$this->type $columns FROM $table";
 
         if(count($this->join) > 0) {
             $joins = implode(' ', array_map(function($join) {

@@ -53,11 +53,13 @@ class Update extends ConditionsQueryBase
             return $this->query;
         }
 
-        $columns = implode(', ', array_map(function($column, $param) {
-            return "{$this->table}.$column = $param";
+        $table = $this->getTable();
+
+        $columns = implode(', ', array_map(function($column, $param) use($table) {
+            return "{$table}.$column = $param";
         }, array_keys($this->columns), $this->columns));
 
-        $query = "$this->type {$this->table} SET $columns";
+        $query = "$this->type $table SET $columns";
 
         if($conditions = $this->getConditions()) {
             $query .= " WHERE $conditions";
