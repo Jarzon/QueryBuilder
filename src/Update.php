@@ -6,16 +6,14 @@ class Update extends ConditionsQueryBase
     protected $columns = [];
     protected $query = null;
 
-    public function __construct(string $table, ?string $tableAlias, object $pdo, ?array $columns = [])
+    public function __construct(string $table, ?string $tableAlias, object $pdo)
     {
         $this->type = 'UPDATE';
         $this->pdo = $pdo;
 
         $this->setTable($table, $tableAlias);
 
-        if($columns !== null) {
-            $this->addColumn($columns);
-        }
+
 
         return $this;
     }
@@ -30,6 +28,18 @@ class Update extends ConditionsQueryBase
     public function setRaw(string $column, string $value)
     {
         $this->addColumn([$column => $value], true);
+
+        return $this;
+    }
+
+    public function columns(array $columns)
+    {
+        if(!is_array($columns)) {
+            $columns = [$columns];
+        }
+
+        $this->columns = [];
+        $this->addColumn($columns);
 
         return $this;
     }

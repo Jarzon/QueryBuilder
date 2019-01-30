@@ -9,17 +9,24 @@ class Select extends ConditionsQueryBase
     protected $groupBy = [];
     protected $limit = [];
 
-    public function __construct(string $table, ?string $tableAlias, ?array $columns, object $pdo)
+    public function __construct(string $table, ?string $tableAlias, object $pdo)
     {
         $this->type = 'SELECT';
         $this->pdo = $pdo;
 
         $this->setTable($table, $tableAlias);
 
-        if($columns !== null) {
-            $this->columns = [];
-            $this->addSelect($columns);
+        return $this;
+    }
+
+    public function columns(array $columns)
+    {
+        if(!is_array($columns)) {
+            $columns = [$columns];
         }
+
+        $this->columns = [];
+        $this->addSelect($columns);
 
         return $this;
     }

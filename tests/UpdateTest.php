@@ -4,26 +4,25 @@ declare(strict_types=1);
 namespace Tests;
 
 use PHPUnit\Framework\TestCase;
-use Jarzon\QueryBuilder;
+use Jarzon\QueryBuilder as QB;
 
 class UpdateTest extends TestCase
 {
     public function testSql()
     {
-        $queryBuilder = new QueryBuilder(new PdoMock());
+        QB::setPDO(new PdoMock());
 
-        $query = $queryBuilder->table('users')
-            ->update(['name' => 'test', 'email' => 'test@exemple.com']);
+        $query = QB::update('users')
+            ->columns(['name' => 'test', 'email' => 'test@exemple.com']);
 
         $this->assertEquals("UPDATE users SET users.name = :name, users.email = :email", $query->getSql());
     }
 
     public function testSet()
     {
-        $queryBuilder = new QueryBuilder(new PdoMock());
+        QB::setPDO(new PdoMock());
 
-        $query = $queryBuilder->table('users')
-            ->update()
+        $query = QB::update('users')
             ->set('name', 'test')
             ->set('email', 'test@exemple.com');
 
@@ -32,10 +31,10 @@ class UpdateTest extends TestCase
 
     public function testSetRaw()
     {
-        $queryBuilder = new QueryBuilder(new PdoMock());
+        QB::setPDO(new PdoMock());
 
-        $query = $queryBuilder->table('users')
-            ->update(['name' => 'test', 'email' => 'test@exemple.com'])
+        $query = QB::update('users')
+            ->columns(['name' => 'test', 'email' => 'test@exemple.com'])
             ->setRaw('updated', 'NOW()');
 
         $this->assertEquals("UPDATE users SET users.name = :name, users.email = :email, users.updated = NOW()", $query->getSql());
@@ -43,10 +42,10 @@ class UpdateTest extends TestCase
 
     public function testExec()
     {
-        $queryBuilder = new QueryBuilder(new PdoMock());
+        QB::setPDO(new PdoMock());
 
-        $query = $queryBuilder->table('users')
-            ->update(['username' => 'test', 'mail' => 'test@exemple.com']);
+        $query = QB::update('users')
+            ->columns(['username' => 'test', 'mail' => 'test@exemple.com']);
 
         $query->exec();
 
@@ -55,10 +54,10 @@ class UpdateTest extends TestCase
 
     public function testWhere()
     {
-        $queryBuilder = new QueryBuilder(new PdoMock());
+        QB::setPDO(new PdoMock());
 
-        $query = $queryBuilder->table('users')
-            ->update(['name' => 'test', 'email' => 'test@exemple.com'])
+        $query = QB::update('users')
+            ->columns(['name' => 'test', 'email' => 'test@exemple.com'])
             ->where('id', '=', 1);
 
         $query->exec();

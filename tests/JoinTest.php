@@ -4,17 +4,16 @@ declare(strict_types=1);
 namespace Tests;
 
 use PHPUnit\Framework\TestCase;
-use Jarzon\QueryBuilder;
+use Jarzon\QueryBuilder as QB;
 
 class JoinTest extends TestCase
 {
     public function testBasicLeftJoin()
     {
-        $queryBuilder = new QueryBuilder(new PdoMock());
+        QB::setPDO(new PdoMock());
 
-        $query = $queryBuilder
-            ->table('users')
-            ->select(['id', 'name'])
+        $query = QB::select('users')
+            ->columns(['id', 'name'])
             ->leftJoin('accounts', 'accounts.user_id', '=', 'users.id')
             ->where('date', '<', 30);
 
@@ -25,11 +24,10 @@ class JoinTest extends TestCase
 
     public function testComplexLeftJoin()
     {
-        $queryBuilder = new QueryBuilder(new PdoMock());
+        QB::setPDO(new PdoMock());
 
-        $query = $queryBuilder
-            ->table('users')
-            ->select(['id', 'name'])
+        $query = QB::select('users')
+            ->columns(['id', 'name'])
             ->leftJoin('accounts', function ($join) {
                 $join
                     ->whereRaw('accounts.user_id', '=', 'users.id')

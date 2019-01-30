@@ -4,16 +4,15 @@ declare(strict_types=1);
 namespace Tests;
 
 use PHPUnit\Framework\TestCase;
-use Jarzon\QueryBuilder;
+use Jarzon\QueryBuilder as QB;
 
 class DeleteTest extends TestCase
 {
     public function testSimple()
     {
-        $queryBuilder = new QueryBuilder(new PdoMock());
+        QB::setPDO(new PdoMock());
 
-        $query = $queryBuilder->table('users')
-            ->delete()
+        $query = QB::delete('users')
             ->where('name', '=', 'test');
 
         $this->assertEquals("DELETE users WHERE users.name = :name", $query->getSql());

@@ -3,80 +3,56 @@ namespace Jarzon;
 
 class QueryBuilder
 {
-    protected $lastQuery;
-    protected $table = '';
-    protected $tableAlias = null;
-    protected $pdo;
+    static $table = '';
+    static $tableAlias = null;
+    static $pdo;
     static $currentTable = '';
 
-    public function __construct(object $pdo)
+    static function setPDO(object $pdo)
     {
-        $this->pdo = $pdo;
+        self::$pdo = $pdo;
     }
 
-    public function table(string $table, $tableAlias = null)
+    static public function setTable(string $table, $tableAlias = null)
     {
-        $this->table = $table;
-        $this->tableAlias = $tableAlias;
+        self::$table = $table;
+        self::$tableAlias = $tableAlias;
 
-        $this::$currentTable = $tableAlias !== null? $tableAlias: $table;
-
-        return $this;
+        static::$currentTable = $tableAlias !== null? $tableAlias: $table;
     }
 
-    public function getSql(): string
+    static public function select(string $table, $tableAlias = null): Select
     {
-        return $this->lastQuery->getSql();
-    }
+        self::setTable($table, $tableAlias);
 
-    public function select($columns = null): Select
-    {
-        if($columns !== null && !is_array($columns)) {
-            $columns = [$columns];
-        }
-
-        $query = new Select($this->table, $this->tableAlias, $columns, $this->pdo);
-
-        $this->lastQuery = $query;
+        $query = new Select($table, $tableAlias, self::$pdo);
 
         return $query;
     }
 
-    public function insert($columns = []): Insert
+    static public function insert(string $table, $tableAlias = null): Insert
     {
-        if(!is_array($columns)) {
-            $columns = [$columns];
-        }
+        self::setTable($table, $tableAlias);
 
-        $query = new Insert($this->table, $this->pdo, $columns);
-
-        $this->lastQuery = $query;
+        $query = new Insert($table, self::$pdo);
 
         return $query;
     }
 
-    public function update($columns = []): Update
+    static public function update(string $table, $tableAlias = null): Update
     {
-        if(!is_array($columns)) {
-            $columns = [$columns];
-        }
+        self::setTable($table, $tableAlias);
 
-        $query = new Update($this->table, $this->tableAlias, $this->pdo, $columns);
-
-        $this->lastQuery = $query;
+        $query = new Update($table, $tableAlias, self::$pdo);
 
         return $query;
     }
 
-    public function delete($columns = []): Delete
+    static public function delete(string $table, $tableAlias = null): Delete
     {
-        if(!is_array($columns)) {
-            $columns = [$columns];
-        }
+        self::setTable($table, $tableAlias);
 
-        $query = new Delete($this->table, $this->tableAlias, $this->pdo, $columns);
-
-        $this->lastQuery = $query;
+        $query = new Delete($table, $tableAlias, self::$pdo);
 
         return $query;
     }
