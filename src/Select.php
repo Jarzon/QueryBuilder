@@ -30,7 +30,11 @@ class Select extends ConditionsQueryBase
 
             $output = $name;
 
-            if(is_int($key) === false) {
+            if(is_array($name)) {
+                $key = array_key_first($name);
+                return "$key AS $name[$key]";
+            }
+            else if(!is_int($key)) {
                 $output = "$key AS $name";
             }
 

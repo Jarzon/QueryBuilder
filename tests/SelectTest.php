@@ -4,13 +4,13 @@ declare(strict_types=1);
 namespace Tests;
 
 use PHPUnit\Framework\TestCase;
-use Jarzon\QueryBuilder;
+use Jarzon\QueryBuilder as QB;
 
 class SelectTest extends TestCase
 {
     public function testSimpleSelect()
     {
-        $queryBuilder = new QueryBuilder(new PdoMock());
+        $queryBuilder = new QB(new PdoMock());
 
         $query = $queryBuilder->table('users')
             ->select()
@@ -21,7 +21,7 @@ class SelectTest extends TestCase
 
     public function testAddSelect()
     {
-        $queryBuilder = new QueryBuilder(new PdoMock());
+        $queryBuilder = new QB(new PdoMock());
 
         $query = $queryBuilder->table('users')
             ->select(['id', 'name'])
@@ -34,7 +34,7 @@ class SelectTest extends TestCase
 
     public function testWhereColumn()
     {
-        $queryBuilder = new QueryBuilder(new PdoMock());
+        $queryBuilder = new QB(new PdoMock());
 
         $query = $queryBuilder->table('users')
             ->select()
@@ -45,7 +45,7 @@ class SelectTest extends TestCase
 
     public function testComplexWhere()
     {
-        $queryBuilder = new QueryBuilder(new PdoMock());
+        $queryBuilder = new QB(new PdoMock());
 
         $query = $queryBuilder->table('users')
             ->select()
@@ -57,7 +57,7 @@ class SelectTest extends TestCase
 
     public function testWithAlias()
     {
-        $queryBuilder = new QueryBuilder(new PdoMock());
+        $queryBuilder = new QB(new PdoMock());
 
         $query = $queryBuilder->table('users')
             ->select(['id', 'name' => 'username']);
@@ -67,19 +67,39 @@ class SelectTest extends TestCase
 
     public function testTableAlias()
     {
-        $queryBuilder = new QueryBuilder(new PdoMock());
+        $queryBuilder = new QB(new PdoMock());
 
         $query = $queryBuilder->table('users', 'U')
             ->select(['id', 'name' => 'username'])
             ->where('date', '<', 30)
             ->where('name', '!=', 'Root');
 
-        $this->assertEquals("SELECT U.id, U.name AS username FROM users WHERE U.date < :date AND U.name != :name", $query->getSql());
+        $this->assertEquals("SELECT U.id, U.name AS username FROM users U WHERE U.date < :date AND U.name != :name", $query->getSql());
+    }
+
+    public function testColumnFunction()
+    {
+        $queryBuilder = new QB(new PdoMock());
+
+        $query = $queryBuilder->table('users', 'U')
+            ->select(['id', ['DATE(U.date)' => 'date']]);
+
+        $this->assertEquals("SELECT U.id, DATE(U.date) AS date FROM users U", $query->getSql());
+    }
+
+    public function testColumnFunction2()
+    {
+        $queryBuilder = new QB(new PdoMock());
+
+        $query = $queryBuilder->table('users', 'U')
+            ->select(['id', QB::date('date')]);
+
+        $this->assertEquals("SELECT U.id, DATE(U.date) AS date FROM users U", $query->getSql());
     }
 
     public function testAndCondition()
     {
-        $queryBuilder = new QueryBuilder(new PdoMock());
+        $queryBuilder = new QB(new PdoMock());
 
         $query = $queryBuilder->table('users')
             ->select(['id', 'name' => 'username'])
@@ -91,7 +111,7 @@ class SelectTest extends TestCase
 
     public function testOrCondition()
     {
-        $queryBuilder = new QueryBuilder(new PdoMock());
+        $queryBuilder = new QB(new PdoMock());
 
         $query = $queryBuilder->table('users')
             ->select(['id', 'name' => 'username'])
@@ -103,7 +123,7 @@ class SelectTest extends TestCase
 
     public function testSubCondition()
     {
-        $queryBuilder = new QueryBuilder(new PdoMock());
+        $queryBuilder = new QB(new PdoMock());
 
         $query = $queryBuilder->table('users')
             ->select(['id', 'name' => 'username'])
@@ -118,7 +138,7 @@ class SelectTest extends TestCase
 
     public function testBetweenCondition()
     {
-        $queryBuilder = new QueryBuilder(new PdoMock());
+        $queryBuilder = new QB(new PdoMock());
 
         $query = $queryBuilder->table('users')
             ->select(['id', 'name' => 'username'])
@@ -129,7 +149,7 @@ class SelectTest extends TestCase
 
     public function testNotBetweenCondition()
     {
-        $queryBuilder = new QueryBuilder(new PdoMock());
+        $queryBuilder = new QB(new PdoMock());
 
         $query = $queryBuilder->table('users')
             ->select(['id', 'name' => 'username'])
@@ -140,7 +160,7 @@ class SelectTest extends TestCase
 
     public function testInCondition()
     {
-        $queryBuilder = new QueryBuilder(new PdoMock());
+        $queryBuilder = new QB(new PdoMock());
 
         $query = $queryBuilder->table('users')
             ->select(['id', 'name' => 'username'])
@@ -151,7 +171,7 @@ class SelectTest extends TestCase
 
     public function testNotInCondition()
     {
-        $queryBuilder = new QueryBuilder(new PdoMock());
+        $queryBuilder = new QB(new PdoMock());
 
         $query = $queryBuilder->table('users')
             ->select(['id', 'name' => 'username'])
@@ -162,7 +182,7 @@ class SelectTest extends TestCase
 
     public function testIsNullCondition()
     {
-        $queryBuilder = new QueryBuilder(new PdoMock());
+        $queryBuilder = new QB(new PdoMock());
 
         $query = $queryBuilder->table('users')
             ->select(['id', 'name' => 'username'])
@@ -173,7 +193,7 @@ class SelectTest extends TestCase
 
     public function testIsNotNullCondition()
     {
-        $queryBuilder = new QueryBuilder(new PdoMock());
+        $queryBuilder = new QB(new PdoMock());
 
         $query = $queryBuilder->table('users')
             ->select(['id', 'name' => 'username'])
@@ -184,7 +204,7 @@ class SelectTest extends TestCase
 
     public function testOrderBy()
     {
-        $queryBuilder = new QueryBuilder(new PdoMock());
+        $queryBuilder = new QB(new PdoMock());
 
         $query = $queryBuilder->table('users')
             ->select(['id', 'name' => 'username'])
@@ -195,7 +215,7 @@ class SelectTest extends TestCase
 
     public function testOrderByDesc()
     {
-        $queryBuilder = new QueryBuilder(new PdoMock());
+        $queryBuilder = new QB(new PdoMock());
 
         $query = $queryBuilder->table('users')
             ->select(['id', 'name' => 'username'])
@@ -206,7 +226,7 @@ class SelectTest extends TestCase
 
     public function testGroupBy()
     {
-        $queryBuilder = new QueryBuilder(new PdoMock());
+        $queryBuilder = new QB(new PdoMock());
 
         $query = $queryBuilder->table('users')
             ->select(['id', 'name' => 'username'])
@@ -217,7 +237,7 @@ class SelectTest extends TestCase
 
     public function testLimit()
     {
-        $queryBuilder = new QueryBuilder(new PdoMock());
+        $queryBuilder = new QB(new PdoMock());
 
         $query = $queryBuilder->table('users')
             ->select(['id', 'name' => 'username'])
@@ -228,7 +248,7 @@ class SelectTest extends TestCase
 
     public function testLimitOffset()
     {
-        $queryBuilder = new QueryBuilder(new PdoMock());
+        $queryBuilder = new QB(new PdoMock());
 
         $query = $queryBuilder->table('users')
             ->select(['id', 'name' => 'username'])

@@ -5,6 +5,7 @@ class Join extends ConditionsQueryBase
 {
     public function __construct(string $type, $table, $firstColumnOrCallback, $operator = null, $secondColumn = null)
     {
+        // TODO: Add join table alias support
         $this->type = "$type JOIN";
 
         $this->setTable($table, null);

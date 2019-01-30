@@ -7,6 +7,7 @@ class QueryBuilder
     protected $table = '';
     protected $tableAlias = null;
     protected $pdo;
+    static $currentTable = '';
 
     public function __construct(object $pdo)
     {
@@ -17,6 +18,8 @@ class QueryBuilder
     {
         $this->table = $table;
         $this->tableAlias = $tableAlias;
+
+        $this::$currentTable = $tableAlias !== null? $tableAlias: $table;
 
         return $this;
     }
@@ -76,5 +79,10 @@ class QueryBuilder
         $this->lastQuery = $query;
 
         return $query;
+    }
+
+    static function date($column)
+    {
+        return ["DATE(" . self::$currentTable . ".$column)" => $column];
     }
 }
