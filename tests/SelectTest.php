@@ -74,26 +74,6 @@ class SelectTest extends TestCase
         $this->assertEquals("SELECT U.id, U.name AS username FROM users U WHERE U.date < :date AND U.name != :name", $query->getSql());
     }
 
-    public function testColumnFunction()
-    {
-        QB::setPDO(new PdoMock());
-
-        $query = QB::select('users', 'U')
-            ->columns(['id', ['DATE(U.date)' => 'date']]);
-
-        $this->assertEquals("SELECT U.id, DATE(U.date) AS date FROM users U", $query->getSql());
-    }
-
-    public function testColumnFunction2()
-    {
-        QB::setPDO(new PdoMock());
-
-        $query = QB::select('users', 'U')
-            ->columns(['id', QB::date('date')]);
-
-        $this->assertEquals("SELECT U.id, DATE(U.date) AS date FROM users U", $query->getSql());
-    }
-
     public function testAndCondition()
     {
         QB::setPDO(new PdoMock());

@@ -57,8 +57,56 @@ class QueryBuilder
         return $query;
     }
 
-    static function date($column)
+    static function function(string $function, $column, $alias = null)
     {
-        return ["DATE(" . self::$currentTable . ".$column)" => $column];
+        if($alias === false) {
+            return "$function(".self::$currentTable.".$column)";
+        }
+
+        return ["$function(".self::$currentTable.".$column)" => $alias ?? $column];
+    }
+
+    static function functionMultipleArgs(string $function, $column, $alias = null)
+    {
+        if($alias === false) {
+            return "$function(".self::$currentTable.".$column)";
+        }
+
+        return ["$function($column)" => $alias ?? $column];
+    }
+
+    static function date(string $column, $alias = null)
+    {
+        return self::function('DATE', $column, $alias);
+    }
+
+    static function ceiling(string $column, $alias = null)
+    {
+        return self::function('CEILING', $column, $alias);
+    }
+
+    static function floor(string $column, $alias = null)
+    {
+        return self::function('FLOOR', $column, $alias);
+    }
+
+    static function count(string $column, $alias = null)
+    {
+        return self::function('COUNT', $column, $alias);
+    }
+
+    static function length(string $column, $alias = null)
+    {
+        return self::function('CHAR_LENGTH', $column, $alias);
+    }
+
+    static function concat(array $columns, $alias = null)
+    {
+        return self::functionMultipleArgs('CONCAT', implode(', ', $columns), $alias);
+    }
+
+    static function groupConcat(string $rawSQL, $alias = null)
+    {
+        return self::functionMultipleArgs('GROUP_CONCAT', $rawSQL, $alias);
     }
 }
