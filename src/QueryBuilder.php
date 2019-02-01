@@ -1,6 +1,8 @@
 <?php
 namespace Jarzon;
 
+use mysql_xdevapi\Exception;
+
 class QueryBuilder
 {
     static $table = '';
@@ -62,6 +64,9 @@ class QueryBuilder
         if($alias === false) {
             return "$function(".self::$currentTable.".$column)";
         }
+        else if(is_array($column)) {
+            $column = array_values($column)[0];
+        }
 
         return ["$function(".self::$currentTable.".$column)" => $alias ?? $column];
     }
@@ -97,6 +102,11 @@ class QueryBuilder
         return self::function('FORMAT', "$column, $round".(($local !== '')? ", '$local'": ''), $alias ?? $column);
     }
 
+    static function currency(string $value, $alias = null)
+    {
+        return self::concat([self::format($value, 2, 'fr_CA', false), "' $'"], $alias ?? $value);
+    }
+
     // String
 
     static function length(string $column, $alias = null)
@@ -104,8 +114,15 @@ class QueryBuilder
         return self::function('CHAR_LENGTH', $column, $alias);
     }
 
-    static function concat(array $columns, $alias = null)
+    static function concat($columns, $alias = null)
     {
+        if(!is_array($columns)) {
+            $columns = [$columns];
+        }
+        else if(is_array($columns[0])) {
+            throw new \Exception("Received Array expected string. You probably forgot to disable last function alias");
+        }
+
         return self::functionMultipleArgs('CONCAT', implode(', ', $columns), $alias);
     }
 

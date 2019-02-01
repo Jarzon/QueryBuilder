@@ -13,7 +13,7 @@ class FunctionsTest extends TestCase
         QB::setPDO(new PdoMock());
 
         $query = QB::select('users', 'U')
-            ->columns([QB::concat(['U.name', ' - ', QB::date('date', false)], 'date')]);
+            ->columns([QB::concat("U.name, ' - ', " . QB::date('date', false), 'date')]);
 
         $this->assertEquals("SELECT CONCAT(U.name, ' - ', DATE(U.date)) AS date FROM users U", $query->getSql());
     }
@@ -25,7 +25,7 @@ class FunctionsTest extends TestCase
         QB::setPDO(new PdoMock());
 
         $query = QB::select('users', 'U')
-            ->columns([QB::CEILING('number')]);
+            ->columns([QB::ceiling('number')]);
 
         $this->assertEquals("SELECT CEILING(U.number) AS number FROM users U", $query->getSql());
     }
@@ -60,14 +60,16 @@ class FunctionsTest extends TestCase
         $this->assertEquals("SELECT FORMAT(U.number, 2, 'fr_CA') AS number FROM users U", $query->getSql());
     }
 
-    public function testFormatNoAlias()
+    public function testCurrency()
     {
         QB::setPDO(new PdoMock());
 
         $query = QB::select('users', 'U')
-            ->columns([QB::format('number', 2,'fr_CA', false)]);
+            ->columns([
+                QB::currency('number')
+            ]);
 
-        $this->assertEquals("SELECT FORMAT(U.number, 2, 'fr_CA') AS number FROM users U", $query->getSql());
+        $this->assertEquals("SELECT CONCAT(FORMAT(U.number, 2, 'fr_CA'), ' $') AS number FROM users U", $query->getSql());
     }
 
     // MIN
@@ -96,7 +98,7 @@ class FunctionsTest extends TestCase
         QB::setPDO(new PdoMock());
 
         $query = QB::select('users', 'U')
-            ->columns([QB::concat(['"# "', 'U.number'], 'number')]);
+            ->columns([QB::concat(["'# '", 'U.number'], 'number')]);
 
         $this->assertEquals("SELECT CONCAT('# ', U.number) AS number FROM users U", $query->getSql());
     }
@@ -144,7 +146,7 @@ class FunctionsTest extends TestCase
         QB::setPDO(new PdoMock());
 
         $query = QB::select('users', 'U')
-            ->columns([QB::dateAdd('date', 'INTERVAL 1 DAY')]);// the alias is screwed here
+            ->columns([QB::dateAdd('date', 'INTERVAL 1 DAY')]);
 
         $this->assertEquals("SELECT DATE_ADD(U.date, INTERVAL 1 DAY) AS date FROM users U", $query->getSql());
     }
