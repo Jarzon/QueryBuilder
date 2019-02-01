@@ -109,4 +109,14 @@ class QueryBuilder
     {
         return self::functionMultipleArgs('GROUP_CONCAT', $rawSQL, $alias);
     }
+
+    static function currentDate($alias = null)
+    {
+        return self::functionMultipleArgs('CURDATE', null, $alias);
+    }
+
+    static function dateAdd($rawDate, $rawIntervalAddition, $alias = null)
+    {
+        return self::functionMultipleArgs('DATE_ADD', "$rawDate, $rawIntervalAddition", $alias);
+    }
 }

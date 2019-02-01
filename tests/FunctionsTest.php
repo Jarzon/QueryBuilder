@@ -8,16 +8,6 @@ use Jarzon\QueryBuilder as QB;
 
 class FunctionsTest extends TestCase
 {
-    public function testDate()
-    {
-        QB::setPDO(new PdoMock());
-
-        $query = QB::select('users', 'U')
-            ->columns([QB::date('date', 'date2')]);
-
-        $this->assertEquals("SELECT DATE(U.date) AS date2 FROM users U", $query->getSql());
-    }
-
     public function testFalseAlias()
     {
         QB::setPDO(new PdoMock());
@@ -27,6 +17,8 @@ class FunctionsTest extends TestCase
 
         $this->assertEquals("SELECT CONCAT(U.name, ' - ', DATE(U.date)) AS date FROM users U", $query->getSql());
     }
+
+    // Numbers
 
     public function testCeiling()
     {
@@ -58,6 +50,18 @@ class FunctionsTest extends TestCase
         $this->assertEquals("SELECT COUNT(U.number) AS number FROM users U", $query->getSql());
     }
 
+    // MIN
+    // MAX
+    // SUM
+    // AVG
+    // ABS
+    // POWER(int, int)
+    // FORMAT(value, round, local)
+    // GREATEST(...values)
+    // LEAST(...values)
+
+    // Strings
+
     public function testLength()
     {
         QB::setPDO(new PdoMock());
@@ -87,4 +91,63 @@ class FunctionsTest extends TestCase
 
         $this->assertEquals("SELECT GROUP_CONCAT(U.number) AS number FROM users U", $query->getSql());
     }
+
+    // REPLACE(baseString, search, replace)
+    // LOWER
+    // UPPER
+    // LEFT(string, limit)
+    // RIGHT(string, limit)
+
+    // Dates
+
+    public function testDate()
+    {
+        QB::setPDO(new PdoMock());
+
+        $query = QB::select('users', 'U')
+            ->columns([QB::date('date', 'date2')]);
+
+        $this->assertEquals("SELECT DATE(U.date) AS date2 FROM users U", $query->getSql());
+    }
+
+    public function testCurrentDate()
+    {
+        QB::setPDO(new PdoMock());
+
+        $query = QB::select('users', 'U')
+            ->columns([QB::currentDate('date')]);
+
+        $this->assertEquals("SELECT CURDATE() AS date FROM users U", $query->getSql());
+    }
+
+    public function testDateAdd()
+    {
+        QB::setPDO(new PdoMock());
+
+        $query = QB::select('users', 'U')
+            ->columns([QB::dateAdd('date', 'INTERVAL 1 DAY')]);// the alias is screwed here
+
+        $this->assertEquals("SELECT DATE_ADD(U.date, INTERVAL 1 DAY) AS date FROM users U", $query->getSql());
+    }
+
+    // STR_TO_DATE(string, dateFormat)
+    // DATE_SUB
+    // DATE_FORMAT(date, format) [format: %Y-%m-%d]
+    // DATE_DIFF(date1, date2)
+    // DAY
+    // MOUTH
+    // YEAR
+
+    // Time
+
+    // TIME_FORMAT
+    // TIME_ADD
+
+    // Others
+
+    // IF(expresion, returnIfTrue, returnIfFalse)
+    // IFNULL(valueReturnIfNotNull, valueReturnedIfNull)
+    // IN value IN (0, 1, 2, 3, 'a')
+
+    // CONVERT(sourceValue, type)
 }
