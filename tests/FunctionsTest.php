@@ -11,6 +11,24 @@ class FunctionsTest extends TestCase
     public function testFalseAlias()
     {
         QB::setPDO(new PdoMock());
+/*
+        // Using a class to allow auto complete
+        $users = new Users();
+
+        $query = QB::select($users)
+            ->columns([
+                $users::id,
+                QB::concat([$users::name, ' - ', QB::date($users::date, false)], 'date')
+            ]);
+
+        // Static class
+        $query = QB::select(U)
+            ->columns([
+                U::id,
+                QB::concat([U::name, ' - ', QB::date(U::date, false)], 'date')
+            ]);
+
+        // If there is two version of the same DB then us set alias*/
 
         $query = QB::select('users', 'U')
             ->columns([QB::concat("U.name, ' - ', " . QB::date('date', false), 'date')]);
@@ -19,6 +37,46 @@ class FunctionsTest extends TestCase
     }
 
     // Numbers
+
+    public function testMin()
+    {
+        QB::setPDO(new PdoMock());
+
+        $query = QB::select('users', 'U')
+            ->columns([QB::min('number')]);
+
+        $this->assertEquals("SELECT MIN(U.number) AS number FROM users U", $query->getSql());
+    }
+
+    public function testMax()
+    {
+        QB::setPDO(new PdoMock());
+
+        $query = QB::select('users', 'U')
+            ->columns([QB::max('number')]);
+
+        $this->assertEquals("SELECT MAX(U.number) AS number FROM users U", $query->getSql());
+    }
+
+    public function testSum()
+    {
+        QB::setPDO(new PdoMock());
+
+        $query = QB::select('users', 'U')
+            ->columns([QB::sum('number')]);
+
+        $this->assertEquals("SELECT SUM(U.number) AS number FROM users U", $query->getSql());
+    }
+
+    public function testAvg()
+    {
+        QB::setPDO(new PdoMock());
+
+        $query = QB::select('users', 'U')
+            ->columns([QB::avg('number')]);
+
+        $this->assertEquals("SELECT AVG(U.number) AS number FROM users U", $query->getSql());
+    }
 
     public function testCeiling()
     {
@@ -72,10 +130,6 @@ class FunctionsTest extends TestCase
         $this->assertEquals("SELECT CONCAT(FORMAT(U.number, 2, 'fr_CA'), ' $') AS number FROM users U", $query->getSql());
     }
 
-    // MIN
-    // MAX
-    // SUM
-    // AVG
     // ABS
     // POWER(int, int)
     // GREATEST(...values)
@@ -163,6 +217,8 @@ class FunctionsTest extends TestCase
 
     // TIME_FORMAT
     // TIME_ADD
+    // HOUR
+    // MINUTE
 
     // Others
 

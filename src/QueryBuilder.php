@@ -82,6 +82,26 @@ class QueryBuilder
 
     // Number
 
+    static function min(string $column, $alias = null)
+    {
+        return self::function('MIN', $column, $alias);
+    }
+
+    static function max(string $column, $alias = null)
+    {
+        return self::function('MAX', $column, $alias);
+    }
+
+    static function sum(string $column, $alias = null)
+    {
+        return self::function('SUM', $column, $alias);
+    }
+
+    static function avg(string $column, $alias = null)
+    {
+        return self::function('AVG', $column, $alias);
+    }
+
     static function ceiling(string $column, $alias = null)
     {
         return self::function('CEILING', $column, $alias);
