@@ -50,13 +50,32 @@ class FunctionsTest extends TestCase
         $this->assertEquals("SELECT COUNT(U.number) AS number FROM users U", $query->getSql());
     }
 
+    public function testFormat()
+    {
+        QB::setPDO(new PdoMock());
+
+        $query = QB::select('users', 'U')
+            ->columns([QB::format('number')]);
+
+        $this->assertEquals("SELECT FORMAT(U.number, 2, 'fr_CA') AS number FROM users U", $query->getSql());
+    }
+
+    public function testFormatNoAlias()
+    {
+        QB::setPDO(new PdoMock());
+
+        $query = QB::select('users', 'U')
+            ->columns([QB::format('number', 2,'fr_CA', false)]);
+
+        $this->assertEquals("SELECT FORMAT(U.number, 2, 'fr_CA') AS number FROM users U", $query->getSql());
+    }
+
     // MIN
     // MAX
     // SUM
     // AVG
     // ABS
     // POWER(int, int)
-    // FORMAT(value, round, local)
     // GREATEST(...values)
     // LEAST(...values)
 

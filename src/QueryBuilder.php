@@ -75,10 +75,7 @@ class QueryBuilder
         return ["$function($column)" => $alias ?? $column];
     }
 
-    static function date(string $column, $alias = null)
-    {
-        return self::function('DATE', $column, $alias);
-    }
+    // Number
 
     static function ceiling(string $column, $alias = null)
     {
@@ -95,6 +92,13 @@ class QueryBuilder
         return self::function('COUNT', $column, $alias);
     }
 
+    static function format(string $column, int $round = 2, string $local = 'fr_CA', $alias = null)
+    {
+        return self::function('FORMAT', "$column, $round".(($local !== '')? ", '$local'": ''), $alias ?? $column);
+    }
+
+    // String
+
     static function length(string $column, $alias = null)
     {
         return self::function('CHAR_LENGTH', $column, $alias);
@@ -108,6 +112,13 @@ class QueryBuilder
     static function groupConcat(string $rawSQL, $alias = null)
     {
         return self::functionMultipleArgs('GROUP_CONCAT', $rawSQL, $alias);
+    }
+
+    // Date
+
+    static function date(string $column, $alias = null)
+    {
+        return self::function('DATE', $column, $alias);
     }
 
     static function currentDate($alias = null)
