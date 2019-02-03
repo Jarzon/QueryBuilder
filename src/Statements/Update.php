@@ -1,7 +1,7 @@
 <?php
-namespace Jarzon;
+namespace Jarzon\Statements;
 
-class Update extends ConditionsQueryBase
+class Update extends \Jarzon\ConditionsQueryBase
 {
     protected $columns = [];
     protected $query = null;
@@ -12,8 +12,6 @@ class Update extends ConditionsQueryBase
         $this->pdo = $pdo;
 
         $this->setTable($table, $tableAlias);
-
-
 
         return $this;
     }

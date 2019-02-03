@@ -1,5 +1,5 @@
 <?php
-namespace Jarzon;
+namespace Jarzon\Conditions;
 
 class InCondition
 {

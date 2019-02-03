@@ -1,7 +1,7 @@
 <?php
-namespace Jarzon;
+namespace Jarzon\Statements;
 
-class Select extends ConditionsQueryBase
+class Select extends \Jarzon\ConditionsQueryBase
 {
     protected $columns = ['*'];
     protected $join = [];

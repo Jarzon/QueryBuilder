@@ -1,7 +1,9 @@
 <?php
-namespace Jarzon;
+namespace Jarzon\Statements;
 
-class Join extends ConditionsQueryBase
+use \Jarzon\Conditions\Condition;
+
+class Join extends \Jarzon\ConditionsQueryBase
 {
     public function __construct(string $type, $table, $firstColumnOrCallback, $operator = null, $secondColumn = null)
     {

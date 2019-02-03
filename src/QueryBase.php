@@ -1,7 +1,7 @@
 <?php
 namespace Jarzon;
 
-class QueryBase
+abstract class QueryBase
 {
     protected $pdo;
     protected $lastStatement;

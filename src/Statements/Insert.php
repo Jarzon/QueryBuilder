@@ -1,7 +1,7 @@
 <?php
-namespace Jarzon;
+namespace Jarzon\Statements;
 
-class Insert extends QueryBase
+class Insert extends \Jarzon\QueryBase
 {
     protected $columns = [];
     protected $values = [];

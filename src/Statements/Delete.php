@@ -1,7 +1,7 @@
 <?php
-namespace Jarzon;
+namespace Jarzon\Statements;
 
-class Delete extends ConditionsQueryBase
+class Delete extends \Jarzon\ConditionsQueryBase
 {
     public function __construct(string $table, ?string $tableAlias, object $pdo)
     {

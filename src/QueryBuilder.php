@@ -1,7 +1,10 @@
 <?php
 namespace Jarzon;
 
-use mysql_xdevapi\Exception;
+use Jarzon\Statements\Select;
+use Jarzon\Statements\Insert;
+use Jarzon\Statements\Update;
+use Jarzon\Statements\Delete;
 
 class QueryBuilder
 {

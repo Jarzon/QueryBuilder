@@ -1,7 +1,11 @@
 <?php
 namespace Jarzon;
 
-class ConditionsQueryBase extends QueryBase
+use \Jarzon\Conditions\Condition;
+use \Jarzon\Conditions\BetweenCondition;
+use \Jarzon\Conditions\InCondition;
+
+abstract class ConditionsQueryBase extends QueryBase
 {
     protected $conditions = [];
 
