@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace Tests;
 
 use PHPUnit\Framework\TestCase;
+use \Tests\Mocks\PdoMock;
 use Jarzon\QueryBuilder as QB;
+use Tests\Mocks\TableMock;
 
 class InsertTest extends TestCase
 {
@@ -12,8 +14,10 @@ class InsertTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $query = QB::insert('users')
-            ->columns(['name', 'email'])
+        $users = new TableMock();
+
+        $query = QB::insert($users) // Unify column and values
+            ->columns($users->name, $users->email)
             ->values(['test', 'test@exemple.com']);
 
         $this->assertEquals("INSERT INTO users(name, email) VALUES (:name, :email)", $query->getSql());

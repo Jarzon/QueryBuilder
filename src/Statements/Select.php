@@ -1,7 +1,7 @@
 <?php
 namespace Jarzon\Statements;
 
-class Select extends \Jarzon\ConditionsQueryBase
+class Select extends ConditionalStatementBase
 {
     protected $columns = ['*'];
     protected $join = [];
@@ -15,43 +15,41 @@ class Select extends \Jarzon\ConditionsQueryBase
         $this->pdo = $pdo;
 
         $this->setTable($table, $tableAlias);
-
-        return $this;
     }
 
-    public function columns(array $columns)
+    public function columns(...$columns): self
     {
-        if(!is_array($columns)) {
-            $columns = [$columns];
-        }
-
         $this->columns = [];
-        $this->addSelect($columns);
+        $this->addColumns(...$columns);
 
         return $this;
     }
 
-    protected function getColumns() {
+    protected function getColumns(): string
+    {
         $columns = implode(', ', array_map(function($key, $name) {
             if($name === '*') return $name;
 
             $output = $name;
 
-            if(is_array($name)) {
+            if(is_object($name)) {
+                $output = $name->getOutput();
+            }
+            else if(is_array($name)) {
                 $key = array_key_first($name);
                 return "$key AS $name[$key]";
             }
             else if(!is_int($key)) {
-                $output = "$key AS $name";
+                $output = $name;
             }
 
-            return $this->columnAlias($output);
+            return $output;
         }, array_keys($this->columns), $this->columns));
 
         return $columns;
     }
 
-    public function getSql()
+    public function getSql(): string
     {
         $columns = $this->getColumns();
 
@@ -98,25 +96,21 @@ class Select extends \Jarzon\ConditionsQueryBase
         return $query;
     }
 
-    public function addSelect($columns)
+    public function addColumns(...$columns): self
     {
-        if(is_array($columns)) {
-            array_map(function ($key, $column) {
-                if(!is_int($key)) {
-                    $this->columns[$key] = $column;
-                } else {
-                    $this->columns[] = $column;
-                }
+        foreach ($columns as $column) {
 
-            }, array_keys($columns), $columns);
-        } else {
-            $this->columns[] = $columns;
+            if(is_object($column)) {
+                $this->columns[] = $column->getColumnSelect();
+            } else {
+                $this->columns[] = $column;
+            }
         }
 
         return $this;
     }
 
-    public function orderBy(string $column, string $order = '')
+    public function orderBy(string $column, string $order = ''): self
     {
         if($order === 'desc') {
             $order = 'DESC';
@@ -126,7 +120,7 @@ class Select extends \Jarzon\ConditionsQueryBase
         return $this;
     }
 
-    public function groupBy($columns)
+    public function groupBy($columns): self
     {
         if(!is_array($columns)) {
             $columns = [$columns];
@@ -137,7 +131,7 @@ class Select extends \Jarzon\ConditionsQueryBase
         return $this;
     }
 
-    public function limit(int $offset, ?int $select = null)
+    public function limit(int $offset, ?int $select = null): self
     {
         if($select === null) {
             $this->limit = [$this->param($offset, 'limit1')];
@@ -148,7 +142,7 @@ class Select extends \Jarzon\ConditionsQueryBase
         return $this;
     }
 
-    public function leftJoin(string $table, $firstColumnOrCallback, $operator = null, $secondColumn = null)
+    public function leftJoin(string $table, $firstColumnOrCallback, $operator = null, $secondColumn = null): self
     {
         $this->join[] = new Join('LEFT', $table, $firstColumnOrCallback, $operator, $secondColumn);
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Tests;
 
 use PHPUnit\Framework\TestCase;
+use \Tests\Mocks\PdoMock;
 use Jarzon\QueryBuilder as QB;
 
 class UpdateTest extends TestCase

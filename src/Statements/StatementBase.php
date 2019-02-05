@@ -1,7 +1,7 @@
 <?php
-namespace Jarzon;
+namespace Jarzon\Statements;
 
-abstract class QueryBase
+abstract class StatementBase
 {
     protected $pdo;
     protected $lastStatement;
@@ -24,7 +24,18 @@ abstract class QueryBase
             return $value;
         }
 
-        if(is_string($key) && $key !== '?') {
+        if(is_object($key)) {
+            $key =  ":" . $key->getColumnReference();
+
+            if(array_key_exists($key, $this->params)) {
+                $keys = array_keys(array_keys($this->params), $key);
+
+                $key .= count($keys);
+            }
+
+            $this->params[] = $value;
+        }
+        else if(is_string($key) && $key !== '?') {
             $key = ":$key";
 
             if(array_key_exists($key, $this->params)) {
@@ -43,16 +54,7 @@ abstract class QueryBase
 
     protected function getTable()
     {
-        return "$this->table".(isset($this->tableAlias)? " $this->tableAlias": '');
-    }
-
-    public function columnAlias($column, $isRaw = false)
-    {
-        if($isRaw) {
-            return $column;
-        }
-
-        return ($this->tableAlias === null? $this->table: $this->tableAlias) . ".$column";
+        return $this->table;
     }
 
     public function getLastStatement()

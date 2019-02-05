@@ -1,7 +1,7 @@
 <?php
 namespace Jarzon\Statements;
 
-class Update extends \Jarzon\ConditionsQueryBase
+class Update extends ConditionalStatementBase
 {
     protected $columns = [];
     protected $query = null;
@@ -12,25 +12,23 @@ class Update extends \Jarzon\ConditionsQueryBase
         $this->pdo = $pdo;
 
         $this->setTable($table, $tableAlias);
-
-        return $this;
     }
 
-    public function set(string $column, string $value)
+    public function set(string $column, string $value): self
     {
         $this->addColumn([$column => $value]);
 
         return $this;
     }
 
-    public function setRaw(string $column, string $value)
+    public function setRaw(string $column, string $value): self
     {
         $this->addColumn([$column => $value], true);
 
         return $this;
     }
 
-    public function columns(array $columns)
+    public function columns(array $columns): self
     {
         if(!is_array($columns)) {
             $columns = [$columns];
@@ -42,7 +40,7 @@ class Update extends \Jarzon\ConditionsQueryBase
         return $this;
     }
 
-    public function addColumn(array $columns, bool $isRaw = false)
+    public function addColumn(array $columns, bool $isRaw = false): self
     {
         if(!$isRaw) {
             array_walk($columns, function(&$value, $column) {
@@ -55,7 +53,7 @@ class Update extends \Jarzon\ConditionsQueryBase
         return $this;
     }
 
-    public function getSql()
+    public function getSql(): string
     {
         if($this->query !== null) {
             return $this->query;

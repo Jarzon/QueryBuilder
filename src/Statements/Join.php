@@ -3,7 +3,7 @@ namespace Jarzon\Statements;
 
 use \Jarzon\Conditions\Condition;
 
-class Join extends \Jarzon\ConditionsQueryBase
+class Join extends ConditionalStatementBase
 {
     public function __construct(string $type, $table, $firstColumnOrCallback, $operator = null, $secondColumn = null)
     {
@@ -17,11 +17,9 @@ class Join extends \Jarzon\ConditionsQueryBase
         } else {
             $firstColumnOrCallback($this);
         }
-
-        return $this;
     }
 
-    public function getSql()
+    public function getSql(): string
     {
         return "$this->type $this->table ON ".$this->getConditions();
     }

@@ -1,7 +1,7 @@
 <?php
 namespace Jarzon\Statements;
 
-class Insert extends \Jarzon\QueryBase
+class Insert extends StatementBase
 {
     protected $columns = [];
     protected $values = [];
@@ -12,8 +12,6 @@ class Insert extends \Jarzon\QueryBase
         $this->pdo = $pdo;
 
         $this->setTable($table, null);
-
-        return $this;
     }
 
     public function values(array $values)
@@ -23,15 +21,15 @@ class Insert extends \Jarzon\QueryBase
         return $this;
     }
 
-    public function columns(array $columns)
+    public function columns(... $columns): self
     {
         $this->columns = [];
-        $this->addColumn($columns);
+        $this->addColumn(...$columns);
 
         return $this;
     }
 
-    public function addColumn(array $columns)
+    public function addColumn(...$columns): self
     {
         if(is_array($columns)) {
             array_map(function ($key, $column) {
@@ -49,7 +47,7 @@ class Insert extends \Jarzon\QueryBase
         return $this;
     }
 
-    public function getSql()
+    public function getSql(): string
     {
         $columns = implode(', ', $this->columns);
         $values = ':'.implode(', :', $this->columns);

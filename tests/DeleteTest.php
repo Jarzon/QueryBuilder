@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace Tests;
 
 use PHPUnit\Framework\TestCase;
+use \Tests\Mocks\PdoMock;
 use Jarzon\QueryBuilder as QB;
+use \Tests\Mocks\TableMock;
 
 class DeleteTest extends TestCase
 {
@@ -12,9 +14,11 @@ class DeleteTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $query = QB::delete('users')
-            ->where('name', '=', 'test');
+        $users = new TableMock();
 
-        $this->assertEquals("DELETE users WHERE users.name = :name", $query->getSql());
+        $query = QB::delete($users->table)
+            ->where($users->name, '=', 'test');
+
+        $this->assertEquals("DELETE users WHERE name = :name", $query->getSql());
     }
 }

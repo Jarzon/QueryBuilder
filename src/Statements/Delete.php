@@ -1,7 +1,7 @@
 <?php
 namespace Jarzon\Statements;
 
-class Delete extends \Jarzon\ConditionsQueryBase
+class Delete extends ConditionalStatementBase
 {
     public function __construct(string $table, ?string $tableAlias, object $pdo)
     {
@@ -9,11 +9,9 @@ class Delete extends \Jarzon\ConditionsQueryBase
         $this->pdo = $pdo;
 
         $this->setTable($table, $tableAlias);
-
-        return $this;
     }
 
-    public function getSql()
+    public function getSql(): string
     {
         $table = $this->getTable();
 

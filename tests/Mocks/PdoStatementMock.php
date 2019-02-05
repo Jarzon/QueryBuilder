@@ -1,5 +1,5 @@
 <?php
-namespace Tests;
+namespace Tests\Mocks;
 class PdoStatementMock extends \PDOStatement
 {
     public $params = [];

@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace Tests;
 
 use PHPUnit\Framework\TestCase;
+use \Tests\Mocks\PdoMock;
 use Jarzon\QueryBuilder as QB;
+use \Tests\Mocks\TableMock;
 
 class FunctionsTest extends TestCase
 {
@@ -16,22 +18,24 @@ class FunctionsTest extends TestCase
         $users = new Users();
 
         $query = QB::select($users)
-            ->columns([
+            ->columns(
                 $users::id,
-                QB::concat([$users::name, ' - ', QB::date($users::date, false)], 'date')
-            ]);
+                $users->date->date()->preAppend($users->name, ' - ')->alias('customDate')
+            );
 
         // Static class
         $query = QB::select(U)
-            ->columns([
+            ->columns(
                 U::id,
                 QB::concat([U::name, ' - ', QB::date(U::date, false)], 'date')
-            ]);
+            );
 
         // If there is two version of the same DB then us set alias*/
 
-        $query = QB::select('users', 'U')
-            ->columns([QB::concat("U.name, ' - ', " . QB::date('date', false), 'date')]);
+        $users = new TableMock('U');
+
+        $query = QB::select($users)
+            ->columns($users->date->date()->preAppend($users->name, "' - '"));
 
         $this->assertEquals("SELECT CONCAT(U.name, ' - ', DATE(U.date)) AS date FROM users U", $query->getSql());
     }
@@ -42,8 +46,10 @@ class FunctionsTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $query = QB::select('users', 'U')
-            ->columns([QB::min('number')]);
+        $users = new TableMock('U');
+
+        $query = QB::select($users)
+            ->columns($users->number->min());
 
         $this->assertEquals("SELECT MIN(U.number) AS number FROM users U", $query->getSql());
     }
@@ -51,9 +57,10 @@ class FunctionsTest extends TestCase
     public function testMax()
     {
         QB::setPDO(new PdoMock());
+        $users = new TableMock('U');
 
-        $query = QB::select('users', 'U')
-            ->columns([QB::max('number')]);
+        $query = QB::select($users)
+            ->columns($users->number->max());
 
         $this->assertEquals("SELECT MAX(U.number) AS number FROM users U", $query->getSql());
     }
@@ -61,9 +68,10 @@ class FunctionsTest extends TestCase
     public function testSum()
     {
         QB::setPDO(new PdoMock());
+        $users = new TableMock('U');
 
-        $query = QB::select('users', 'U')
-            ->columns([QB::sum('number')]);
+        $query = QB::select($users)
+            ->columns($users->number->sum());
 
         $this->assertEquals("SELECT SUM(U.number) AS number FROM users U", $query->getSql());
     }
@@ -71,9 +79,10 @@ class FunctionsTest extends TestCase
     public function testAvg()
     {
         QB::setPDO(new PdoMock());
+        $users = new TableMock('U');
 
-        $query = QB::select('users', 'U')
-            ->columns([QB::avg('number')]);
+        $query = QB::select($users)
+            ->columns($users->number->avg());
 
         $this->assertEquals("SELECT AVG(U.number) AS number FROM users U", $query->getSql());
     }
@@ -81,9 +90,10 @@ class FunctionsTest extends TestCase
     public function testCeiling()
     {
         QB::setPDO(new PdoMock());
+        $users = new TableMock('U');
 
-        $query = QB::select('users', 'U')
-            ->columns([QB::ceiling('number')]);
+        $query = QB::select($users)
+            ->columns($users->number->ceiling());
 
         $this->assertEquals("SELECT CEILING(U.number) AS number FROM users U", $query->getSql());
     }
@@ -91,9 +101,10 @@ class FunctionsTest extends TestCase
     public function testFloor()
     {
         QB::setPDO(new PdoMock());
+        $users = new TableMock('U');
 
-        $query = QB::select('users', 'U')
-            ->columns([QB::floor('number')]);
+        $query = QB::select($users)
+            ->columns($users->number->floor());
 
         $this->assertEquals("SELECT FLOOR(U.number) AS number FROM users U", $query->getSql());
     }
@@ -101,9 +112,10 @@ class FunctionsTest extends TestCase
     public function testCount()
     {
         QB::setPDO(new PdoMock());
+        $users = new TableMock('U');
 
-        $query = QB::select('users', 'U')
-            ->columns([QB::count('number')]);
+        $query = QB::select($users)
+            ->columns($users->number->count());
 
         $this->assertEquals("SELECT COUNT(U.number) AS number FROM users U", $query->getSql());
     }
@@ -111,9 +123,10 @@ class FunctionsTest extends TestCase
     public function testFormat()
     {
         QB::setPDO(new PdoMock());
+        $users = new TableMock('U');
 
-        $query = QB::select('users', 'U')
-            ->columns([QB::format('number')]);
+        $query = QB::select($users)
+            ->columns($users->number->format());
 
         $this->assertEquals("SELECT FORMAT(U.number, 2, 'fr_CA') AS number FROM users U", $query->getSql());
     }
@@ -121,11 +134,12 @@ class FunctionsTest extends TestCase
     public function testCurrency()
     {
         QB::setPDO(new PdoMock());
+        $users = new TableMock('U');
 
-        $query = QB::select('users', 'U')
-            ->columns([
-                QB::currency('number')
-            ]);
+        $query = QB::select($users)
+            ->columns(
+                $users->number->currency()
+            );
 
         $this->assertEquals("SELECT CONCAT(FORMAT(U.number, 2, 'fr_CA'), ' $') AS number FROM users U", $query->getSql());
     }
@@ -140,19 +154,21 @@ class FunctionsTest extends TestCase
     public function testLength()
     {
         QB::setPDO(new PdoMock());
+        $users = new TableMock('U');
 
-        $query = QB::select('users', 'U')
-            ->columns([QB::length('number')]);
+        $query = QB::select($users)
+            ->columns($users->name->length());
 
-        $this->assertEquals("SELECT CHAR_LENGTH(U.number) AS number FROM users U", $query->getSql());
+        $this->assertEquals("SELECT CHAR_LENGTH(U.name) AS name FROM users U", $query->getSql());
     }
 
     public function testConcat()
     {
         QB::setPDO(new PdoMock());
+        $users = new TableMock('U');
 
-        $query = QB::select('users', 'U')
-            ->columns([QB::concat(["'# '", 'U.number'], 'number')]);
+        $query = QB::select($users)
+            ->columns($users->number->preAppend(QB::raw('# ')));
 
         $this->assertEquals("SELECT CONCAT('# ', U.number) AS number FROM users U", $query->getSql());
     }
@@ -160,9 +176,10 @@ class FunctionsTest extends TestCase
     public function testGroupConcat()
     {
         QB::setPDO(new PdoMock());
+        $users = new TableMock('U');
 
-        $query = QB::select('users', 'U')
-            ->columns([QB::groupConcat('U.number', 'number')]);
+        $query = QB::select($users)
+            ->columns(QB::groupConcat($users->number, 'number'));
 
         $this->assertEquals("SELECT GROUP_CONCAT(U.number) AS number FROM users U", $query->getSql());
     }
@@ -178,9 +195,10 @@ class FunctionsTest extends TestCase
     public function testDate()
     {
         QB::setPDO(new PdoMock());
+        $users = new TableMock('U');
 
-        $query = QB::select('users', 'U')
-            ->columns([QB::date('date', 'date2')]);
+        $query = QB::select($users)
+            ->columns($users->date->date()->alias('date2'));
 
         $this->assertEquals("SELECT DATE(U.date) AS date2 FROM users U", $query->getSql());
     }
@@ -188,9 +206,10 @@ class FunctionsTest extends TestCase
     public function testCurrentDate()
     {
         QB::setPDO(new PdoMock());
+        $users = new TableMock('U');
 
-        $query = QB::select('users', 'U')
-            ->columns([QB::currentDate('date')]);
+        $query = QB::select($users)
+            ->columns(QB::currentDate('date'));
 
         $this->assertEquals("SELECT CURDATE() AS date FROM users U", $query->getSql());
     }
@@ -198,9 +217,10 @@ class FunctionsTest extends TestCase
     public function testDateAdd()
     {
         QB::setPDO(new PdoMock());
+        $users = new TableMock('U');
 
-        $query = QB::select('users', 'U')
-            ->columns([QB::dateAdd('date', 'INTERVAL 1 DAY')]);
+        $query = QB::select($users)
+            ->columns($users->date->dateAdd('1 DAY'));
 
         $this->assertEquals("SELECT DATE_ADD(U.date, INTERVAL 1 DAY) AS date FROM users U", $query->getSql());
     }
