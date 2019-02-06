@@ -99,6 +99,11 @@ abstract class QueryBuilder
         return ["$function($column)" => $alias ?? $column];
     }
 
+    static function concat(array $columns, $alias = null)
+    {
+        return self::functionMultipleArgs('CONCAT', implode(', ', $columns), $alias);
+    }
+
     static function currentDate($alias = null)
     {
         return self::functionMultipleArgs('CURDATE', null, $alias);
