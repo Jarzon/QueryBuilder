@@ -28,13 +28,12 @@ class SelectTest extends TestCase
 
         $users = new TableMock('U');
 
-        $query = QB::select($users->table)
-            ->columns([$users->id, $users->name])
+        $query = QB::select($users)
+            ->columns($users->id, $users->name)
             ->where($users->date, '<', 30)
-            ->addSelect($users->date)
-            ->addSelect($users->date->alias('date2'));
+            ->addColumns($users->date->alias('date2'));
 
-        $this->assertEquals('SELECT U.id, U.name, U.date, U.date AS date2 FROM users U WHERE U.date < :date', $query->getSql());
+        $this->assertEquals('SELECT U.id, U.name, U.date AS date2 FROM users U WHERE U.date < :date', $query->getSql());
     }
 
     public function testWhereColumn()
@@ -43,10 +42,10 @@ class SelectTest extends TestCase
 
         $users = new TableMock('U');
 
-        $query = QB::select($users->table)
+        $query = QB::select($users)
             ->whereRaw($users->date, '=', $users->created);
 
-        $this->assertEquals('SELECT * FROM users U WHERE U.column = U.anotherColumn', $query->getSql());
+        $this->assertEquals('SELECT * FROM users U WHERE U.date = U.created', $query->getSql());
     }
 
     public function testComplexWhere()
@@ -55,23 +54,23 @@ class SelectTest extends TestCase
 
         $users = new TableMock('U');
 
-        $query = QB::select($users->table)
-            ->whereRaw('users.column', '>', '(users.anotherColumn - 5)');
+        $query = QB::select($users)
+            ->whereRaw($users->date, '>', '(U.anotherColumn - 5)');
 
 
-        $this->assertEquals('SELECT * FROM users U WHERE U.column > (U.anotherColumn - 5)', $query->getSql());
+        $this->assertEquals('SELECT * FROM users U WHERE U.date > (U.anotherColumn - 5)', $query->getSql());
     }
 
     public function testWithAlias()
     {
         QB::setPDO(new PdoMock());
 
-        $users = new TableMock('U');
+        $users = new TableMock();
 
-        $query = QB::select($users->table)
-            ->columns(['id', 'name' => 'username']);
+        $query = QB::select($users)
+            ->columns($users->id, $users->name->alias('username'));
 
-        $this->assertEquals('SELECT U.id, U.name AS username FROM users', $query->getSql());
+        $this->assertEquals('SELECT id, name AS username FROM users', $query->getSql());
     }
 
     public function testTableAlias()
@@ -80,10 +79,10 @@ class SelectTest extends TestCase
 
         $users = new TableMock('U');
 
-        $query = QB::select($users->table)
-            ->columns(['id', 'name' => 'username'])
-            ->where('date', '<', 30)
-            ->where('name', '!=', 'Root');
+        $query = QB::select($users)
+            ->columns($users->id, $users->name->alias('username'))
+            ->where($users->date, '<', 30)
+            ->where($users->name, '!=', 'Root');
 
         $this->assertEquals("SELECT U.id, U.name AS username FROM users U WHERE U.date < :date AND U.name != :name", $query->getSql());
     }
@@ -94,12 +93,11 @@ class SelectTest extends TestCase
 
         $users = new TableMock('U');
 
-        $query = QB::select($users->table)
-            ->columns(['id', 'name' => 'username'])
-            ->where('date', '<', 30)
-            ->where('name', '!=', 'Root');
+        $query = QB::select($users)
+            ->where($users->date, '<', 30)
+            ->where($users->name, '!=', 'Root');
 
-        $this->assertEquals("SELECT U.id, U.name AS username FROM users U WHERE U.date < :date AND U.name != :name", $query->getSql());
+        $this->assertEquals("SELECT * FROM users U WHERE U.date < :date AND U.name != :name", $query->getSql());
     }
 
     public function testOrCondition()
@@ -108,12 +106,11 @@ class SelectTest extends TestCase
 
         $users = new TableMock('U');
 
-        $query = QB::select($users->table)
-            ->columns(['id', 'name' => 'username'])
-            ->where('date', '<', 30)
-            ->or('name', '!=', 'Root');
+        $query = QB::select($users)
+            ->where($users->date, '<', 30)
+            ->or($users->name, '!=', 'Root');
 
-        $this->assertEquals("SELECT U.id, U.name AS username FROM users U WHERE U.date < :date OR U.name != :name", $query->getSql());
+        $this->assertEquals("SELECT * FROM users U WHERE U.date < :date OR U.name != :name", $query->getSql());
     }
 
     public function testSubCondition()
@@ -122,15 +119,14 @@ class SelectTest extends TestCase
 
         $users = new TableMock('U');
 
-        $query = QB::select($users->table)
-            ->columns(['id', 'name' => 'username'])
-            ->where('date', '<', '01-01-2000')
-            ->where(function ($q) {
-                $q->where('name', '!=', 'Root')
-                    ->or('date', '<', '01-01-2000');
+        $query = QB::select($users)
+            ->where($users->date, '<', '01-01-2000')
+            ->where(function ($q) use($users) {
+                $q->where($users->name, '!=', 'Root')
+                    ->or($users->date, '<', '01-01-2000');
             });
 
-        $this->assertEquals("SELECT U.id, U.name AS username FROM users U WHERE U.date < :date AND ( U.name != :name OR U.date < :date2 )", $query->getSql());
+        $this->assertEquals("SELECT * FROM users U WHERE U.date < :date AND ( U.name != :name OR U.date < :date2 )", $query->getSql());
     }
 
     public function testBetweenCondition()
@@ -139,11 +135,10 @@ class SelectTest extends TestCase
 
         $users = new TableMock('U');
 
-        $query = QB::select($users->table)
-            ->columns(['id', 'name' => 'username'])
-            ->between('numberColumn', 10, 30);
+        $query = QB::select($users)
+            ->between($users->number, 10, 30);
 
-        $this->assertEquals('SELECT U.id, U.name AS username FROM users U WHERE U.numberColumn BETWEEN :numberColumn1 AND :numberColumn2', $query->getSql());
+        $this->assertEquals('SELECT * FROM users U WHERE U.number BETWEEN :numberColumn1 AND :numberColumn2', $query->getSql());
     }
 
     public function testNotBetweenCondition()
@@ -152,11 +147,10 @@ class SelectTest extends TestCase
 
         $users = new TableMock('U');
 
-        $query = QB::select($users->table)
-            ->columns(['id', 'name' => 'username'])
-            ->notBetween('numberColumn', 10, 30);
+        $query = QB::select($users)
+            ->notBetween($users->number, 10, 30);
 
-        $this->assertEquals('SELECT U.id, U.name AS username FROM users U WHERE U.numberColumn NOT BETWEEN :numberColumn1 AND :numberColumn2', $query->getSql());
+        $this->assertEquals('SELECT * FROM users U WHERE U.number NOT BETWEEN :numberColumn1 AND :numberColumn2', $query->getSql());
     }
 
     public function testInCondition()
@@ -165,11 +159,10 @@ class SelectTest extends TestCase
 
         $users = new TableMock('U');
 
-        $query = QB::select($users->table)
-            ->columns(['id', 'name' => 'username'])
-            ->in('name', ['admin', 'mod']);
+        $query = QB::select($users)
+            ->in($users->name, ['admin', 'mod']);
 
-        $this->assertEquals("SELECT U.id, U.name AS username FROM users U WHERE U.name IN ('admin', 'mod')", $query->getSql());
+        $this->assertEquals("SELECT * FROM users U WHERE U.name IN ('admin', 'mod')", $query->getSql());
     }
 
     public function testNotInCondition()
@@ -178,11 +171,10 @@ class SelectTest extends TestCase
 
         $users = new TableMock('U');
 
-        $query = QB::select($users->table)
-            ->columns(['id', 'name' => 'username'])
-            ->notIn('name', ['admin', 'mod']);
+        $query = QB::select($users)
+            ->notIn($users->name, ['admin', 'mod']);
 
-        $this->assertEquals("SELECT U.id, U.name AS username FROM users U WHERE U.name NOT IN ('admin', 'mod')", $query->getSql());
+        $this->assertEquals("SELECT * FROM users U WHERE U.name NOT IN ('admin', 'mod')", $query->getSql());
     }
 
     public function testIsNullCondition()
@@ -191,11 +183,10 @@ class SelectTest extends TestCase
 
         $users = new TableMock('U');
 
-        $query = QB::select($users->table)
-            ->columns(['id', 'name' => 'username'])
-            ->isNull('name');
+        $query = QB::select($users)
+            ->isNull($users->name);
 
-        $this->assertEquals('SELECT U.id, U.name AS username FROM users U WHERE U.name IS NULL', $query->getSql());
+        $this->assertEquals('SELECT * FROM users U WHERE U.name IS NULL', $query->getSql());
     }
 
     public function testIsNotNullCondition()
@@ -204,11 +195,10 @@ class SelectTest extends TestCase
 
         $users = new TableMock('U');
 
-        $query = QB::select($users->table)
-            ->columns(['id', 'name' => 'username'])
-            ->isNotNull('name');
+        $query = QB::select($users)
+            ->isNotNull($users->name);
 
-        $this->assertEquals('SELECT U.id, U.name AS username FROM users U WHERE U.name IS NOT NULL', $query->getSql());
+        $this->assertEquals('SELECT * FROM users U WHERE U.name IS NOT NULL', $query->getSql());
     }
 
     public function testOrderBy()
@@ -217,11 +207,10 @@ class SelectTest extends TestCase
 
         $users = new TableMock('U');
 
-        $query = QB::select($users->table)
-            ->columns(['id', 'name' => 'username'])
-            ->orderBy('users.id');
+        $query = QB::select($users)
+            ->orderBy($users->id);
 
-        $this->assertEquals('SELECT U.id, U.name AS username FROM users U ORDER BY U.id', $query->getSql());
+        $this->assertEquals('SELECT * FROM users U ORDER BY U.id', $query->getSql());
     }
 
     public function testOrderByDesc()
@@ -230,11 +219,10 @@ class SelectTest extends TestCase
 
         $users = new TableMock('U');
 
-        $query = QB::select($users->table)
-            ->columns(['id', 'name' => 'username'])
-            ->orderBy('users.id', 'desc');
+        $query = QB::select($users)
+            ->orderBy($users->id, 'desc');
 
-        $this->assertEquals('SELECT U.id, U.name AS username FROM users U ORDER BY U.id DESC', $query->getSql());
+        $this->assertEquals('SELECT * FROM users U ORDER BY U.id DESC', $query->getSql());
     }
 
     public function testGroupBy()
@@ -243,11 +231,10 @@ class SelectTest extends TestCase
 
         $users = new TableMock('U');
 
-        $query = QB::select($users->table)
-            ->columns(['id', 'name' => 'username'])
-            ->groupBy('users.id');
+        $query = QB::select($users)
+            ->groupBy($users->id);
 
-        $this->assertEquals('SELECT U.id, U.name AS username FROM users U GROUP BY U.id', $query->getSql());
+        $this->assertEquals('SELECT * FROM users U GROUP BY U.id', $query->getSql());
     }
 
     public function testLimit()
@@ -256,11 +243,10 @@ class SelectTest extends TestCase
 
         $users = new TableMock('U');
 
-        $query = QB::select($users->table)
-            ->columns(['id', 'name' => 'username'])
+        $query = QB::select($users)
             ->limit(10);
 
-        $this->assertEquals('SELECT U.id, U.name AS username FROM users U LIMIT :limit1', $query->getSql());
+        $this->assertEquals('SELECT * FROM users U LIMIT :limit1', $query->getSql());
     }
 
     public function testLimitOffset()
@@ -269,10 +255,9 @@ class SelectTest extends TestCase
 
         $users = new TableMock('U');
 
-        $query = QB::select($users->table)
-            ->columns(['id', 'name' => 'username'])
+        $query = QB::select($users)
             ->limit(10, 20);
 
-        $this->assertEquals('SELECT U.id, U.name AS username FROM users U LIMIT :limit1, :limit2', $query->getSql());
+        $this->assertEquals('SELECT * FROM users U LIMIT :limit1, :limit2', $query->getSql());
     }
 }

@@ -13,24 +13,6 @@ class FunctionsTest extends TestCase
     public function testFalseAlias()
     {
         QB::setPDO(new PdoMock());
-/*
-        // Using a class to allow auto complete
-        $users = new Users();
-
-        $query = QB::select($users)
-            ->columns(
-                $users::id,
-                $users->date->date()->preAppend($users->name, ' - ')->alias('customDate')
-            );
-
-        // Static class
-        $query = QB::select(U)
-            ->columns(
-                U::id,
-                QB::concat([U::name, ' - ', QB::date(U::date, false)], 'date')
-            );
-
-        // If there is two version of the same DB then us set alias*/
 
         $users = new TableMock('U');
 
@@ -171,17 +153,6 @@ class FunctionsTest extends TestCase
             ->columns($users->number->preAppend(QB::raw('# ')));
 
         $this->assertEquals("SELECT CONCAT('# ', U.number) AS number FROM users U", $query->getSql());
-    }
-
-    public function testGroupConcat()
-    {
-        QB::setPDO(new PdoMock());
-        $users = new TableMock('U');
-
-        $query = QB::select($users)
-            ->columns(QB::groupConcat($users->number, 'number'));
-
-        $this->assertEquals("SELECT GROUP_CONCAT(U.number) AS number FROM users U", $query->getSql());
     }
 
     // REPLACE(baseString, search, replace)

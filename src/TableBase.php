@@ -17,7 +17,7 @@ abstract class TableBase
 
     public function __toString(): string
     {
-        return $this->table . ($this->alias !== null? " $this->alias": '');
+        return $this->table . ($this->alias != ''? " $this->alias": '');
     }
 
     protected function getAlias()

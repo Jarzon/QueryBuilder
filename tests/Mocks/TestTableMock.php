@@ -6,18 +6,14 @@ use Jarzon\Columns\Number;
 use Jarzon\Columns\Text;
 use Jarzon\TableBase;
 
-class TableMock extends TableBase
+class TestTableMock extends TableBase
 {
     /** @var Number $id */
     public $id;
-    /** @var $name Text */
-    public $name;
-    /** @var $email Text */
-    public $email;
-    /** @var $date Date */
-    public $date;
-    /** @var $number Number */
-    public $number;
+    /** @var $text Text */
+    public $text;
+    /** @var $user_id Number */
+    public $user_id;
     /** @var $created Date */
     public $created;
 
@@ -26,13 +22,11 @@ class TableMock extends TableBase
         parent::__construct($alias);
 
         $this
-            ->table('users')
+            ->table('test')
 
             ->number('id')
-            ->text('name')
-            ->text('email')
-            ->date('date')
-            ->number('number')
+            ->text('text')
+            ->number('user_id')
             ->date('created');
     }
 }

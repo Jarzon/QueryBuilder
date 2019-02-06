@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use \Tests\Mocks\PdoMock;
 use Jarzon\QueryBuilder as QB;
 use Tests\Mocks\TableMock;
+use Tests\Mocks\TestTableMock;
 
 class JoinTest extends TestCase
 {
@@ -17,7 +18,7 @@ class JoinTest extends TestCase
 
         $users = new TableMock('U');
 
-        $query = QB::select($users->table)
+        $query = QB::select($users)
             ->columns($users->id, $users->name)
             ->leftJoin('accounts', 'accounts.user_id', '=', $users->id)
             ->where($users->date, '<', 30);
@@ -32,16 +33,17 @@ class JoinTest extends TestCase
         QB::setPDO(new PdoMock());
 
         $users = new TableMock('U');
+        $test = new TestTableMock('T');
 
-        $query = QB::select($users->table)
+        $query = QB::select($users)
             ->columns($users->id, $users->name)
-            ->leftJoin('accounts', function (Join $join) use ($users) {
+            ->leftJoin($test, function (Join $join) use ($users, $test) {
                 $join
-                    ->whereRaw('accounts.user_id', '=', $users->id)
-                    ->where('accounts.money', '>', 100);
+                    ->whereRaw($test->user_id, '=', $users->id)
+                    ->where($test->text, '!=', 'something');
             })
             ->where($users->date, '<', 30);
 
-        $this->assertEquals('SELECT U.id, U.name FROM users U LEFT JOIN accounts ON accounts.user_id = U.id AND accounts.money > :money WHERE U.date < :date', $query->getSql());
+        $this->assertEquals('SELECT U.id, U.name FROM users U LEFT JOIN test T ON T.user_id = U.id AND T.text != :text WHERE U.date < :date', $query->getSql());
     }
 }

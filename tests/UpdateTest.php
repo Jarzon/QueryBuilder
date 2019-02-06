@@ -6,6 +6,7 @@ namespace Tests;
 use PHPUnit\Framework\TestCase;
 use \Tests\Mocks\PdoMock;
 use Jarzon\QueryBuilder as QB;
+use Tests\Mocks\TableMock;
 
 class UpdateTest extends TestCase
 {
@@ -13,7 +14,9 @@ class UpdateTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $query = QB::update('users')
+        $users = new TableMock();
+
+        $query = QB::update($users)
             ->columns(['name' => 'test', 'email' => 'test@exemple.com']);
 
         $this->assertEquals("UPDATE users SET users.name = :name, users.email = :email", $query->getSql());
