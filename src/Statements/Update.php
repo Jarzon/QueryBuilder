@@ -11,7 +11,8 @@ class Update extends ConditionalStatementBase
         $this->type = 'UPDATE';
         $this->pdo = $pdo;
 
-        $this->setTable($table, $tableAlias);
+        $this->table = $table;
+        $this->tableAlias = $tableAlias;
     }
 
     public function set(string $column, string $value): self

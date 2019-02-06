@@ -14,39 +14,8 @@ class Select extends ConditionalStatementBase
         $this->type = 'SELECT';
         $this->pdo = $pdo;
 
-        $this->setTable($table, $tableAlias);
-    }
-
-    public function columns(...$columns): self
-    {
-        $this->columns = [];
-        $this->addColumns(...$columns);
-
-        return $this;
-    }
-
-    protected function getColumns(): string
-    {
-        $columns = implode(', ', array_map(function($key, $name) {
-            if($name === '*') return $name;
-
-            $output = $name;
-
-            if(is_object($name)) {
-                $output = $name->getOutput();
-            }
-            else if(is_array($name)) {
-                $key = array_key_first($name);
-                return "$key AS $name[$key]";
-            }
-            else if(!is_int($key)) {
-                $output = $name;
-            }
-
-            return $output;
-        }, array_keys($this->columns), $this->columns));
-
-        return $columns;
+        $this->table = $table;
+        $this->tableAlias = $tableAlias;
     }
 
     public function getSql(): string
@@ -96,6 +65,38 @@ class Select extends ConditionalStatementBase
         return $query;
     }
 
+    public function columns(...$columns): self
+    {
+        $this->columns = [];
+        $this->addColumns(...$columns);
+
+        return $this;
+    }
+
+    protected function getColumns(): string
+    {
+        $columns = implode(', ', array_map(function($key, $name) {
+            if($name === '*') return $name;
+
+            $output = $name;
+
+            if(is_object($name)) {
+                $output = $name->getOutput();
+            }
+            else if(is_array($name)) {
+                $key = array_key_first($name);
+                return "$key AS $name[$key]";
+            }
+            else if(!is_int($key)) {
+                $output = $name;
+            }
+
+            return $output;
+        }, array_keys($this->columns), $this->columns));
+
+        return $columns;
+    }
+
     public function addColumns(...$columns): self
     {
         foreach ($columns as $column) {
@@ -110,7 +111,7 @@ class Select extends ConditionalStatementBase
         return $this;
     }
 
-    public function orderBy(string $column, string $order = ''): self
+    public function orderBy($column, string $order = ''): self
     {
         if($order === 'desc') {
             $order = 'DESC';
@@ -142,7 +143,7 @@ class Select extends ConditionalStatementBase
         return $this;
     }
 
-    public function leftJoin(string $table, $firstColumnOrCallback, $operator = null, $secondColumn = null): self
+    public function leftJoin($table, $firstColumnOrCallback, $operator = null, $secondColumn = null): self
     {
         $this->join[] = new Join('LEFT', $table, $firstColumnOrCallback, $operator, $secondColumn);
 

@@ -10,7 +10,7 @@ class Join extends ConditionalStatementBase
         // TODO: Add join table alias support
         $this->type = "$type JOIN";
 
-        $this->setTable($table, null);
+        $this->table = $table;
 
         if($operator !== null) {
             $this->addCondition(new Condition($firstColumnOrCallback, $operator, $secondColumn));

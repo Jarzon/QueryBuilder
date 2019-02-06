@@ -8,7 +8,8 @@ class Delete extends ConditionalStatementBase
         $this->type = 'DELETE';
         $this->pdo = $pdo;
 
-        $this->setTable($table, $tableAlias);
+        $this->table = $table;
+        $this->tableAlias = $tableAlias;
     }
 
     public function getSql(): string

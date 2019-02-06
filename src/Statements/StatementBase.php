@@ -12,12 +12,6 @@ abstract class StatementBase
     protected $table = '';
     protected $tableAlias = null;
 
-    protected function setTable(string $table, ?string $tableAlias)
-    {
-        $this->table = $table;
-        $this->tableAlias = $tableAlias;
-    }
-
     protected function param($value, $key = '?', bool $raw = false)
     {
         if($raw) {
@@ -25,7 +19,7 @@ abstract class StatementBase
         }
 
         if(is_object($key)) {
-            $key =  ":" . $key->getColumnReference();
+            $key =  ":" . $key->getColumnName();
 
             if(array_key_exists($key, $this->params)) {
                 $keys = array_keys(array_keys($this->params), $key);
@@ -54,7 +48,7 @@ abstract class StatementBase
 
     protected function getTable()
     {
-        return $this->table;
+        return $this->table . (isset($this->tableAlias)? " $this->tableAlias" : '');
     }
 
     public function getLastStatement()

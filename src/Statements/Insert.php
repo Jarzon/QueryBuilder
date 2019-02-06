@@ -11,7 +11,7 @@ class Insert extends StatementBase
         $this->type = 'INSERT INTO';
         $this->pdo = $pdo;
 
-        $this->setTable($table, null);
+        $this->table = $table;
     }
 
     public function values(array $values)
