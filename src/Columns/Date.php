@@ -1,7 +1,7 @@
 <?php
 namespace Jarzon\Columns;
 
-class Date extends TableColumn
+class Date extends ColumnBase
 {
     public function date(): self
     {

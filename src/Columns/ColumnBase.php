@@ -1,7 +1,7 @@
 <?php
 namespace Jarzon\Columns;
 
-class TableColumn
+ class ColumnBase
 {
     public $tableAlias = null;
     public $name = '';
@@ -11,7 +11,6 @@ class TableColumn
     public function __construct(string $name, $tableAlias = null)
     {
         $this->name = $name;
-        $this->alias = $name;
         $this->tableAlias = $tableAlias;
     }
 
@@ -45,14 +44,19 @@ class TableColumn
         return !empty($this->output)? $this->output : $this->getColumnReference();
     }
 
+    public function getColumnName()
+    {
+        return $this->name;
+    }
+
     public function getColumnReference()
     {
-        return ($this->tableAlias != ''? "$this->tableAlias.": '') . $this->name;
+        return ($this->tableAlias != ''? "$this->tableAlias.": '') . $this->getColumnName();
     }
 
     public function getColumnSelect()
     {
-        return ($this->getOutput()) . " AS $this->alias";
+        return $this->getOutput() . ($this->output !== '' || $this->alias !== ''? " AS ".(!empty($this->alias)? $this->alias: $this->name): '');
     }
 
     public function __toString()

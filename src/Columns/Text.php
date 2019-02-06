@@ -1,7 +1,7 @@
 <?php
 namespace Jarzon\Columns;
 
-class Text extends TableColumn
+class Text extends ColumnBase
 {
     public $name = '';
 

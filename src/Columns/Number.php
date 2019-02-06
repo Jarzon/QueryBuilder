@@ -1,7 +1,7 @@
 <?php
 namespace Jarzon\Columns;
 
-class Number extends TableColumn
+class Number extends ColumnBase
 {
     public function min(): self
     {
