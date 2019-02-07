@@ -113,6 +113,10 @@ class Select extends ConditionalStatementBase
 
     public function orderBy($column, string $order = ''): self
     {
+        if(is_object($column)) {
+            $column = $column->getColumnReference();
+        }
+
         if($order === 'desc') {
             $order = 'DESC';
         }

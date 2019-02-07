@@ -49,14 +49,14 @@ abstract class ConditionalStatementBase extends StatementBase
 
     public function between($column, $start, $end, $isRaw = false): self
     {
-        $this->addCondition(new BetweenCondition($column, $this->param($start, "{$column}1"), $this->param($end, "{$column}2")));
+        $this->addCondition(new BetweenCondition($column, $this->param($start, $column), $this->param($end, $column)));
 
         return $this;
     }
 
     public function notBetween($column, $start, $end, $isRaw = false): self
     {
-        $this->addCondition(new BetweenCondition($column, $this->param($start, "{$column}1"), $this->param($end, "{$column}2"), true));
+        $this->addCondition(new BetweenCondition($column, $this->param($start, $column), $this->param($end, $column), true));
 
         return $this;
     }

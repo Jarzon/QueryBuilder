@@ -138,7 +138,7 @@ class SelectTest extends TestCase
         $query = QB::select($users)
             ->between($users->number, 10, 30);
 
-        $this->assertEquals('SELECT * FROM users U WHERE U.number BETWEEN :numberColumn1 AND :numberColumn2', $query->getSql());
+        $this->assertEquals('SELECT * FROM users U WHERE U.number BETWEEN :number AND :number2', $query->getSql());
     }
 
     public function testNotBetweenCondition()
@@ -150,7 +150,7 @@ class SelectTest extends TestCase
         $query = QB::select($users)
             ->notBetween($users->number, 10, 30);
 
-        $this->assertEquals('SELECT * FROM users U WHERE U.number NOT BETWEEN :numberColumn1 AND :numberColumn2', $query->getSql());
+        $this->assertEquals('SELECT * FROM users U WHERE U.number NOT BETWEEN :number AND :number2', $query->getSql());
     }
 
     public function testInCondition()

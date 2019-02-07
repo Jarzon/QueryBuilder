@@ -7,6 +7,7 @@ namespace Jarzon\Columns;
     public $name = '';
     public $alias = '';
     public $output = '';
+    public $paramCount = 1;
 
     public function __construct(string $name, $tableAlias = null)
     {
@@ -39,27 +40,34 @@ namespace Jarzon\Columns;
         return $this;
     }
 
-    public function getOutput()
+    public function getOutput(): string
     {
         return !empty($this->output)? $this->output : $this->getColumnReference();
     }
 
-    public function getColumnName()
+    public function getColumnName(): string
     {
         return $this->name;
     }
 
-    public function getColumnReference()
+     public function getColumnParamName(): string
+     {
+         $output = $this->name . ($this->paramCount > 1? $this->paramCount: '');
+         $this->paramCount++;
+         return $output;
+     }
+
+    public function getColumnReference(): string
     {
         return ($this->tableAlias != ''? "$this->tableAlias.": '') . $this->getColumnName();
     }
 
-    public function getColumnSelect()
+    public function getColumnSelect(): string
     {
         return $this->getOutput() . ($this->output !== '' || $this->alias !== ''? " AS ".(!empty($this->alias)? $this->alias: $this->name): '');
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getOutput();
     }
