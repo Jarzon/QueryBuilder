@@ -21,13 +21,7 @@ abstract class StatementBase
         if(is_object($key)) {
             $key =  ":" . $key->getColumnParamName();
 
-            if(array_key_exists($key, $this->params)) {
-                $keys = array_keys(array_keys($this->params), $key);
-
-                $key .= count($keys);
-            }
-
-            $this->params[] = $value;
+            $this->params[$key] = $value;
         }
         else if(is_string($key) && $key !== '?') {
             $key = ":$key";

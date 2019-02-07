@@ -26,9 +26,11 @@ class UpdateTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $query = QB::update('users')
-            ->set('name', 'test')
-            ->set('email', 'test@exemple.com');
+        $users = new TableMock();
+
+        $query = QB::update($users)
+            ->set($users->name, 'test')
+            ->set($users->email, 'test@exemple.com');
 
         $this->assertEquals("UPDATE users SET users.name = :name, users.email = :email", $query->getSql());
     }
@@ -60,13 +62,15 @@ class UpdateTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
+        $users = new TableMock();
+
         $query = QB::update('users')
             ->columns(['name' => 'test', 'email' => 'test@exemple.com'])
-            ->where('id', '=', 1);
+            ->where($users->id, '=', 1);
 
         $query->exec();
 
-        $this->assertEquals("UPDATE users SET users.name = :name, users.email = :email WHERE users.id = :id", $query->getSql());
+        $this->assertEquals("UPDATE users SET users.name = :name, users.email = :email WHERE id = :id", $query->getSql());
 
         $this->assertEquals([':name' => 'test', ':email' => 'test@exemple.com', ':id' => 1], $query->getLastStatement()->params);
     }

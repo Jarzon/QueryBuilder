@@ -15,8 +15,12 @@ class Update extends ConditionalStatementBase
         $this->tableAlias = $tableAlias;
     }
 
-    public function set(string $column, string $value): self
+    public function set($column, string $value): self
     {
+        if(is_object($column)) {
+            $column = $column->getColumnName();
+        }
+
         $this->addColumn([$column => $value]);
 
         return $this;
