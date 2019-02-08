@@ -7,8 +7,8 @@ use Jarzon\Columns\Date;
 
 abstract class TableBase
 {
-    public $table = '';
-    public $alias = null;
+    protected $table = '';
+    protected $alias = null;
 
     public function __construct($alias = null)
     {
@@ -25,28 +25,28 @@ abstract class TableBase
         return $this->alias ?? $this->table;
     }
 
-    public function table($name): self
+    protected function table($name): self
     {
         $this->table = $name;
 
         return $this;
     }
 
-    public function text($name): self
+    protected function text($name): self
     {
         $this->$name = new Text($name, $this->getAlias());
 
         return $this;
     }
 
-    public function number($name): self
+    protected function number($name): self
     {
         $this->$name = new Number($name, $this->getAlias());
 
         return $this;
     }
 
-    public function date($name): self
+    protected function date($name): self
     {
         $this->$name = new Date($name, $this->getAlias());
 

@@ -16,7 +16,7 @@ class DeleteTest extends TestCase
 
         $users = new TableMock();
 
-        $query = QB::delete($users->table)
+        $query = QB::delete($users)
             ->where($users->name, '=', 'test');
 
         $this->assertEquals("DELETE users WHERE name = :name", $query->getSql());
