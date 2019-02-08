@@ -1,10 +1,10 @@
 <?php
-namespace Tests\Mocks;
+namespace Jarzon\QueryBuilder\Tests\Mocks;
 
-use Jarzon\Columns\Date;
-use Jarzon\Columns\Number;
-use Jarzon\Columns\Text;
-use Jarzon\TableBase;
+use Jarzon\QueryBuilder\Columns\Date;
+use Jarzon\QueryBuilder\Columns\Number;
+use Jarzon\QueryBuilder\Columns\Text;
+use Jarzon\QueryBuilder\TableBase;
 
 class TestTableMock extends TableBase
 {

@@ -1,9 +1,9 @@
 <?php
-namespace Jarzon;
+namespace Jarzon\QueryBuilder;
 
-use Jarzon\Columns\Text;
-use Jarzon\Columns\Number;
-use Jarzon\Columns\Date;
+use Jarzon\QueryBuilder\Columns\Text;
+use Jarzon\QueryBuilder\Columns\Number;
+use Jarzon\QueryBuilder\Columns\Date;
 
 abstract class TableBase
 {

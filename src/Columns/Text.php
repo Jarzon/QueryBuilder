@@ -1,5 +1,5 @@
 <?php
-namespace Jarzon\Columns;
+namespace Jarzon\QueryBuilder\Columns;
 
 class Text extends ColumnBase
 {

@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests;
+namespace Jarzon\QueryBuilder\Tests;
 
-use Jarzon\Statements\Join;
+use Jarzon\QueryBuilder\Statements\Join;
 use PHPUnit\Framework\TestCase;
-use \Tests\Mocks\PdoMock;
-use Jarzon\QueryBuilder as QB;
-use Tests\Mocks\TableMock;
-use Tests\Mocks\TestTableMock;
+use \Jarzon\QueryBuilder\Tests\Mocks\PdoMock;
+use Jarzon\QueryBuilder\Builder as QB;
+use Jarzon\QueryBuilder\Tests\Mocks\TableMock;
+use Jarzon\QueryBuilder\Tests\Mocks\TestTableMock;
 
 class JoinTest extends TestCase
 {

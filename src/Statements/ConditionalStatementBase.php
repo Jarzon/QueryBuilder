@@ -1,9 +1,9 @@
 <?php
-namespace Jarzon\Statements;
+namespace Jarzon\QueryBuilder\Statements;
 
-use \Jarzon\Conditions\Condition;
-use \Jarzon\Conditions\BetweenCondition;
-use \Jarzon\Conditions\InCondition;
+use \Jarzon\QueryBuilder\Conditions\Condition;
+use \Jarzon\QueryBuilder\Conditions\BetweenCondition;
+use \Jarzon\QueryBuilder\Conditions\InCondition;
 
 abstract class ConditionalStatementBase extends StatementBase
 {

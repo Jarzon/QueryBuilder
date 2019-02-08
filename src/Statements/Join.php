@@ -1,7 +1,7 @@
 <?php
-namespace Jarzon\Statements;
+namespace Jarzon\QueryBuilder\Statements;
 
-use \Jarzon\Conditions\Condition;
+use \Jarzon\QueryBuilder\Conditions\Condition;
 
 class Join extends ConditionalStatementBase
 {

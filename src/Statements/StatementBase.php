@@ -1,5 +1,5 @@
 <?php
-namespace Jarzon\Statements;
+namespace Jarzon\QueryBuilder\Statements;
 
 abstract class StatementBase
 {

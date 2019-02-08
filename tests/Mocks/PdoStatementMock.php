@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Mocks;
+namespace Jarzon\QueryBuilder\Tests\Mocks;
 class PdoStatementMock extends \PDOStatement
 {
     public $params = [];

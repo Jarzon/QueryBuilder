@@ -1,12 +1,12 @@
 <?php
-namespace Jarzon;
+namespace Jarzon\QueryBuilder;
 
-use Jarzon\Statements\Select;
-use Jarzon\Statements\Insert;
-use Jarzon\Statements\Update;
-use Jarzon\Statements\Delete;
+use Jarzon\QueryBuilder\Statements\Select;
+use Jarzon\QueryBuilder\Statements\Insert;
+use Jarzon\QueryBuilder\Statements\Update;
+use Jarzon\QueryBuilder\Statements\Delete;
 
-abstract class QueryBuilder
+abstract class Builder
 {
     static $table = '';
     static $tableAlias = null;

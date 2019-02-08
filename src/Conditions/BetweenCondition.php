@@ -1,5 +1,5 @@
 <?php
-namespace Jarzon\Conditions;
+namespace Jarzon\QueryBuilder\Conditions;
 
 class BetweenCondition
 {

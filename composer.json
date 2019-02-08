@@ -2,10 +2,10 @@
   "name": "jarzon/querybuilder",
   "type": "project",
   "autoload": {
-    "psr-4": {"Jarzon\\": "src/"}
+    "psr-4": {"Jarzon\\QueryBuilder\\": "src/"}
   },
   "autoload-dev": {
-    "psr-4": {"Tests\\": "tests/"}
+    "psr-4": {"Jarzon\\QueryBuilder\\Tests\\": "tests/"}
   },
   "require": {
     "php": ">=7.2.0"
