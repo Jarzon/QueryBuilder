@@ -32,24 +32,18 @@ abstract class TableBase
         return $this;
     }
 
-    protected function text($name): self
+    protected function text($name)
     {
-        $this->$name = new Text($name, $this->getAlias());
-
-        return $this;
+        return new Text($name, $this->getAlias());
     }
 
-    protected function number($name): self
+    protected function number($name)
     {
-        $this->$name = new Number($name, $this->getAlias());
-
-        return $this;
+        return new Number($name, $this->getAlias());
     }
 
-    protected function date($name): self
+    protected function date($name)
     {
-        $this->$name = new Date($name, $this->getAlias());
-
-        return $this;
+        return new Date($name, $this->getAlias());
     }
 }
