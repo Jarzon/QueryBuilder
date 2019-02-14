@@ -22,6 +22,18 @@ class UpdateTest extends TestCase
         $this->assertEquals("UPDATE users SET users.name = :name, users.email = :email", $query->getSql());
     }
 
+    public function testAliasSql()
+    {
+        QB::setPDO(new PdoMock());
+
+        $users = new TableMock('U');
+
+        $query = QB::update($users)
+            ->columns(['name' => 'test', 'email' => 'test@exemple.com']);
+
+        $this->assertEquals("UPDATE users U SET name = :name, email = :email", $query->getSql());
+    }
+
     public function testSet()
     {
         QB::setPDO(new PdoMock());

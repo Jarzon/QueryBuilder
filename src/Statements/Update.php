@@ -66,8 +66,8 @@ class Update extends ConditionalStatementBase
 
         $table = $this->getTable();
 
-        $columns = implode(', ', array_map(function($column, $param) use($table) {
-            return "{$table}.$column = $param";
+        $columns = implode(', ', array_map(function($column, $param) {
+            return "$column = $param";
         }, array_keys($this->columns), $this->columns));
 
         $query = "$this->type $table SET $columns";
