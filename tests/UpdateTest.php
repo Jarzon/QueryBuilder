@@ -19,7 +19,7 @@ class UpdateTest extends TestCase
         $query = QB::update($users)
             ->columns(['name' => 'test', 'email' => 'test@exemple.com']);
 
-        $this->assertEquals("UPDATE users SET users.name = :name, users.email = :email", $query->getSql());
+        $this->assertEquals("UPDATE users SET name = :name, email = :email", $query->getSql());
     }
 
     public function testAliasSql()
@@ -44,7 +44,7 @@ class UpdateTest extends TestCase
             ->set($users->name, 'test')
             ->set($users->email, 'test@exemple.com');
 
-        $this->assertEquals("UPDATE users SET users.name = :name, users.email = :email", $query->getSql());
+        $this->assertEquals("UPDATE users SET name = :name, email = :email", $query->getSql());
     }
 
     public function testSetRaw()
@@ -55,7 +55,7 @@ class UpdateTest extends TestCase
             ->columns(['name' => 'test', 'email' => 'test@exemple.com'])
             ->setRaw('updated', 'NOW()');
 
-        $this->assertEquals("UPDATE users SET users.name = :name, users.email = :email, users.updated = NOW()", $query->getSql());
+        $this->assertEquals("UPDATE users SET name = :name, email = :email, updated = NOW()", $query->getSql());
     }
 
     public function testExec()
@@ -82,7 +82,7 @@ class UpdateTest extends TestCase
 
         $query->exec();
 
-        $this->assertEquals("UPDATE users SET users.name = :name, users.email = :email WHERE id = :id", $query->getSql());
+        $this->assertEquals("UPDATE users SET name = :name, email = :email WHERE id = :id", $query->getSql());
 
         $this->assertEquals([':name' => 'test', ':email' => 'test@exemple.com', ':id' => 1], $query->getLastStatement()->params);
     }
