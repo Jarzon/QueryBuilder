@@ -2,4 +2,3 @@ language: php
 install: composer update
 php:
   - '7.3'
-  - '7.2'
