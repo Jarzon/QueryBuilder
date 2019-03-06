@@ -21,7 +21,7 @@ class Insert extends StatementBase
         return $this;
     }
 
-    public function columns(... $columns): self
+    public function columns(... $columns)
     {
         $this->columns = [];
         $this->addColumn(...$columns);
@@ -29,7 +29,7 @@ class Insert extends StatementBase
         return $this;
     }
 
-    public function addColumn(...$columns): self
+    public function addColumn(...$columns)
     {
         if(is_array($columns)) {
             array_map(function ($key, $column) {

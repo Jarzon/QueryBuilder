@@ -9,7 +9,7 @@ abstract class ConditionalStatementBase extends StatementBase
 {
     protected $conditions = [];
 
-    public function where($column, ?string $operator = null, $value = null, $isRaw = false): self
+    public function where($column, ?string $operator = null, $value = null, $isRaw = false)
     {
         $conditionsCount = count($this->conditions);
         if($conditionsCount > 0 && $this->conditions[$conditionsCount-1] != '(') {
@@ -31,14 +31,14 @@ abstract class ConditionalStatementBase extends StatementBase
         return $this;
     }
 
-    public function whereRaw($column, ?string $operator = null, $value = null): self
+    public function whereRaw($column, ?string $operator = null, $value = null)
     {
         $this->where($column, $operator, $value, true);
 
         return $this;
     }
 
-    public function or($column, string $operator, $value, $isRaw = false): self
+    public function or($column, string $operator, $value, $isRaw = false)
     {
         $this->addCondition('OR');
 
@@ -47,42 +47,42 @@ abstract class ConditionalStatementBase extends StatementBase
         return $this;
     }
 
-    public function between($column, $start, $end, $isRaw = false): self
+    public function between($column, $start, $end, $isRaw = false)
     {
         $this->addCondition(new BetweenCondition($column, $this->param($start, $column), $this->param($end, $column)));
 
         return $this;
     }
 
-    public function notBetween($column, $start, $end, $isRaw = false): self
+    public function notBetween($column, $start, $end, $isRaw = false)
     {
         $this->addCondition(new BetweenCondition($column, $this->param($start, $column), $this->param($end, $column), true));
 
         return $this;
     }
 
-    public function in($column, array $list, $isRaw = false): self
+    public function in($column, array $list, $isRaw = false)
     {
         $this->addCondition(new InCondition($column, $list));
 
         return $this;
     }
 
-    public function notIn($column, array $list, $isRaw = false): self
+    public function notIn($column, array $list, $isRaw = false)
     {
         $this->addCondition(new InCondition($column, $list, true));
 
         return $this;
     }
 
-    public function isNull($column, $isRaw = false): self
+    public function isNull($column, $isRaw = false)
     {
         $this->addCondition(new Condition($column, 'IS', null));
 
         return $this;
     }
 
-    public function isNotNull($column, $isRaw = false): self
+    public function isNotNull($column, $isRaw = false)
     {
         $this->addCondition(new Condition($column, 'IS NOT', null));
 

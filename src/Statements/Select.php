@@ -65,7 +65,7 @@ class Select extends ConditionalStatementBase
         return $query;
     }
 
-    public function columns(...$columns): self
+    public function columns(...$columns)
     {
         $this->columns = [];
         $this->addColumns(...$columns);
@@ -97,7 +97,7 @@ class Select extends ConditionalStatementBase
         return $columns;
     }
 
-    public function addColumns(...$columns): self
+    public function addColumns(...$columns)
     {
         foreach ($columns as $column) {
 
@@ -111,7 +111,7 @@ class Select extends ConditionalStatementBase
         return $this;
     }
 
-    public function orderBy($column, string $order = ''): self
+    public function orderBy($column, string $order = '')
     {
         if(is_object($column)) {
             $column = $column->getColumnReference();
@@ -125,7 +125,7 @@ class Select extends ConditionalStatementBase
         return $this;
     }
 
-    public function groupBy($columns): self
+    public function groupBy($columns)
     {
         if(!is_array($columns)) {
             $columns = [$columns];
@@ -136,7 +136,7 @@ class Select extends ConditionalStatementBase
         return $this;
     }
 
-    public function limit(int $offset, ?int $select = null): self
+    public function limit(int $offset, ?int $select = null)
     {
         if($select === null) {
             $this->limit = [$this->param($offset, 'limit1')];
@@ -147,7 +147,7 @@ class Select extends ConditionalStatementBase
         return $this;
     }
 
-    public function leftJoin($table, $firstColumnOrCallback, $operator = null, $secondColumn = null): self
+    public function leftJoin($table, $firstColumnOrCallback, $operator = null, $secondColumn = null)
     {
         $this->join[] = new Join('LEFT', $table, $firstColumnOrCallback, $operator, $secondColumn);
 

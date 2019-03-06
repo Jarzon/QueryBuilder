@@ -15,7 +15,7 @@ class Update extends ConditionalStatementBase
         $this->tableAlias = $tableAlias;
     }
 
-    public function set($column, string $value): self
+    public function set($column, string $value)
     {
         if(is_object($column)) {
             $column = $column->getColumnName();
@@ -26,14 +26,14 @@ class Update extends ConditionalStatementBase
         return $this;
     }
 
-    public function setRaw(string $column, string $value): self
+    public function setRaw(string $column, string $value)
     {
         $this->addColumn([$column => $value], true);
 
         return $this;
     }
 
-    public function columns(array $columns): self
+    public function columns(array $columns)
     {
         if(!is_array($columns)) {
             $columns = [$columns];
@@ -45,7 +45,7 @@ class Update extends ConditionalStatementBase
         return $this;
     }
 
-    public function addColumn(array $columns, bool $isRaw = false): self
+    public function addColumn(array $columns, bool $isRaw = false)
     {
         if(!$isRaw) {
             array_walk($columns, function(&$value, $column) {

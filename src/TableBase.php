@@ -25,7 +25,7 @@ abstract class TableBase
         return $this->alias ?? $this->table;
     }
 
-    protected function table($name): self
+    protected function table($name)
     {
         $this->table = $name;
 

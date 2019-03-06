@@ -15,14 +15,14 @@ namespace Jarzon\QueryBuilder\Columns;
         $this->tableAlias = $tableAlias;
     }
 
-    public function alias(string $alias): self
+    public function alias(string $alias)
     {
         $this->alias = $alias;
 
         return $this;
     }
 
-    public function preAppend(...$args): self
+    public function preAppend(...$args)
     {
         $args[] = $this->getOutput();
 
@@ -31,7 +31,7 @@ namespace Jarzon\QueryBuilder\Columns;
         return $this;
     }
 
-    public function append(...$args): self
+    public function append(...$args)
     {
         array_unshift($args,  $this->getOutput());
 

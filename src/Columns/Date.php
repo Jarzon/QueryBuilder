@@ -3,14 +3,14 @@ namespace Jarzon\QueryBuilder\Columns;
 
 class Date extends ColumnBase
 {
-    public function date(): self
+    public function date()
     {
         $this->output = "DATE({$this->getOutput()})";
 
         return $this;
     }
 
-    public function dateAdd(string $intervalAddition): self
+    public function dateAdd(string $intervalAddition)
     {
         $this->output .= "DATE_ADD({$this->getOutput()}, INTERVAL $intervalAddition)";
 
