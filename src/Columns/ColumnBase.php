@@ -5,8 +5,8 @@ class ColumnBase
 {
     public $tableAlias = null;
     public $name = '';
-    public $alias = '';
-    public $output = '';
+    public $alias = null;
+    public $output = null;
     public $paramCount = 1;
 
     public function __construct(string $name, $tableAlias = null)
@@ -42,7 +42,7 @@ class ColumnBase
 
     public function getOutput(): string
     {
-        return !empty($this->output)? $this->output : $this->getColumnReference();
+        return $this->output ?? $this->getColumnReference();
     }
 
     public function getColumnName(): string
@@ -52,9 +52,9 @@ class ColumnBase
 
     public function getColumnParamName(): string
     {
-        $output = $this->name . ($this->paramCount > 1? $this->paramCount: '');
+        $parameterName = $this->name . ($this->paramCount > 1? $this->paramCount: '');
         $this->paramCount++;
-        return $output;
+        return $parameterName;
     }
 
     public function getColumnReference(): string
@@ -64,10 +64,11 @@ class ColumnBase
 
     public function getColumnSelect(): string
     {
-        $output = $this->getOutput() . ($this->output !== '' || $this->alias !== ''? " AS ".(!empty($this->alias)? $this->alias: $this->name): '');
+        $output = $this->getOutput();
 
-        $this->output = '';
-        $this->alias = '';
+        if($this->output !== null || $this->alias !== null) {
+            $output .= " AS " . ($this->alias ?? $this->name);
+        }
 
         return $output;
     }
@@ -75,10 +76,5 @@ class ColumnBase
     public function __toString(): string
     {
         return $this->getOutput();
-    }
-
-    public function resetCounter()
-    {
-        $this->paramCount = 1;
     }
 }

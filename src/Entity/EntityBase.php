@@ -19,15 +19,6 @@ abstract class EntityBase implements EntityInterface
 
     public function __toString(): string
     {
-        // Reset column counters
-        $vars = get_object_vars($this);
-
-        foreach ($vars as $var) {
-            if(is_object($var)) {
-                $var->resetCounter();
-            }
-        }
-
         return $this->table . ($this->alias != ''? " $this->alias": '');
     }
 

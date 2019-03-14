@@ -270,6 +270,8 @@ class SelectTest extends TestCase
         $query2 = QB::select($users)
             ->where($users->id, '<', 30);
 
+        $users = new EntityMock('U');
+
         $query = QB::select($users)
             ->where($users->id, '<', 30);
 
@@ -285,6 +287,8 @@ class SelectTest extends TestCase
         $query2 = QB::select($users)
             ->columns($users->id->count()->alias('number'));
 
+        $users = new EntityMock('U');
+
         $query = QB::select($users)
             ->columns($users->id);
 
@@ -299,6 +303,8 @@ class SelectTest extends TestCase
 
         $query2 = QB::select($users)
             ->columns($users->id->alias('number'));
+
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->columns($users->id);
