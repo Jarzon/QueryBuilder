@@ -6,7 +6,7 @@ namespace Jarzon\QueryBuilder\Tests;
 use PHPUnit\Framework\TestCase;
 use \Jarzon\QueryBuilder\Tests\Mocks\PdoMock;
 use Jarzon\QueryBuilder\Builder as QB;
-use \Jarzon\QueryBuilder\Tests\Mocks\TableMock;
+use \Jarzon\QueryBuilder\Tests\Mocks\EntityMock;
 
 class FunctionsTest extends TestCase
 {
@@ -14,7 +14,7 @@ class FunctionsTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->columns($users->date->date()->preAppend($users->name, "' - '"));
@@ -28,7 +28,7 @@ class FunctionsTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->columns($users->number->min());
@@ -39,7 +39,7 @@ class FunctionsTest extends TestCase
     public function testMax()
     {
         QB::setPDO(new PdoMock());
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->columns($users->number->max());
@@ -50,7 +50,7 @@ class FunctionsTest extends TestCase
     public function testSum()
     {
         QB::setPDO(new PdoMock());
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->columns($users->number->sum());
@@ -61,7 +61,7 @@ class FunctionsTest extends TestCase
     public function testAvg()
     {
         QB::setPDO(new PdoMock());
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->columns($users->number->avg());
@@ -72,7 +72,7 @@ class FunctionsTest extends TestCase
     public function testCeiling()
     {
         QB::setPDO(new PdoMock());
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->columns($users->number->ceiling());
@@ -83,7 +83,7 @@ class FunctionsTest extends TestCase
     public function testFloor()
     {
         QB::setPDO(new PdoMock());
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->columns($users->number->floor());
@@ -94,7 +94,7 @@ class FunctionsTest extends TestCase
     public function testCount()
     {
         QB::setPDO(new PdoMock());
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->columns($users->number->count());
@@ -105,7 +105,7 @@ class FunctionsTest extends TestCase
     public function testFormat()
     {
         QB::setPDO(new PdoMock());
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->columns($users->number->format());
@@ -116,7 +116,7 @@ class FunctionsTest extends TestCase
     public function testCurrency()
     {
         QB::setPDO(new PdoMock());
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->columns(
@@ -136,7 +136,7 @@ class FunctionsTest extends TestCase
     public function testLength()
     {
         QB::setPDO(new PdoMock());
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->columns($users->name->length());
@@ -147,7 +147,7 @@ class FunctionsTest extends TestCase
     public function testConcat()
     {
         QB::setPDO(new PdoMock());
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->columns($users->number->preAppend(QB::raw('# ')));
@@ -166,7 +166,7 @@ class FunctionsTest extends TestCase
     public function testDate()
     {
         QB::setPDO(new PdoMock());
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->columns($users->date->date()->alias('date2'));
@@ -177,7 +177,7 @@ class FunctionsTest extends TestCase
     public function testCurrentDate()
     {
         QB::setPDO(new PdoMock());
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->columns(QB::currentDate('date'));
@@ -188,7 +188,7 @@ class FunctionsTest extends TestCase
     public function testDateAdd()
     {
         QB::setPDO(new PdoMock());
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->columns($users->date->dateAdd('1 DAY'));

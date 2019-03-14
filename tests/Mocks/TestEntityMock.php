@@ -1,19 +1,17 @@
 <?php
 namespace Jarzon\QueryBuilder\Tests\Mocks;
 
-use Jarzon\QueryBuilder\TableBase;
+use Jarzon\QueryBuilder\Entity\EntityBase;
 
-class TestTableMock extends TableBase
+class TestEntityMock extends EntityBase
 {
     public $id;
     public $text;
     public $user_id;
     public $created;
 
-    public function __construct($alias = '')
+    public function build()
     {
-        parent::__construct($alias);
-
         $this->table('test');
 
         $this->id = $this->number('id');

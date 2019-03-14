@@ -6,7 +6,7 @@ namespace Jarzon\QueryBuilder\Tests;
 use PHPUnit\Framework\TestCase;
 use \Jarzon\QueryBuilder\Tests\Mocks\PdoMock;
 use Jarzon\QueryBuilder\Builder as QB;
-use Jarzon\QueryBuilder\Tests\Mocks\TableMock;
+use Jarzon\QueryBuilder\Tests\Mocks\EntityMock;
 
 class InsertTest extends TestCase
 {
@@ -14,7 +14,7 @@ class InsertTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $users = new TableMock();
+        $users = new EntityMock();
 
         $query = QB::insert($users) // Unify column and values
             ->columns($users->name, $users->email)

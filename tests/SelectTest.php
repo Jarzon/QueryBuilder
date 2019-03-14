@@ -6,7 +6,7 @@ namespace Jarzon\QueryBuilder\Tests;
 use PHPUnit\Framework\TestCase;
 use \Jarzon\QueryBuilder\Tests\Mocks\PdoMock;
 use Jarzon\QueryBuilder\Builder as QB;
-use Jarzon\QueryBuilder\Tests\Mocks\TableMock;
+use Jarzon\QueryBuilder\Tests\Mocks\EntityMock;
 
 class SelectTest extends TestCase
 {
@@ -14,7 +14,7 @@ class SelectTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->where($users->date, '<', 30);
@@ -26,7 +26,7 @@ class SelectTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->columns($users->id, $users->name)
@@ -40,7 +40,7 @@ class SelectTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->whereRaw($users->date, '=', $users->created);
@@ -52,7 +52,7 @@ class SelectTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->whereRaw($users->date, '>', '(U.anotherColumn - 5)');
@@ -65,7 +65,7 @@ class SelectTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $users = new TableMock();
+        $users = new EntityMock();
 
         $query = QB::select($users)
             ->columns($users->id, $users->name->alias('username'));
@@ -77,7 +77,7 @@ class SelectTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->columns($users->id, $users->name->alias('username'))
@@ -91,7 +91,7 @@ class SelectTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->where($users->date, '<', 30)
@@ -104,7 +104,7 @@ class SelectTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->where($users->date, '<', 30)
@@ -117,7 +117,7 @@ class SelectTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->where($users->date, '<', '01-01-2000')
@@ -133,7 +133,7 @@ class SelectTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->between($users->number, 10, 30);
@@ -145,7 +145,7 @@ class SelectTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->notBetween($users->number, 10, 30);
@@ -157,7 +157,7 @@ class SelectTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->in($users->name, ['admin', 'mod']);
@@ -169,7 +169,7 @@ class SelectTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->notIn($users->name, ['admin', 'mod']);
@@ -181,7 +181,7 @@ class SelectTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->isNull($users->name);
@@ -193,7 +193,7 @@ class SelectTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->isNotNull($users->name);
@@ -205,7 +205,7 @@ class SelectTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->orderBy($users->id);
@@ -217,7 +217,7 @@ class SelectTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->orderBy($users->id, 'desc');
@@ -229,7 +229,7 @@ class SelectTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->groupBy($users->id);
@@ -241,7 +241,7 @@ class SelectTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->limit(10);
@@ -253,11 +253,41 @@ class SelectTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->limit(10, 20);
 
         $this->assertEquals('SELECT * FROM users U LIMIT :limit1, :limit2', $query->getSql());
+    }
+
+    public function testMutlipleQueriesParam()
+    {
+        QB::setPDO(new PdoMock());
+
+        $users = new EntityMock('U');
+
+        $query2 = QB::select($users)
+            ->where($users->id, '<', 30);
+
+        $query = QB::select($users)
+            ->where($users->id, '<', 30);
+
+        $this->assertEquals($query2, $query);
+    }
+
+    public function testMutlipleQueriesColumn()
+    {
+        QB::setPDO(new PdoMock());
+
+        $users = new EntityMock('U');
+
+        $query2 = QB::select($users)
+            ->columns($users->id->count()->alias('number'));
+
+        $query = QB::select($users)
+            ->columns($users->id);
+
+        $this->assertNotEquals($query2, $query);
     }
 }

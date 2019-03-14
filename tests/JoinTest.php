@@ -7,8 +7,8 @@ use Jarzon\QueryBuilder\Statements\Join;
 use PHPUnit\Framework\TestCase;
 use \Jarzon\QueryBuilder\Tests\Mocks\PdoMock;
 use Jarzon\QueryBuilder\Builder as QB;
-use Jarzon\QueryBuilder\Tests\Mocks\TableMock;
-use Jarzon\QueryBuilder\Tests\Mocks\TestTableMock;
+use Jarzon\QueryBuilder\Tests\Mocks\EntityMock;
+use Jarzon\QueryBuilder\Tests\Mocks\TestEntityMock;
 
 class JoinTest extends TestCase
 {
@@ -16,7 +16,7 @@ class JoinTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::select($users)
             ->columns($users->id, $users->name)
@@ -32,8 +32,8 @@ class JoinTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $users = new TableMock('U');
-        $test = new TestTableMock('T');
+        $users = new EntityMock('U');
+        $test = new TestEntityMock('T');
 
         $query = QB::select($users)
             ->columns($users->id, $users->name)

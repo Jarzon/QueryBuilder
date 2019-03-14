@@ -1,22 +1,33 @@
 <?php
-namespace Jarzon\QueryBuilder;
+namespace Jarzon\QueryBuilder\Entity;
 
 use Jarzon\QueryBuilder\Columns\Text;
 use Jarzon\QueryBuilder\Columns\Number;
 use Jarzon\QueryBuilder\Columns\Date;
 
-abstract class TableBase
+abstract class EntityBase implements EntityInterface
 {
     protected $table = '';
-    protected $alias = null;
+    protected $alias = '';
 
-    public function __construct($alias = null)
+    public function __construct($alias = '')
     {
         $this->alias = $alias;
+
+        $this->build();
     }
 
     public function __toString(): string
     {
+        // Reset column counters
+        $vars = get_object_vars($this);
+
+        foreach ($vars as $var) {
+            if(is_object($var)) {
+                $var->resetCounter();
+            }
+        }
+
         return $this->table . ($this->alias != ''? " $this->alias": '');
     }
 

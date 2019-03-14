@@ -1,7 +1,7 @@
 <?php
 namespace Jarzon\QueryBuilder\Columns;
 
- class ColumnBase
+class ColumnBase
 {
     public $tableAlias = null;
     public $name = '';
@@ -50,12 +50,12 @@ namespace Jarzon\QueryBuilder\Columns;
         return $this->name;
     }
 
-     public function getColumnParamName(): string
-     {
-         $output = $this->name . ($this->paramCount > 1? $this->paramCount: '');
-         $this->paramCount++;
-         return $output;
-     }
+    public function getColumnParamName(): string
+    {
+        $output = $this->name . ($this->paramCount > 1? $this->paramCount: '');
+        $this->paramCount++;
+        return $output;
+    }
 
     public function getColumnReference(): string
     {
@@ -64,11 +64,20 @@ namespace Jarzon\QueryBuilder\Columns;
 
     public function getColumnSelect(): string
     {
-        return $this->getOutput() . ($this->output !== '' || $this->alias !== ''? " AS ".(!empty($this->alias)? $this->alias: $this->name): '');
+        $output = $this->getOutput() . ($this->output !== '' || $this->alias !== ''? " AS ".(!empty($this->alias)? $this->alias: $this->name): '');
+
+        $this->output = '';
+
+        return $output;
     }
 
     public function __toString(): string
     {
         return $this->getOutput();
+    }
+
+    public function resetCounter()
+    {
+        $this->paramCount = 1;
     }
 }

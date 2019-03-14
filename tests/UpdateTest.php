@@ -6,7 +6,7 @@ namespace Jarzon\QueryBuilder\Tests;
 use PHPUnit\Framework\TestCase;
 use \Jarzon\QueryBuilder\Tests\Mocks\PdoMock;
 use Jarzon\QueryBuilder\Builder as QB;
-use Jarzon\QueryBuilder\Tests\Mocks\TableMock;
+use Jarzon\QueryBuilder\Tests\Mocks\EntityMock;
 
 class UpdateTest extends TestCase
 {
@@ -14,7 +14,7 @@ class UpdateTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $users = new TableMock();
+        $users = new EntityMock();
 
         $query = QB::update($users)
             ->columns(['name' => 'test', 'email' => 'test@exemple.com']);
@@ -26,7 +26,7 @@ class UpdateTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $users = new TableMock('U');
+        $users = new EntityMock('U');
 
         $query = QB::update($users)
             ->columns(['name' => 'test', 'email' => 'test@exemple.com']);
@@ -38,7 +38,7 @@ class UpdateTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $users = new TableMock();
+        $users = new EntityMock();
 
         $query = QB::update($users)
             ->set($users->name, 'test')
@@ -74,7 +74,7 @@ class UpdateTest extends TestCase
     {
         QB::setPDO(new PdoMock());
 
-        $users = new TableMock();
+        $users = new EntityMock();
 
         $query = QB::update('users')
             ->columns(['name' => 'test', 'email' => 'test@exemple.com'])
