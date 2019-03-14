@@ -67,6 +67,7 @@ class ColumnBase
         $output = $this->getOutput() . ($this->output !== '' || $this->alias !== ''? " AS ".(!empty($this->alias)? $this->alias: $this->name): '');
 
         $this->output = '';
+        $this->alias = '';
 
         return $output;
     }

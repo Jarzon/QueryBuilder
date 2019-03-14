@@ -290,4 +290,19 @@ class SelectTest extends TestCase
 
         $this->assertNotEquals($query2, $query);
     }
+
+    public function testMutlipleQueriesAlias()
+    {
+        QB::setPDO(new PdoMock());
+
+        $users = new EntityMock('U');
+
+        $query2 = QB::select($users)
+            ->columns($users->id->alias('number'));
+
+        $query = QB::select($users)
+            ->columns($users->id);
+
+        $this->assertNotEquals($query2, $query);
+    }
 }
