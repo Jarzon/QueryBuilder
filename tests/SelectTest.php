@@ -320,6 +320,6 @@ class SelectTest extends TestCase
 
         $query = QB::select($users);
 
-        $this->assertEquals('', $query->fetch());
+        $this->assertEquals([], $query->fetchAll());
     }
 }
