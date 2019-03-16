@@ -311,4 +311,15 @@ class SelectTest extends TestCase
 
         $this->assertNotEquals($query2, $query);
     }
+
+    public function testFetch()
+    {
+        QB::setPDO(new PdoMock());
+
+        $users = new EntityMock('U');
+
+        $query = QB::select($users);
+
+        $this->assertEquals('', $query->fetch());
+    }
 }

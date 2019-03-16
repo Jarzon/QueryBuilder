@@ -23,8 +23,6 @@ class JoinTest extends TestCase
             ->leftJoin('accounts', 'accounts.user_id', '=', $users->id)
             ->where($users->date, '<', 30);
 
-        $query->exec(30);
-
         $this->assertEquals('SELECT U.id, U.name FROM users U LEFT JOIN accounts ON accounts.user_id = U.id WHERE U.date < :date', $query->getSql());
     }
 
