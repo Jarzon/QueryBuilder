@@ -110,7 +110,7 @@ class FunctionsTest extends TestCase
         $query = QB::select($users)
             ->columns($users->number->format());
 
-        $this->assertEquals("SELECT FORMAT(U.number, 2, 'fr_CA') AS number FROM users U", $query->getSql());
+        $this->assertEquals("SELECT FORMAT(U.number, 2, 'sv_SE') AS number FROM users U", $query->getSql());
     }
 
     public function testCurrency()
@@ -123,7 +123,7 @@ class FunctionsTest extends TestCase
                 $users->number->currency()
             );
 
-        $this->assertEquals("SELECT CONCAT(FORMAT(U.number, 2, 'fr_CA'), ' $') AS number FROM users U", $query->getSql());
+        $this->assertEquals("SELECT CONCAT(FORMAT(U.number, 2, 'sv_SE'), ' $') AS number FROM users U", $query->getSql());
     }
 
     // ABS

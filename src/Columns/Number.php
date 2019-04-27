@@ -52,7 +52,7 @@ class Number extends ColumnBase
         return $this;
     }
 
-    public function format(int $round = 2, string $local = 'fr_CA')
+    public function format(int $round = 2, string $local = 'sv_SE')
     {
         $this->output = "FORMAT({$this->getOutput()}, $round" . (($local !== '')? ", '$local'": '') . ')';
 
