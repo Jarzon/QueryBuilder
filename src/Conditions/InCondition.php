@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Jarzon\QueryBuilder\Conditions;
 
 class InCondition
@@ -7,7 +9,7 @@ class InCondition
     protected $column;
     protected $list = [];
 
-    public function __construct(string $column, array $list, bool $not = false)
+    public function __construct($column, array $list, bool $not = false)
     {
         $this->column = $column;
         $this->list = $list;
@@ -15,8 +17,6 @@ class InCondition
         if($not) {
             $this->type = 'NOT IN';
         }
-
-        return $this;
     }
 
     public function getSql()

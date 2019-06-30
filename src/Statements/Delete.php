@@ -1,9 +1,11 @@
 <?php
+declare(strict_types=1);
+
 namespace Jarzon\QueryBuilder\Statements;
 
 class Delete extends ConditionalStatementBase
 {
-    public function __construct(string $table, ?string $tableAlias, object $pdo)
+    public function __construct($table, ?string $tableAlias, object $pdo)
     {
         $this->type = 'DELETE';
         $this->pdo = $pdo;

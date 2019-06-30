@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Jarzon\QueryBuilder\Tests\Mocks;
 class PdoMock extends \PDO
 {

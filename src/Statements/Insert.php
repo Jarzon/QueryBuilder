@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Jarzon\QueryBuilder\Statements;
 
 class Insert extends StatementBase
@@ -6,7 +8,7 @@ class Insert extends StatementBase
     protected $columns = [];
     protected $values = [];
 
-    public function __construct(string $table, object $pdo)
+    public function __construct($table, object $pdo)
     {
         $this->type = 'INSERT INTO';
         $this->pdo = $pdo;
@@ -40,8 +42,6 @@ class Insert extends StatementBase
                 }
 
             }, array_keys($columns), $columns);
-        } else {
-            $this->columns[] = $columns;
         }
 
         return $this;

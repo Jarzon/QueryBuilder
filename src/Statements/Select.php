@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Jarzon\QueryBuilder\Statements;
 
 class Select extends ConditionalStatementBase
@@ -9,7 +11,7 @@ class Select extends ConditionalStatementBase
     protected $groupBy = [];
     protected $limit = [];
 
-    public function __construct(string $table, ?string $tableAlias, object $pdo)
+    public function __construct($table, ?string $tableAlias, object $pdo)
     {
         $this->type = 'SELECT';
         $this->pdo = $pdo;

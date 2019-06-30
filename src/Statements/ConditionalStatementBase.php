@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Jarzon\QueryBuilder\Statements;
 
 use \Jarzon\QueryBuilder\Conditions\Condition;

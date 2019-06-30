@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Jarzon\QueryBuilder\Conditions;
 
 class BetweenCondition
@@ -8,7 +10,7 @@ class BetweenCondition
     protected $start;
     protected $end;
 
-    public function __construct(string $column, $start, $end, bool $not = false)
+    public function __construct($column, $start, $end, bool $not = false)
     {
         $this->column = $column;
         $this->start = $start;
@@ -17,11 +19,9 @@ class BetweenCondition
         if($not) {
             $this->type = 'NOT BETWEEN';
         }
-
-        return $this;
     }
 
-    public function getSql()
+    public function getSql(): string
     {
         return "$this->column $this->type $this->start AND $this->end";
     }

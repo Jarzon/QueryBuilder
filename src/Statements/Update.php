@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Jarzon\QueryBuilder\Statements;
 
 class Update extends ConditionalStatementBase
@@ -6,7 +8,7 @@ class Update extends ConditionalStatementBase
     protected $columns = [];
     protected $query = null;
 
-    public function __construct(string $table, ?string $tableAlias, object $pdo)
+    public function __construct($table, ?string $tableAlias, object $pdo)
     {
         $this->type = 'UPDATE';
         $this->pdo = $pdo;

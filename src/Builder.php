@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Jarzon\QueryBuilder;
 
 use Jarzon\QueryBuilder\Statements\Select;
@@ -18,7 +20,7 @@ abstract class Builder
         self::$pdo = $pdo;
     }
 
-    static public function setTable(string $table, $tableAlias = null)
+    static public function setTable($table, $tableAlias = null)
     {
         self::$table = $table;
         self::$tableAlias = $tableAlias;

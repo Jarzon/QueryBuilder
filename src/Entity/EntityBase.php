@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Jarzon\QueryBuilder\Entity;
 
 use Jarzon\QueryBuilder\Columns\Text;
