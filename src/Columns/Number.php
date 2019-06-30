@@ -31,6 +31,13 @@ class Number extends ColumnBase
         return $this;
     }
 
+    public function round(int $precision = 2)
+    {
+        $this->output = "ROUND({$this->getOutput()}, $precision)";
+
+        return $this;
+    }
+
     public function ceiling()
     {
         $this->output = "CEILING({$this->getOutput()})";

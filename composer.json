@@ -1,6 +1,9 @@
 {
   "name": "jarzon/querybuilder",
   "type": "project",
+  "config": {
+    "bin-dir": "bin"
+  },
   "autoload": {
     "psr-4": {"Jarzon\\QueryBuilder\\": "src/"}
   },
@@ -11,6 +14,7 @@
     "php": ">=7.3.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "~6.2.0"
+    "phpunit/phpunit": "~7.5.0",
+    "phpstan/phpstan": "~0.11.0"
   }
 }

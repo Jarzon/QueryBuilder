@@ -69,6 +69,17 @@ class FunctionsTest extends TestCase
         $this->assertEquals("SELECT AVG(U.number) AS number FROM users U", $query->getSql());
     }
 
+    public function testRound()
+    {
+        QB::setPDO(new PdoMock());
+        $users = new EntityMock('U');
+
+        $query = QB::select($users)
+            ->columns($users->number->round());
+
+        $this->assertEquals("SELECT ROUND(U.number, 2) AS number FROM users U", $query->getSql());
+    }
+
     public function testCeiling()
     {
         QB::setPDO(new PdoMock());
