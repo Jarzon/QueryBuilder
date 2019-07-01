@@ -17,6 +17,6 @@ $query = Jarzon\QueryBuilder::table('users')
   ->where('id', '<', 30)
   ->where('name', '!=', 'admin');
 
-// $query->getSql() output:
+// $query->getSql() returns:
 // SELECT name FROM users WHERE id < 30 AND name != 'admin'
 ```

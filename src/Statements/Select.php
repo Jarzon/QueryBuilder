@@ -156,7 +156,7 @@ class Select extends ConditionalStatementBase
         return $this;
     }
 
-    public function fetchAll(int $fetch_style = null)
+    public function fetchAll(int $fetch_style = 0)
     {
         $this->lastStatement = $query = $this->pdo->prepare($this->getSql());
 
