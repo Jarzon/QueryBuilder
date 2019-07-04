@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Jarzon\QueryBuilder\Columns;
 
-class ColumnBase
+class ColumnBase implements ColumnInterface
 {
     public $tableAlias = null;
     public $name = '';
