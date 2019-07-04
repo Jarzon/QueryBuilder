@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Jarzon\QueryBuilder\Columns;
 
-class Number extends ColumnBase
+class Numeric extends ColumnBase
 {
     public function min()
     {

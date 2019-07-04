@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Jarzon\QueryBuilder\Entity;
 
 use Jarzon\QueryBuilder\Columns\Text;
-use Jarzon\QueryBuilder\Columns\Number;
+use Jarzon\QueryBuilder\Columns\Numeric;
 use Jarzon\QueryBuilder\Columns\Date;
 
 abstract class EntityBase implements EntityInterface
@@ -43,7 +43,7 @@ abstract class EntityBase implements EntityInterface
 
     protected function number($name)
     {
-        return new Number($name, $this->getAlias());
+        return new Numeric($name, $this->getAlias());
     }
 
     protected function date($name)
