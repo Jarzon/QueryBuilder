@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Jarzon\QueryBuilder\Statements;
 
+use Jarzon\QueryBuilder\Columns\ColumnInterface;
+
 class Update extends ConditionalStatementBase
 {
     protected $columns = [];
@@ -19,7 +21,7 @@ class Update extends ConditionalStatementBase
 
     public function set($column, string $value)
     {
-        if(is_object($column)) {
+        if($column instanceof ColumnInterface) {
             $column = $column->getColumnName();
         }
 
@@ -28,8 +30,12 @@ class Update extends ConditionalStatementBase
         return $this;
     }
 
-    public function setRaw(string $column, string $value)
+    public function setRaw($column, string $value)
     {
+        if($column instanceof ColumnInterface) {
+            $column = $column->getColumnName();
+        }
+
         $this->addColumn([$column => $value], true);
 
         return $this;
