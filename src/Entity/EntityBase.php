@@ -7,7 +7,7 @@ use Jarzon\QueryBuilder\Columns\Text;
 use Jarzon\QueryBuilder\Columns\Numeric;
 use Jarzon\QueryBuilder\Columns\Date;
 
-abstract class EntityBase implements EntityInterface
+abstract class EntityBase
 {
     protected $table = '';
     protected $alias = '';
@@ -15,8 +15,6 @@ abstract class EntityBase implements EntityInterface
     public function __construct($alias = '')
     {
         $this->alias = $alias;
-
-        $this->build();
     }
 
     public function __toString(): string

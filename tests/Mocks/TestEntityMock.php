@@ -12,8 +12,10 @@ class TestEntityMock extends EntityBase
     public $user_id;
     public $created;
 
-    public function build()
+    public function __construct($alias = '')
     {
+        parent::__construct($alias);
+
         $this->table('test');
 
         $this->id = $this->number('id');
