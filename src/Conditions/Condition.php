@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Jarzon\QueryBuilder\Conditions;
 
+use Jarzon\QueryBuilder\Columns\ColumnInterface;
+
 class Condition
 {
     protected $column;
@@ -15,7 +17,7 @@ class Condition
             $value = 'NULL';
         }
 
-        if(is_object($column)) {
+        if($column instanceof ColumnInterface) {
             $column = $column->getColumnReference();
         }
 

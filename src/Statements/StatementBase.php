@@ -1,6 +1,8 @@
 <?php
 namespace Jarzon\QueryBuilder\Statements;
 
+use Jarzon\QueryBuilder\Columns\ColumnInterface;
+
 abstract class StatementBase
 {
     protected $pdo;
@@ -18,7 +20,7 @@ abstract class StatementBase
             return $value;
         }
 
-        if(is_object($key)) {
+        if($key instanceof ColumnInterface) {
             $key =  ":" . $key->getColumnParamName();
 
             $this->params[$key] = $value;

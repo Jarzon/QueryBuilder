@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Jarzon\QueryBuilder\Statements;
 
+use Jarzon\QueryBuilder\Columns\ColumnInterface;
+
 class Select extends ConditionalStatementBase
 {
     protected $columns = ['*'];
@@ -82,7 +84,7 @@ class Select extends ConditionalStatementBase
 
             $output = $name;
 
-            if(is_object($name)) {
+            if($name instanceof ColumnInterface) {
                 $output = $name->getOutput();
             }
             else if(is_array($name)) {
@@ -103,7 +105,7 @@ class Select extends ConditionalStatementBase
     {
         foreach ($columns as $column) {
 
-            if(is_object($column)) {
+            if($column instanceof ColumnInterface) {
                 $this->columns[] = $column->getColumnSelect();
             } else {
                 $this->columns[] = $column;
@@ -115,7 +117,7 @@ class Select extends ConditionalStatementBase
 
     public function orderBy($column, string $order = '')
     {
-        if(is_object($column)) {
+        if($column instanceof ColumnInterface) {
             $column = $column->getColumnReference();
         }
 
