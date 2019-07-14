@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Jarzon\QueryBuilder\Statements;
 
+use Jarzon\QueryBuilder\Entity\EntityBase;
+
 class Insert extends StatementBase
 {
     protected $columns = [];
@@ -23,25 +25,35 @@ class Insert extends StatementBase
         return $this;
     }
 
-    public function columns(... $columns)
+    public function columns(...$columns)
     {
+        if(is_array($columns[0])) {
+            $columns = $columns[0];
+        }
+
         $this->columns = [];
-        $this->addColumn(...$columns);
+        $this->addColumn($columns);
 
         return $this;
     }
 
-    public function addColumn(...$columns)
+    public function addColumn(array $columns, bool $isRaw = false)
     {
-        if(is_array($columns)) {
-            array_map(function ($key, $column) {
-                if(!is_int($key)) {
-                    $this->columns[$key] = $column;
-                } else {
-                    $this->columns[] = $column;
-                }
+        if(!$isRaw) {
+            $columns = array_filter($columns, function($column) {
+                return (is_int($column) || !$this->table instanceof EntityBase) || ($this->table instanceof EntityBase && $this->table->columnExist($column));
+            }, ARRAY_FILTER_USE_KEY);
 
-            }, array_keys($columns), $columns);
+            array_walk($columns, function(&$value, $column) {
+                if(!is_int($column)) {
+                    $value = $this->param($value, $column);
+                    $this->columns[$value] = $column;
+                }
+            });
+        }
+
+        if(empty($this->columns)) {
+            $this->columns = $columns;
         }
 
         return $this;

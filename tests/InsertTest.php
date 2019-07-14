@@ -16,7 +16,7 @@ class InsertTest extends TestCase
 
         $users = new EntityMock();
 
-        $query = QB::insert($users) // Unify column and values
+        $query = QB::insert($users)
         ->columns($users->name, $users->email)
             ->values(['test', 'test@exemple.com']);
 
@@ -29,7 +29,7 @@ class InsertTest extends TestCase
 
         $users = new EntityMock();
 
-        $query = QB::insert($users) // Unify column and values
+        $query = QB::insert($users)
         ->columns(['notAColumn' => 'test', 'name' => 'test', 'email' => 'test@exemple.com']);
 
         $this->assertEquals("INSERT INTO users(name, email) VALUES (:name, :email)", $query->getSql());
