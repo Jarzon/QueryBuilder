@@ -76,8 +76,25 @@ class UpdateTest extends TestCase
 
         $users = new EntityMock();
 
-        $query = QB::update('users')
+        $query = QB::update($users)
             ->columns(['name' => 'test', 'email' => 'test@exemple.com'])
+            ->where($users->id, '=', 1);
+
+        $query->exec();
+
+        $this->assertEquals("UPDATE users SET name = :name, email = :email WHERE id = :id", $query->getSql());
+
+        $this->assertEquals([':name' => 'test', ':email' => 'test@exemple.com', ':id' => 1], $query->getLastStatement()->params);
+    }
+
+    public function testNonExistingColumn()
+    {
+        QB::setPDO(new PdoMock());
+
+        $users = new EntityMock();
+
+        $query = QB::update($users)
+            ->columns(['notAColumn' => 'test', 'name' => 'test', 'email' => 'test@exemple.com'])
             ->where($users->id, '=', 1);
 
         $query->exec();

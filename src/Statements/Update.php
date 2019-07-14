@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Jarzon\QueryBuilder\Statements;
 
 use Jarzon\QueryBuilder\Columns\ColumnInterface;
+use Jarzon\QueryBuilder\Entity\EntityBase;
 
 class Update extends ConditionalStatementBase
 {
@@ -56,6 +57,10 @@ class Update extends ConditionalStatementBase
     public function addColumn(array $columns, bool $isRaw = false)
     {
         if(!$isRaw) {
+            $columns = array_filter($columns, function($column) {
+                return !$this->table instanceof EntityBase || ($this->table instanceof EntityBase && $this->table->columnExist($column));
+            }, ARRAY_FILTER_USE_KEY);
+
             array_walk($columns, function(&$value, $column) {
                 $value = $this->param($value, $column);
             });
@@ -90,12 +95,12 @@ class Update extends ConditionalStatementBase
 
     public function exec(...$params)
     {
-        $this->lastStatement = $query = $this->pdo->prepare($this->getSql());
+        $this->lastStatement = $this->pdo->prepare($this->getSql());
 
         if(count($params) === 0) {
             $params = $this->params;
         }
 
-        return $query->execute($params);
+        return $this->lastStatement->execute($params);
     }
 }

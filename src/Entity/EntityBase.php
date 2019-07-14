@@ -22,6 +22,11 @@ abstract class EntityBase
         return $this->table . ($this->alias != ''? " $this->alias": '');
     }
 
+    public function columnExist(string $name): bool
+    {
+        return property_exists($this, $name);
+    }
+
     protected function getAlias()
     {
         return $this->alias ?? $this->table;
