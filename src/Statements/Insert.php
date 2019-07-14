@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Jarzon\QueryBuilder\Statements;
 
+use Jarzon\QueryBuilder\Columns\ColumnBase;
 use Jarzon\QueryBuilder\Entity\EntityBase;
 
 class Insert extends StatementBase
@@ -37,20 +38,22 @@ class Insert extends StatementBase
         return $this;
     }
 
-    public function addColumn(array $columns, bool $isRaw = false)
+    public function addColumn($columns, $value = null)
     {
-        if(!$isRaw) {
+        if($columns instanceof ColumnBase) {
+            $columns = [$columns->getColumnName() => $value];
+        } else {
             $columns = array_filter($columns, function($column) {
                 return (is_int($column) || !$this->table instanceof EntityBase) || ($this->table instanceof EntityBase && $this->table->columnExist($column));
             }, ARRAY_FILTER_USE_KEY);
-
-            array_walk($columns, function(&$value, $column) {
-                if(!is_int($column)) {
-                    $value = $this->param($value, $column);
-                    $this->columns[$value] = $column;
-                }
-            });
         }
+
+        array_walk($columns, function(&$value, $column) {
+            if(!is_int($column)) {
+                $value = $this->param($value, $column);
+                $this->columns[$value] = $column;
+            }
+        });
 
         if(empty($this->columns)) {
             $this->columns = $columns;
@@ -71,14 +74,14 @@ class Insert extends StatementBase
 
     public function exec(...$params)
     {
-        $this->lastStatement = $query = $this->pdo->prepare($this->getSql());
+        $this->lastStatement = $this->pdo->prepare($this->getSql());
 
         if(count($params) === 0) {
             $params = $this->params;
         }
 
-        $query->execute($params);
+        $this->lastStatement->execute($params);
 
-        return $query->lastInsertId();
+        return $this->pdo->lastInsertId();
     }
 }
