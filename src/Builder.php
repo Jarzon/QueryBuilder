@@ -81,6 +81,8 @@ abstract class Builder
         return ["$function($column)" => $alias ?? $column];
     }
 
+    /** Columns functions */
+
     static function functionMultipleArgs(string $function, $column, $alias = null)
     {
         // No alias

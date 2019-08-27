@@ -224,9 +224,22 @@ class FunctionsTest extends TestCase
 
     // Others
 
-    // IF(expresion, returnIfTrue, returnIfFalse)
-    // IFNULL(valueReturnIfNotNull, valueReturnedIfNull)
+    public function testIf()
+    {
+        QB::setPDO(new PdoMock());
+        $users = new EntityMock('U');
+
+        $query = QB::select($users)
+            ->columns($users->created->ifIsGreaterThat(0, $users->created->ifIsNull(0), "$users->date - 1")->alias('date'));
+
+        $this->assertEquals("SELECT IF(U.created > 0, IFNULL(U.created, 0), U.date - 1) AS date FROM users U", $query->getSql());
+    }
+
     // IN value IN (0, 1, 2, 3, 'a')
+    // CASE column1
+    //   WHEN 0 THEN column2
+    //   WHEN 1 THEN column3
+    // END AS columnAlias
 
     // CONVERT(sourceValue, type)
 }

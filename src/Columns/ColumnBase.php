@@ -24,24 +24,6 @@ class ColumnBase implements ColumnInterface
         return $this;
     }
 
-    public function preAppend(...$args)
-    {
-        $args[] = $this->getOutput();
-
-        $this->output = "CONCAT(" . implode(', ', $args) . ")";
-
-        return $this;
-    }
-
-    public function append(...$args)
-    {
-        array_unshift($args,  $this->getOutput());
-
-        $this->output = "CONCAT(" . implode(', ', $args) . ")";
-
-        return $this;
-    }
-
     public function getOutput(): string
     {
         return $this->output ?? $this->getColumnReference();
@@ -73,6 +55,74 @@ class ColumnBase implements ColumnInterface
         }
 
         return $output;
+    }
+
+    /** Functions */
+
+    public function preAppend(...$args)
+    {
+        $args[] = $this->getOutput();
+
+        $this->output = "CONCAT(" . implode(', ', $args) . ")";
+
+        return $this;
+    }
+
+    public function append(...$args)
+    {
+        array_unshift($args,  $this->getOutput());
+
+        $this->output = "CONCAT(" . implode(', ', $args) . ")";
+
+        return $this;
+    }
+
+    public function ifIsNull($value)
+    {
+        $args[] = $this->getOutput();
+
+        $this->output = "IFNULL(" .implode(', ', $args) . ", $value)";
+
+        return $this;
+    }
+
+    public function if($value, $operator, $expr1, $expr2)
+    {
+        $args[] = $this->getOutput();
+
+        $this->output = "IF(" . $this->getColumnReference() . " $operator $value, $expr1, $expr2)";
+
+        return $this;
+    }
+
+    public function ifIsGreaterThat($value, $expr1, $expr2)
+    {
+        return $this->if($value, '>', $expr1, $expr2);
+    }
+
+    public function ifIsLowerThat($value, $expr1, $expr2)
+    {
+        return $this->if($value, '<', $expr1, $expr2);
+    }
+
+    public function ifIsGreaterThatOrEqual($value, $expr1, $expr2)
+    {
+        return $this->if($value, '>=', $expr1, $expr2);
+    }
+
+    public function ifIsLowerThatOrEqual($value, $expr1, $expr2)
+    {
+        return $this->if($value, '<=', $expr1, $expr2);
+    }
+
+    public function ifIsEqual($value, $expr1, $expr2)
+    {
+        return $this->if($value, '=', $expr1, $expr2);
+    }
+
+    public function ifIsNotEqual($value, $expr1, $expr2)
+    {
+        return $this->if($value, '!=', $expr1, $expr2);
     }
 
     public function __toString(): string
