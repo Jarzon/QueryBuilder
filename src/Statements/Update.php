@@ -20,7 +20,7 @@ class Update extends ConditionalStatementBase
         $this->tableAlias = $tableAlias;
     }
 
-    public function set($column, string $value)
+    public function set($column, $value)
     {
         if($column instanceof ColumnInterface) {
             $column = $column->getColumnName();
@@ -31,7 +31,7 @@ class Update extends ConditionalStatementBase
         return $this;
     }
 
-    public function setRaw($column, string $value)
+    public function setRaw($column, $value)
     {
         if($column instanceof ColumnInterface) {
             $column = $column->getColumnName();
