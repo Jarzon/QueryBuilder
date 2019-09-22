@@ -207,6 +207,19 @@ class FunctionsTest extends TestCase
         $this->assertEquals("SELECT DATE_ADD(U.date, INTERVAL 1 DAY) AS date FROM users U", $query->getSql());
     }
 
+    public function testWhereDateAdd()
+    {
+        QB::setPDO(new PdoMock());
+        $users = new EntityMock('U');
+
+        $query = QB::select($users)
+            ->columns($users->name)
+            ->where('NOW()', '>', $users->date->dateAdd('1 MONTH'))
+            ->where('NOW()', '<', $users->date->dateAdd('1 YEAR'));
+
+        $this->assertEquals("SELECT U.name FROM users U WHERE NOW() > DATE_ADD(U.date, INTERVAL 1 MONTH) AND NOW() < DATE_ADD(U.date, INTERVAL 1 YEAR)", $query->getSql());
+    }
+
     // STR_TO_DATE(string, dateFormat)
     // DATE_SUB
     // DATE_FORMAT(date, format) [format: %Y-%m-%d]

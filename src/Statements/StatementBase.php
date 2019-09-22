@@ -16,7 +16,10 @@ abstract class StatementBase
 
     protected function param($value, $key = '?', bool $raw = false)
     {
-        if($raw) {
+        if($value instanceof ColumnInterface) {
+            return $value->getColumnOutput();
+        }
+        else if($raw) {
             return $value;
         }
 
