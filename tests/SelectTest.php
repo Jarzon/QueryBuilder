@@ -113,20 +113,23 @@ class SelectTest extends TestCase
         $this->assertEquals("SELECT * FROM users U WHERE U.date < :date OR U.name != :name", $query->getSql());
     }
 
-    public function testSubCondition()
+    public function testSubConditions()
     {
         QB::setPDO(new PdoMock());
 
         $users = new EntityMock('U');
 
         $query = QB::select($users)
-            ->where($users->date, '<', '01-01-2000')
             ->where(function ($q) use($users) {
+                $q->whereRaw($users->name, '!=', 'Root')
+                    ->or($users->date, '<', '01-01-2000');
+            })
+            ->or(function ($q) use($users) {
                 $q->where($users->name, '!=', 'Root')
                     ->or($users->date, '<', '01-01-2000');
             });
 
-        $this->assertEquals("SELECT * FROM users U WHERE U.date < :date AND ( U.name != :name OR U.date < :date2 )", $query->getSql());
+        $this->assertEquals("SELECT * FROM users U WHERE ( U.name != Root OR U.date < :date ) OR ( U.name != :name OR U.date < :date2 )", $query->getSql());
     }
 
     public function testBetweenCondition()

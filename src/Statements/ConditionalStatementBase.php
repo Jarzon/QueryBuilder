@@ -40,9 +40,17 @@ abstract class ConditionalStatementBase extends StatementBase
         return $this;
     }
 
-    public function or($column, string $operator, $value, $isRaw = false)
+    public function or($column, string $operator = null, $value = null, $isRaw = false)
     {
         $this->addCondition('OR');
+
+        if($operator === null && is_callable($column) && $column instanceof \Closure) {
+            $this->addCondition('(');
+            $column($this);
+            $this->addCondition(')');
+
+            return $this;
+        }
 
         $this->addCondition(new Condition($column, $operator, $this->param($value, $column)));
 
