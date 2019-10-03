@@ -42,9 +42,15 @@ class Select extends ConditionalStatementBase
             $query .= " WHERE $conditions";
         }
 
+        if(count($this->groupBy) > 0) {
+            $groupBy = implode(', ', $this->groupBy);
+
+            $query .= " GROUP BY $groupBy";
+        }
+
         if(count($this->orderBy) > 0) {
-            $orderBy = implode(', ', array_map(function($column, $order) {
-                if($order == null) {
+            $orderBy = implode(', ', array_map(function ($column, $order) {
+                if ($order == null) {
                     return $column;
                 }
 
@@ -52,12 +58,6 @@ class Select extends ConditionalStatementBase
             }, array_keys($this->orderBy), $this->orderBy));
 
             $query .= " ORDER BY $orderBy";
-        }
-
-        if(count($this->groupBy) > 0) {
-            $groupBy = implode(', ', $this->groupBy);
-
-            $query .= " GROUP BY $groupBy";
         }
 
         if(count($this->limit) > 0) {
