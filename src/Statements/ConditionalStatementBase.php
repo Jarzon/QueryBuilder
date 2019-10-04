@@ -13,10 +13,7 @@ abstract class ConditionalStatementBase extends StatementBase
 
     public function where($column, ?string $operator = null, $value = null, $isRaw = false)
     {
-        $conditionsCount = count($this->conditions);
-        if($conditionsCount > 0 && $this->conditions[$conditionsCount-1] != '(') {
-            $this->addCondition('AND');
-        }
+        $this->chaining();
 
         if($operator === null && is_callable($column) && $column instanceof \Closure) {
             $this->addCondition('(');
@@ -35,6 +32,8 @@ abstract class ConditionalStatementBase extends StatementBase
 
     public function whereRaw($column, ?string $operator = null, $value = null)
     {
+        $this->chaining();
+
         $this->where($column, $operator, $value, true);
 
         return $this;
@@ -59,6 +58,8 @@ abstract class ConditionalStatementBase extends StatementBase
 
     public function between($column, $start, $end, $isRaw = false)
     {
+        $this->chaining();
+
         $this->addCondition(new BetweenCondition($column, $this->param($start, $column), $this->param($end, $column)));
 
         return $this;
@@ -66,6 +67,8 @@ abstract class ConditionalStatementBase extends StatementBase
 
     public function notBetween($column, $start, $end, $isRaw = false)
     {
+        $this->chaining();
+
         $this->addCondition(new BetweenCondition($column, $this->param($start, $column), $this->param($end, $column), true));
 
         return $this;
@@ -73,6 +76,8 @@ abstract class ConditionalStatementBase extends StatementBase
 
     public function in($column, array $list, $isRaw = false)
     {
+        $this->chaining();
+
         $this->addCondition(new InCondition($column, $list));
 
         return $this;
@@ -80,6 +85,8 @@ abstract class ConditionalStatementBase extends StatementBase
 
     public function notIn($column, array $list, $isRaw = false)
     {
+        $this->chaining();
+
         $this->addCondition(new InCondition($column, $list, true));
 
         return $this;
@@ -87,6 +94,8 @@ abstract class ConditionalStatementBase extends StatementBase
 
     public function isNull($column, $isRaw = false)
     {
+        $this->chaining();
+
         $this->addCondition(new Condition($column, 'IS', null));
 
         return $this;
@@ -94,9 +103,18 @@ abstract class ConditionalStatementBase extends StatementBase
 
     public function isNotNull($column, $isRaw = false)
     {
+        $this->chaining();
+
         $this->addCondition(new Condition($column, 'IS NOT', null));
 
         return $this;
+    }
+
+    protected function chaining() {
+        $conditionsCount = count($this->conditions);
+        if($conditionsCount > 0 && $this->conditions[$conditionsCount-1] != '(') {
+            $this->addCondition('AND');
+        }
     }
 
     protected function addCondition($condition, $isRaw = false)
