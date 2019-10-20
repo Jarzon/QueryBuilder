@@ -32,8 +32,6 @@ abstract class ConditionalStatementBase extends StatementBase
 
     public function whereRaw($column, ?string $operator = null, $value = null)
     {
-        $this->chaining();
-
         $this->where($column, $operator, $value, true);
 
         return $this;
