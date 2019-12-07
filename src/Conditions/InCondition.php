@@ -5,9 +5,9 @@ namespace Jarzon\QueryBuilder\Conditions;
 
 class InCondition
 {
-    protected $type = 'IN';
+    protected string $type = 'IN';
     protected $column;
-    protected $list = [];
+    protected array $list = [];
 
     public function __construct($column, array $list, bool $not = false)
     {

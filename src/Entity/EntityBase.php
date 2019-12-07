@@ -9,8 +9,8 @@ use Jarzon\QueryBuilder\Columns\Date;
 
 abstract class EntityBase
 {
-    protected $table = '';
-    protected $alias = '';
+    protected string $table = '';
+    protected string $alias = '';
 
     public function __construct($alias = '')
     {

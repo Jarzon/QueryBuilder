@@ -5,14 +5,15 @@ use Jarzon\QueryBuilder\Columns\ColumnInterface;
 
 abstract class StatementBase
 {
-    protected $pdo;
-    protected $lastStatement;
+    protected object $pdo;
+    protected object $lastStatement;
 
-    protected $params = [];
+    protected array $params = [];
 
-    protected $type = '';
+    protected string $type = '';
+    /** @var string|ColumnInterface */
     protected $table = '';
-    protected $tableAlias = null;
+    protected ?string $tableAlias;
 
     protected function param($value, $key = '?', bool $raw = false)
     {
@@ -50,7 +51,7 @@ abstract class StatementBase
         return $this->table . (isset($this->tableAlias)? " $this->tableAlias" : '');
     }
 
-    public function getLastStatement()
+    public function getLastStatement(): ?object
     {
         return $this->lastStatement;
     }

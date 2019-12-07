@@ -9,7 +9,7 @@ use \Jarzon\QueryBuilder\Conditions\InCondition;
 
 abstract class ConditionalStatementBase extends StatementBase
 {
-    protected $conditions = [];
+    protected array $conditions = [];
 
     public function where($column, ?string $operator = null, $value = null, $isRaw = false)
     {

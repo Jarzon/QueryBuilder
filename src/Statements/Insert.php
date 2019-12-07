@@ -8,8 +8,8 @@ use Jarzon\QueryBuilder\Entity\EntityBase;
 
 class Insert extends StatementBase
 {
-    protected $columns = [];
-    protected $values = [];
+    protected array $columns = [];
+    protected array $values = [];
 
     public function __construct($table, object $pdo)
     {

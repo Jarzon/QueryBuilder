@@ -5,9 +5,10 @@ namespace Jarzon\QueryBuilder\Columns;
 
 interface ColumnInterface
 {
-    public function getOutput();
-    public function getColumnName();
-    public function getColumnParamName();
-    public function getColumnReference();
-    public function getColumnSelect();
+    public function getOutput(): string;
+    public function getColumnOutput(): string;
+    public function getColumnName(): string;
+    public function getColumnParamName(): string;
+    public function getColumnReference(): string;
+    public function getColumnSelect(): string;
 }

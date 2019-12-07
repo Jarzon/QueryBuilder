@@ -7,8 +7,10 @@ use Jarzon\QueryBuilder\Columns\ColumnInterface;
 
 class Condition
 {
+    /** @var ColumnInterface|string */
     protected $column;
-    protected $operator;
+    protected string $operator;
+    /** @var string|int|float */
     protected $value;
 
     public function __construct($column, string $operator, $value)

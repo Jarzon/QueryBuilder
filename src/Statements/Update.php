@@ -8,8 +8,8 @@ use Jarzon\QueryBuilder\Entity\EntityBase;
 
 class Update extends ConditionalStatementBase
 {
-    protected $columns = [];
-    protected $query = null;
+    protected array $columns = [];
+    protected ?string $query = null;
 
     public function __construct($table, ?string $tableAlias, object $pdo)
     {

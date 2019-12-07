@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Jarzon\QueryBuilder;
 
+use Jarzon\QueryBuilder\Columns\ColumnInterface;
 use Jarzon\QueryBuilder\Statements\Select;
 use Jarzon\QueryBuilder\Statements\Insert;
 use Jarzon\QueryBuilder\Statements\Update;
@@ -10,10 +11,12 @@ use Jarzon\QueryBuilder\Statements\Delete;
 
 abstract class Builder
 {
+    /** @var string|ColumnInterface */
     static $table = '';
-    static $tableAlias = null;
-    static $pdo;
-    static $currentTable = '';
+    static ?string $tableAlias;
+    static object $pdo;
+    /** @var string|ColumnInterface */
+    static $currentTable;
 
     static function setPDO(object $pdo)
     {

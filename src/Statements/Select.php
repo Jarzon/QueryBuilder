@@ -7,11 +7,11 @@ use Jarzon\QueryBuilder\Columns\ColumnInterface;
 
 class Select extends ConditionalStatementBase
 {
-    protected $columns = ['*'];
-    protected $join = [];
-    protected $orderBy = [];
-    protected $groupBy = [];
-    protected $limit = [];
+    protected array $columns = ['*'];
+    protected array $join = [];
+    protected array $orderBy = [];
+    protected array $groupBy = [];
+    protected array $limit = [];
 
     public function __construct($table, ?string $tableAlias, object $pdo)
     {

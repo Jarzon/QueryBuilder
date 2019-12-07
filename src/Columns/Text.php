@@ -5,7 +5,7 @@ namespace Jarzon\QueryBuilder\Columns;
 
 class Text extends ColumnBase
 {
-    public $name = '';
+    public string $name = '';
 
     public function length()
     {

@@ -5,11 +5,11 @@ namespace Jarzon\QueryBuilder\Columns;
 
 class ColumnBase implements ColumnInterface
 {
-    public $tableAlias = null;
-    public $name = '';
-    public $alias = null;
-    public $output = null;
-    public $paramCount = 1;
+    public ?string $tableAlias;
+    public string $name = '';
+    public ?string $alias = null;
+    public ?string $output = null;
+    public int $paramCount = 1;
 
     public function __construct(string $name, $tableAlias = null)
     {
