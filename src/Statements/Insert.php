@@ -82,6 +82,12 @@ class Insert extends StatementBase
 
         $this->lastStatement->execute($params);
 
-        return $this->pdo->lastInsertId();
+        $id = $this->pdo->lastInsertId();
+
+        if(is_numeric($id)) {
+            return (int)$id;
+        }
+
+        return $id;
     }
 }
