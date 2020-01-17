@@ -15,6 +15,8 @@ class PdoStatementMock extends \PDOStatement
     public function execute($input_parameters = null)
     {
         $this->params = $input_parameters;
+
+        return true;
     }
 
     public function fetchAll($fetch_style = null, $fetch_argument = null, $ctor_args = array())

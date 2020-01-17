@@ -20,7 +20,11 @@ class Update extends ConditionalStatementBase
         $this->tableAlias = $tableAlias;
     }
 
-    public function set($column, $value)
+    /**
+     * @var string|ColumnInterface $column
+     * @var int|float|string $value
+     */
+    public function set($column, $value): Update
     {
         if($column instanceof ColumnInterface) {
             $column = $column->getColumnName();
@@ -31,18 +35,26 @@ class Update extends ConditionalStatementBase
         return $this;
     }
 
-    public function setRaw($column, $value)
+    /**
+     * @var string|ColumnInterface $column
+     * @var int|float|string|Select $valueOrSubQuery
+     */
+    public function setRaw($column, $valueOrSubQuery): Update
     {
         if($column instanceof ColumnInterface) {
             $column = $column->getColumnName();
         }
 
-        $this->addColumn([$column => $value], true);
+        if($valueOrSubQuery instanceof Select) {
+            $valueOrSubQuery = "({$valueOrSubQuery->getSql()})";
+        }
+
+        $this->addColumn([$column => $valueOrSubQuery], true);
 
         return $this;
     }
 
-    public function columns(array $columns)
+    public function columns(array $columns): Update
     {
         if(!is_array($columns)) {
             $columns = [$columns];
@@ -54,7 +66,7 @@ class Update extends ConditionalStatementBase
         return $this;
     }
 
-    public function addColumn(array $columns, bool $isRaw = false)
+    public function addColumn(array $columns, bool $isRaw = false): Update
     {
         if(!$isRaw) {
             $columns = array_filter($columns, function($column) {
@@ -93,7 +105,7 @@ class Update extends ConditionalStatementBase
         return $query;
     }
 
-    public function exec(...$params)
+    public function exec(...$params): bool
     {
         $this->lastStatement = $this->pdo->prepare($this->getSql());
 
