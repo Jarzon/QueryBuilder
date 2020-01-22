@@ -3,20 +3,22 @@ declare(strict_types=1);
 
 namespace Jarzon\QueryBuilder\Columns;
 
+use Jarzon\QueryBuilder\Raw;
+
 class Text extends ColumnBase
 {
     public string $name = '';
 
     public function length()
     {
-        $this->output = "CHAR_LENGTH({$this->getOutput()})";
+        $this->output = new Raw("CHAR_LENGTH({$this->getOutput()})");
 
         return $this;
     }
 
     public function substring(int $start, int $end)
     {
-        $this->output = "SUBSTRING({$this->getOutput()}, $start, $end)";
+        $this->output = new Raw("SUBSTRING({$this->getOutput()}, $start, $end)");
 
         return $this;
     }

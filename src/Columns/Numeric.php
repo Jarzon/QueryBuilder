@@ -3,67 +3,69 @@ declare(strict_types=1);
 
 namespace Jarzon\QueryBuilder\Columns;
 
+use Jarzon\QueryBuilder\Raw;
+
 class Numeric extends ColumnBase
 {
     public function min()
     {
-        $this->output = "MIN({$this->getOutput()})";
+        $this->output = new Raw("MIN({$this->getOutput()})");
 
         return $this;
     }
 
     public function max()
     {
-        $this->output = "MAX({$this->getOutput()})";
+        $this->output = new Raw("MAX({$this->getOutput()})");
 
         return $this;
     }
 
     public function sum()
     {
-        $this->output = "SUM({$this->getOutput()})";
+        $this->output = new Raw("SUM({$this->getOutput()})");
 
         return $this;
     }
 
     public function avg()
     {
-        $this->output = "AVG({$this->getOutput()})";
+        $this->output = new Raw("AVG({$this->getOutput()})");
 
         return $this;
     }
 
     public function round(int $precision = 2)
     {
-        $this->output = "ROUND({$this->getOutput()}, $precision)";
+        $this->output = new Raw("ROUND({$this->getOutput()}, $precision)");
 
         return $this;
     }
 
     public function ceiling()
     {
-        $this->output = "CEILING({$this->getOutput()})";
+        $this->output = new Raw("CEILING({$this->getOutput()})");
 
         return $this;
     }
 
     public function floor()
     {
-        $this->output = "FLOOR({$this->getOutput()})";
+        $this->output = new Raw("FLOOR({$this->getOutput()})");
 
         return $this;
     }
 
     public function count()
     {
-        $this->output = "COUNT({$this->getOutput()})";
+        $this->output = new Raw("COUNT({$this->getOutput()})");
 
         return $this;
     }
 
     public function format(int $round = 2, string $local = 'sv_SE')
     {
-        $this->output = "FORMAT({$this->getOutput()}, $round" . (($local !== '')? ", '$local'": '') . ')';
+        $this->output = new Raw("FORMAT({$this->getOutput()}, $round" . (($local !== '')? ", '$local'": '') . ')');
 
         return $this;
     }
@@ -74,7 +76,7 @@ class Numeric extends ColumnBase
             $this->output = $value;
         }
 
-        $this->format()->append("' $'");
+        $this->format()->append(" $");
 
         return $this;
     }

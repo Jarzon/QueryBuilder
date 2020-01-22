@@ -3,12 +3,14 @@ declare(strict_types=1);
 
 namespace Jarzon\QueryBuilder\Columns;
 
+use Jarzon\QueryBuilder\Raw;
+
 class ColumnBase implements ColumnInterface
 {
     public ?string $tableAlias;
     public string $name = '';
     public ?string $alias = null;
-    public ?string $output = null;
+    public $output = null;
     public int $paramCount = 1;
 
     public function __construct(string $name, $tableAlias = null)
@@ -24,14 +26,15 @@ class ColumnBase implements ColumnInterface
         return $this;
     }
 
-    public function getOutput(): string
+    /** @return string|Raw */
+    public function getOutput()
     {
-        return $this->output ?? $this->getColumnReference();
+        return $this->output ?? new Raw($this->getColumnReference());
     }
 
-    public function getColumnOutput(): string
+    public function getColumnOutput()
     {
-        $output = $this->output ?? $this->getColumnReference();
+        $output = $this->getOutput();
 
         $this->output = null;
 
@@ -59,6 +62,10 @@ class ColumnBase implements ColumnInterface
     {
         $output = $this->getOutput();
 
+        if($output instanceof Raw) {
+            $output = $output->value;
+        }
+
         if($this->output !== null || $this->alias !== null) {
             $output .= " AS " . ($this->alias ?? $this->name);
         }
@@ -68,11 +75,27 @@ class ColumnBase implements ColumnInterface
 
     /** Functions */
 
+    protected function parseArgs(array &$args)
+    {
+        foreach ($args as $i => $arg) {
+            $args[$i] = $arg instanceof ColumnInterface? $arg->getOutput() :($arg instanceof Raw? $arg: "'$arg'");
+        }
+
+        return $args;
+    }
+
+    public function concat(array $args)
+    {
+        $args = $this->parseArgs($args);
+
+        $this->output = new Raw("CONCAT(" . implode(', ', $args) . ")");
+    }
+
     public function preAppend(...$args)
     {
         $args[] = $this->getOutput();
 
-        $this->output = "CONCAT(" . implode(', ', $args) . ")";
+        $this->concat($args);
 
         return $this;
     }
@@ -81,7 +104,7 @@ class ColumnBase implements ColumnInterface
     {
         array_unshift($args,  $this->getOutput());
 
-        $this->output = "CONCAT(" . implode(', ', $args) . ")";
+        $this->concat($args);
 
         return $this;
     }
@@ -90,16 +113,16 @@ class ColumnBase implements ColumnInterface
     {
         $args[] = $this->getOutput();
 
-        $this->output = "IFNULL(" .implode(', ', $args) . ", $value)";
+        $args = $this->parseArgs($args);
+
+        $this->output = new Raw("IFNULL(" .implode(', ', $args) . ", $value)");
 
         return $this;
     }
 
     public function if($value, $operator, $expr1, $expr2)
     {
-        $args[] = $this->getOutput();
-
-        $this->output = "IF(" . $this->getColumnReference() . " $operator $value, $expr1, $expr2)";
+        $this->output = new Raw("IF(" . $this->getColumnReference() . " $operator $value, $expr1, $expr2)");
 
         return $this;
     }
@@ -136,6 +159,12 @@ class ColumnBase implements ColumnInterface
 
     public function __toString(): string
     {
-        return $this->getOutput();
+        $output = $this->getOutput();
+
+        if($output instanceof Raw) {
+            return $output->value;
+        }
+
+        return $output;
     }
 }

@@ -17,7 +17,7 @@ class FunctionsTest extends TestCase
         $users = new EntityMock('U');
 
         $query = QB::select($users)
-            ->columns($users->date->date()->preAppend($users->name, "' - '"));
+            ->columns($users->date->date()->preAppend($users->name, " - "));
 
         $this->assertEquals("SELECT CONCAT(U.name, ' - ', DATE(U.date)) AS date FROM users U", $query->getSql());
     }
@@ -161,9 +161,9 @@ class FunctionsTest extends TestCase
         $users = new EntityMock('U');
 
         $query = QB::select($users)
-            ->columns($users->number->preAppend(QB::raw('# ')));
+            ->columns($users->number->preAppend(QB::raw('coin')));
 
-        $this->assertEquals("SELECT CONCAT('# ', U.number) AS number FROM users U", $query->getSql());
+        $this->assertEquals("SELECT CONCAT(coin, U.number) AS number FROM users U", $query->getSql());
     }
 
     // REPLACE(baseString, search, replace)

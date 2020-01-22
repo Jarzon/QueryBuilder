@@ -15,13 +15,6 @@ class Raw
 
     public function __toString(): string
     {
-        if(is_string($this->value)) {
-            return "'$this->value'";
-        }
-        else if(is_int($this->value) || is_float($this->value)) {
-            return "$this->value";
-        }
-
-        return (string)$this->value;
+        return $this->value;
     }
 }
