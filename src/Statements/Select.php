@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Jarzon\QueryBuilder\Statements;
 
 use Jarzon\QueryBuilder\Columns\ColumnInterface;
+use Jarzon\QueryBuilder\Raw;
 
 class Select extends ConditionalStatementBase
 {
@@ -107,6 +108,9 @@ class Select extends ConditionalStatementBase
 
             if($column instanceof ColumnInterface) {
                 $this->columns[] = $column->getColumnSelect();
+            }
+            elseif ($column instanceof Raw) {
+                $this->columns[] = $column->value;
             } else {
                 $this->columns[] = $column;
             }
@@ -120,11 +124,11 @@ class Select extends ConditionalStatementBase
         if($column instanceof ColumnInterface) {
             $column = $column->getColumnReference();
         }
-
-        if($order === 'desc') {
-            $order = 'DESC';
+        elseif ($column instanceof Raw) {
+            $column = $column->value;
         }
-        $this->orderBy[$column] = $order;
+
+        $this->orderBy[$column] = strtoupper($order);
 
         return $this;
     }

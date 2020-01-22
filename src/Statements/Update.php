@@ -5,6 +5,7 @@ namespace Jarzon\QueryBuilder\Statements;
 
 use Jarzon\QueryBuilder\Columns\ColumnInterface;
 use Jarzon\QueryBuilder\Entity\EntityBase;
+use Jarzon\QueryBuilder\Raw;
 
 class Update extends ConditionalStatementBase
 {
@@ -29,6 +30,9 @@ class Update extends ConditionalStatementBase
         if($column instanceof ColumnInterface) {
             $column = $column->getColumnName();
         }
+        elseif ($column instanceof Raw) {
+            $column = $column->value;
+        }
 
         $this->addColumn([$column => $value]);
 
@@ -43,6 +47,9 @@ class Update extends ConditionalStatementBase
     {
         if($column instanceof ColumnInterface) {
             $column = $column->getColumnName();
+        }
+        elseif ($column instanceof Raw) {
+            $column = $column->value;
         }
 
         if($valueOrSubQuery instanceof Select) {

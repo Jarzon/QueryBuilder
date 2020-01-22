@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Jarzon\QueryBuilder\Conditions;
 
 use Jarzon\QueryBuilder\Columns\ColumnInterface;
+use Jarzon\QueryBuilder\Raw;
 
 class Condition
 {
@@ -21,6 +22,9 @@ class Condition
 
         if($column instanceof ColumnInterface) {
             $column = $column->getColumnReference();
+        }
+        elseif ($column instanceof Raw) {
+            $column = $column->value;
         }
 
         $this->column = $column;
