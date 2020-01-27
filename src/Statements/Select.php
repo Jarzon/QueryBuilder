@@ -208,7 +208,7 @@ class Select extends ConditionalStatementBase
 
         $query->execute($this->params);
 
-        return $query->fetchAll(\PDO::FETCH_CLASS);
+        return $query->fetchAll();
     }
 
     public function fetchColumn()
