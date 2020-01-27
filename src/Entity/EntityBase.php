@@ -11,11 +11,12 @@ abstract class EntityBase
 {
     protected string $table = '';
     protected string $alias = '';
-    protected string $entityClass = '';
+    public string $entityClass = '';
 
-    public function __construct($alias = '')
+    public function __construct($alias = '', $class = '')
     {
         $this->alias = $alias;
+        $this->entityClass = $class;
     }
 
     public function __toString(): string
