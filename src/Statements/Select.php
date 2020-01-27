@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Jarzon\QueryBuilder\Statements;
 
 use Jarzon\QueryBuilder\Columns\ColumnInterface;
+use Jarzon\QueryBuilder\Entity\EntityBase;
 use Jarzon\QueryBuilder\Raw;
 
 class Select extends ConditionalStatementBase
@@ -171,13 +172,43 @@ class Select extends ConditionalStatementBase
         return $query->fetchAll($fetch_style);
     }
 
-    public function fetch()
+    public function fetch(int $fetch_style = 0)
     {
         $this->lastStatement = $query = $this->pdo->prepare($this->getSql());
 
         $query->execute($this->params);
 
+        return $query->fetch($fetch_style);
+    }
+
+    public function fetchClass(?string $class = null)
+    {
+        $this->lastStatement = $query = $this->pdo->prepare($this->getSql());
+
+        if($class === null && $this->table instanceof EntityBase) {
+            $class = $this->table->entityClass;
+        }
+
+        $query->setFetchMode(\PDO::FETCH_CLASS, $class);
+
+        $query->execute($this->params);
+
         return $query->fetch();
+    }
+
+    public function fetchClassAll(?string $class = null)
+    {
+        $this->lastStatement = $query = $this->pdo->prepare($this->getSql());
+
+        if($class === null && $this->table instanceof EntityBase) {
+            $class = $this->table->entityClass;
+        }
+
+        $query->setFetchMode(\PDO::FETCH_CLASS, $class);
+
+        $query->execute($this->params);
+
+        return $query->fetchAll(\PDO::FETCH_CLASS);
     }
 
     public function fetchColumn()

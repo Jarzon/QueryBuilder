@@ -11,6 +11,7 @@ abstract class EntityBase
 {
     protected string $table = '';
     protected string $alias = '';
+    protected string $entityClass = '';
 
     public function __construct($alias = '')
     {
