@@ -43,7 +43,20 @@ class InsertTest extends TestCase
         $users = new EntityMock();
 
         $query = QB::insert($users)
-        ->columns(['notAColumn' => 'test', 'name' => 'test', 'email' => 'test@exemple.com']);
+            ->columns(['notAColumn' => 'test', 'name' => 'test', 'email' => 'test@exemple.com']);
+
+        $this->assertEquals("INSERT INTO users(name, email) VALUES (:name, :email)", $query->getSql());
+    }
+
+    public function testNoAliasInInserts()
+    {
+        QB::setPDO(new PdoMock());
+
+        $users = new EntityMock('A');
+
+        $query = QB::insert($users)
+            ->columns($users->name, $users->email)
+            ->values(['test', 'test@exemple.com']);
 
         $this->assertEquals("INSERT INTO users(name, email) VALUES (:name, :email)", $query->getSql());
     }

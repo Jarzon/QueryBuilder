@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Jarzon\QueryBuilder\Statements;
 
 use Jarzon\QueryBuilder\Columns\ColumnBase;
-use Jarzon\QueryBuilder\Entity\EntityBase;
 
 class Insert extends StatementBase
 {
@@ -40,23 +39,19 @@ class Insert extends StatementBase
 
     public function addColumn($columns, $value = null)
     {
-        if($columns instanceof ColumnBase) {
-            $columns = [$columns->getColumnName() => $value];
-        } else {
-            $columns = array_filter($columns, function($column) {
-                return (is_int($column) || !$this->table instanceof EntityBase) || ($this->table instanceof EntityBase && $this->table->columnExist($column));
-            }, ARRAY_FILTER_USE_KEY);
+        if($value !== null) {
+            $columns = [$value => $columns];
         }
 
-        array_walk($columns, function(&$value, $column) {
-            if(!is_int($column)) {
+        foreach ($columns as $i => $column) {
+            if($column instanceof ColumnBase) {
                 $value = $this->param($value, $column);
-                $this->columns[$value] = $column;
+                $this->columns[$value] = $column->getColumnName();
             }
-        });
-
-        if(empty($this->columns)) {
-            $this->columns = $columns;
+            else if(!is_int($column) && !empty($column)) {
+                $value = $this->param($column, $value);
+                $this->columns[$column] = $i;
+            }
         }
 
         return $this;
@@ -65,11 +60,9 @@ class Insert extends StatementBase
     public function getSql(): string
     {
         $columns = implode(', ', $this->columns);
-        $values = ':'.implode(', :', $this->columns);
+        $values = ':' . implode(', :', $this->columns);
 
-        $query = "$this->type {$this->table}($columns) VALUES ($values)";
-
-        return $query;
+        return "$this->type {$this->table->table}($columns) VALUES ($values)";
     }
 
     public function exec(...$params)
