@@ -30,10 +30,17 @@ class InsertTest extends TestCase
         $users = new EntityMock();
 
         $query = QB::insert($users)
-            ->columns(['name' => 'test', 'email' => 'test@exemple.com'])
+            ->columns(['id' => '1', 'name' => 'test', 'email' => 'test@exemple.com'])
             ->addColumn($users->date, '01/01/2019');
 
-        $this->assertEquals("INSERT INTO users(name, email, date) VALUES (:name, :email, :date)", $query->getSql());
+        $this->assertEquals("INSERT INTO users(id, name, email, date) VALUES (:id, :name, :email, :date)", $query->getSql());
+
+        $this->assertEquals([
+            ':id' => '1',
+            ':name' => 'test',
+            ':email' => 'test@exemple.com',
+            ':date' => '01/01/2019'
+        ], $query->params);
     }
 
     public function testNonExistingColumn()

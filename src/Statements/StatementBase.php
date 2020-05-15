@@ -8,7 +8,7 @@ abstract class StatementBase
     protected object $pdo;
     protected object $lastStatement;
 
-    protected array $params = [];
+    public array $params = [];
 
     protected string $type = '';
     /** @var string|ColumnInterface */

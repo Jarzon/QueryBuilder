@@ -44,13 +44,15 @@ class Insert extends StatementBase
         }
 
         foreach ($columns as $i => $column) {
+            if(!$column instanceof ColumnBase && !$this->table->columnExist($i)) continue;
+
             if($column instanceof ColumnBase) {
                 $value = $this->param($value, $column);
                 $this->columns[$value] = $column->getColumnName();
             }
             else if(!is_int($column) && !empty($column)) {
-                $value = $this->param($column, $value);
-                $this->columns[$column] = $i;
+                $value = $this->param($column, $i);
+                $this->columns[$i] = $i;
             }
         }
 
