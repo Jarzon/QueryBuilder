@@ -51,13 +51,9 @@ class Select extends ConditionalStatementBase
         }
 
         if(count($this->orderBy) > 0) {
-            $orderBy = implode(', ', array_map(function ($column, $order) {
-                if ($order == null) {
-                    return $column;
-                }
-
-                return "$column $order";
-            }, array_keys($this->orderBy), $this->orderBy));
+            $orderBy = implode(', ', array_map(function ($entry) {
+                return implode(' ', $entry);
+            }, $this->orderBy));
 
             $query .= " ORDER BY $orderBy";
         }
@@ -122,14 +118,20 @@ class Select extends ConditionalStatementBase
 
     public function orderBy($column, string $order = '')
     {
+        $entry = [];
+
         if($column instanceof ColumnInterface) {
-            $column = $column->getColumnReference();
+            $entry[] = $column->getColumnReference();
         }
         elseif ($column instanceof Raw) {
-            $column = $column->value;
+            $entry[] = $column->value;
         }
 
-        $this->orderBy[$column] = strtoupper($order);
+        if($order != '') {
+            $entry[] = strtoupper($order);
+        }
+
+        $this->orderBy[] = $entry;
 
         return $this;
     }
