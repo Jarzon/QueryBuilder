@@ -161,6 +161,22 @@ class ColumnBase implements ColumnInterface
         return $this->if($value, '!=', $expr1, $expr2);
     }
 
+    public function case(array $conditions, ?string $else = null)
+    {
+        $cases = "CASE " . $this->getColumnReference() . " ";
+
+        foreach ($conditions as $when => $then) {
+            if($then instanceof ColumnBase) {
+                $then = $then->getColumnOutput();
+            }
+            $cases .= "WHEN $when THEN $then ";
+        }
+
+        $this->output = new Raw($cases . ($else? "ELSE $else ": '') . 'END');
+
+        return $this;
+    }
+
     public function __toString(): string
     {
         $output = $this->getOutput();
