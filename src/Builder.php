@@ -15,20 +15,19 @@ abstract class Builder
     static $table = '';
     static ?string $tableAlias;
     static object $pdo;
-    static ?string $currency = 'french cad';
     /** @var string|ColumnInterface */
     static $currentTable;
+    static ?string $local = 'fr_CA';
     static array $currencies = [
-        'french cad' => ' $',
-        'english cad' => '$',
-        'euro' => '€',
-        'us dollar' => '$',
+        'fr_CA' => ' $',
+        'en_CA' => '$',
+        'fr_FR' => '€',
+        'en_US' => '$',
     ];
+
+    // Used to change some locals to others because they don't match real world usage
     static array $currency_format = [
-        'french cad' => 'sv_SE',
-        'english cad' => 'en_CA',
-        'euro' => 'fr_fr',
-        'us dollar' => 'en_US',
+        'fr_CA' => 'sv_SE',
     ];
 
     static function setPDO(object $pdo)
@@ -36,9 +35,9 @@ abstract class Builder
         self::$pdo = $pdo;
     }
 
-    static function setCurrency(string $currency)
+    static function setLocal(string $local)
     {
-        self::$currency = $currency;
+        self::$local = $local;
     }
 
     static function getCurrency()
@@ -46,9 +45,9 @@ abstract class Builder
         return self::$currencies[self::$currency];
     }
 
-    static function getFormat()
+    static function getCurrencyFormat()
     {
-        return self::$currency_format[self::$currency];
+        return self::$currency_format[self::$local] ?? self::$local;
     }
 
     static public function setTable($table, $tableAlias = null)

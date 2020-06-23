@@ -86,7 +86,7 @@ class Numeric extends ColumnBase
             $this->output = $value;
         }
 
-        if(Builder::$currency === 'french cad') {
+        if(Builder::$currency === 'fr_CA') {
             $this->format()->append(" $" );
         }
         else {
