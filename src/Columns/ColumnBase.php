@@ -36,6 +36,14 @@ class ColumnBase implements ColumnInterface
         return $this->output ?? new Raw($this->getColumnReference());
     }
 
+    /** @return string|Raw */
+    public function get()
+    {
+        $output = $this->output ?? new Raw($this->getColumnReference());
+        $this->output = null;
+        return $output;
+    }
+
     public function getColumnOutput()
     {
         $output = $this->getOutput();
