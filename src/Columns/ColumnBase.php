@@ -23,7 +23,11 @@ class ColumnBase implements ColumnInterface
     {
         $this->alias = $alias;
 
-        return $this;
+        $output = $this->getColumnSelect();
+
+        $this->output = null;
+
+        return $output;
     }
 
     /** @return string|Raw */

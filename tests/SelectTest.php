@@ -325,4 +325,16 @@ class SelectTest extends TestCase
 
         $this->assertEquals([], $query->fetchAll());
     }
+
+    public function testSelectSameColumn()
+    {
+        QB::setPDO(new PdoMock());
+
+        $users = new EntityMock('U');
+
+        $query = QB::select($users)
+            ->columns($users->number->count()->alias('count'), $users->number->ifIsEqual(0, 'null', $users->number)->alias('number'));
+
+        $this->assertEquals("SELECT COUNT(U.number) AS count, IF(U.number = 0, null, U.number) AS number FROM users U", $query->getSql());
+    }
 }
