@@ -64,18 +64,18 @@ class Numeric extends ColumnBase
         return $this;
     }
 
-    public function format(int $round = 2)
+    public function time(string $format = '%H:%i', int $multiple = 10000)
     {
-        $local = Builder::getFormat();
-
-        $this->output = new Raw("FORMAT({$this->getOutput()}, $round" . (($local !== '')? ", '$local'": '') . ')');
+        $this->output = new Raw("TIME_FORMAT({$this->getOutput()}". ($multiple? " * $multiple": '') .", '$format')");
 
         return $this;
     }
 
-    public function time(string $format = '%H:%i', int $multiple = 10000)
+    public function formatNumber(int $round = 2)
     {
-        $this->output = new Raw("TIME_FORMAT({$this->getOutput()}". ($multiple? " * $multiple": '') .", '$format')");
+        $local = Builder::getCurrencyLocal();
+
+        $this->output = new Raw("FORMAT({$this->getOutput()}, $round" . (($local !== '')? ", '$local'": '') . ')');
 
         return $this;
     }
@@ -86,11 +86,11 @@ class Numeric extends ColumnBase
             $this->output = $value;
         }
 
-        if(Builder::$currency === 'fr_CA') {
-            $this->format()->append(" $" );
+        if(Builder::$local === 'fr_CA') {
+            $this->formatNumber()->append(" $" );
         }
         else {
-            $this->format()->preAppend(Builder::getCurrency());
+            $this->formatNumber()->preAppend(Builder::getCurrency());
         }
 
         return $this;

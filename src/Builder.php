@@ -42,10 +42,10 @@ abstract class Builder
 
     static function getCurrency()
     {
-        return self::$currencies[self::$currency];
+        return self::$currencies[self::$local];
     }
 
-    static function getCurrencyFormat()
+    static function getCurrencyLocal()
     {
         return self::$currency_format[self::$local] ?? self::$local;
     }

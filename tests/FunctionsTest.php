@@ -113,13 +113,13 @@ class FunctionsTest extends TestCase
         $this->assertEquals("SELECT COUNT(U.number) AS number FROM users U", $query->getSql());
     }
 
-    public function testFormat()
+    public function testFormatNumber()
     {
         QB::setPDO(new PdoMock());
         $users = new EntityMock('U');
 
         $query = QB::select($users)
-            ->columns($users->number->format());
+            ->columns($users->number->formatNumber());
 
         $this->assertEquals("SELECT FORMAT(U.number, 2, 'sv_SE') AS number FROM users U", $query->getSql());
     }
