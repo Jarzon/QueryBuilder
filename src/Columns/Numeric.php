@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Jarzon\QueryBuilder\Columns;
 
+use Jarzon\QueryBuilder\Builder;
 use Jarzon\QueryBuilder\Raw;
 
 class Numeric extends ColumnBase
@@ -63,8 +64,10 @@ class Numeric extends ColumnBase
         return $this;
     }
 
-    public function format(int $round = 2, string $local = 'sv_SE')
+    public function format(int $round = 2)
     {
+        $local = Builder::getFormat();
+
         $this->output = new Raw("FORMAT({$this->getOutput()}, $round" . (($local !== '')? ", '$local'": '') . ')');
 
         return $this;
@@ -76,7 +79,12 @@ class Numeric extends ColumnBase
             $this->output = $value;
         }
 
-        $this->format()->append(" $");
+        if(Builder::$currency === 'french cad') {
+            $this->format()->append(" $" );
+        }
+        else {
+            $this->format()->preAppend(Builder::getCurrency());
+        }
 
         return $this;
     }

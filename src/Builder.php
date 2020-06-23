@@ -15,12 +15,40 @@ abstract class Builder
     static $table = '';
     static ?string $tableAlias;
     static object $pdo;
+    static ?string $currency = 'french cad';
     /** @var string|ColumnInterface */
     static $currentTable;
+    static array $currencies = [
+        'french cad' => ' $',
+        'english cad' => '$',
+        'euro' => '€',
+        'us dollar' => '$',
+    ];
+    static array $currency_format = [
+        'french cad' => 'sv_SE',
+        'english cad' => 'en_CA',
+        'euro' => 'fr_fr',
+        'us dollar' => 'en_US',
+    ];
 
     static function setPDO(object $pdo)
     {
         self::$pdo = $pdo;
+    }
+
+    static function setCurrency(string $currency)
+    {
+        self::$currency = $currency;
+    }
+
+    static function getCurrency()
+    {
+        return self::$currencies[self::$currency];
+    }
+
+    static function getFormat()
+    {
+        return self::$currency_format[self::$currency];
     }
 
     static public function setTable($table, $tableAlias = null)
