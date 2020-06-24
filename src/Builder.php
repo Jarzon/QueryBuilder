@@ -61,6 +61,10 @@ abstract class Builder
 
     static public function select($table, $tableAlias = null): Select
     {
+        if(is_callable($table)) {
+            $table = $table();
+        }
+
         self::setTable($table, $tableAlias);
 
         return new Select($table, $tableAlias, self::$pdo);
