@@ -22,9 +22,9 @@ class Numeric extends ColumnBase
         return $this;
     }
 
-    public function sum()
+    public function sum($over = false)
     {
-        $this->output = new Raw("SUM({$this->getOutput()})");
+        $this->output = new Raw("SUM({$this->getOutput()})" . ($over? " over ($over)": ''));
 
         return $this;
     }
