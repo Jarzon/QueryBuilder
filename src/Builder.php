@@ -21,13 +21,14 @@ abstract class Builder
     static array $currencies = [
         'fr_CA' => ' $',
         'en_CA' => '$',
-        'fr_FR' => '€',
+        'fr_FR' => ' €',
         'en_US' => '$',
     ];
 
     // Used to change some locals to others because they don't match real world usage
     static array $currency_format = [
         'fr_CA' => 'sv_SE',
+        'fr_FR' => 'sv_SE',
     ];
 
     static function setPDO(object $pdo)

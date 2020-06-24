@@ -86,8 +86,8 @@ class Numeric extends ColumnBase
             $this->output = $value;
         }
 
-        if(Builder::$local === 'fr_CA') {
-            $this->formatNumber()->append(" $" );
+        if(Builder::$local === 'fr_CA' || Builder::$local === 'fr_FR') {
+            $this->formatNumber()->append(Builder::getCurrency());
         }
         else {
             $this->formatNumber()->preAppend(Builder::getCurrency());
