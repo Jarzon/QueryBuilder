@@ -145,12 +145,12 @@ class Select extends ConditionalStatementBase
         return $this;
     }
 
-    public function limit(int $offset, ?int $select = null)
+    public function limit(int $offset, ?int $select = null, $isRaw = false)
     {
         if($select === null) {
-            $this->limit = [$this->param($offset, 'limit1')];
+            $this->limit = [$this->param($offset, 'limit1', $isRaw)];
         } else {
-            $this->limit = [$this->param($offset, 'limit1'), $this->param($select, 'limit2')];
+            $this->limit = [$this->param($offset, 'limit1', $isRaw), $this->param($select, 'limit2', $isRaw)];
         }
 
         return $this;

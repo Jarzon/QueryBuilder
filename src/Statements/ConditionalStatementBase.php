@@ -49,7 +49,7 @@ abstract class ConditionalStatementBase extends StatementBase
             return $this;
         }
 
-        $this->addCondition(new Condition($column, $operator, $this->param($value, $column)));
+        $this->addCondition(new Condition($column, $operator, $this->param($value, $column, $isRaw)));
 
         return $this;
     }
@@ -58,7 +58,7 @@ abstract class ConditionalStatementBase extends StatementBase
     {
         $this->chaining();
 
-        $this->addCondition(new BetweenCondition($column, $this->param($start, $column), $this->param($end, $column)));
+        $this->addCondition(new BetweenCondition($column, $this->param($start, $column, $isRaw), $this->param($end, $column, $isRaw)));
 
         return $this;
     }
@@ -67,7 +67,7 @@ abstract class ConditionalStatementBase extends StatementBase
     {
         $this->chaining();
 
-        $this->addCondition(new BetweenCondition($column, $this->param($start, $column), $this->param($end, $column), true));
+        $this->addCondition(new BetweenCondition($column, $this->param($start, $column, $isRaw), $this->param($end, $column, $isRaw), true));
 
         return $this;
     }
