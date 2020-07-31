@@ -4,10 +4,12 @@ declare(strict_types=1);
 namespace Jarzon\QueryBuilder\Statements;
 
 use Jarzon\QueryBuilder\Columns\ColumnBase;
+use Jarzon\QueryBuilder\Entity\EntityBase;
 
 class Insert extends StatementBase
 {
     protected array $columns = [];
+    protected ?Select $select = null;
     protected array $values = [];
 
     public function __construct($table, object $pdo)
@@ -33,6 +35,13 @@ class Insert extends StatementBase
 
         $this->columns = [];
         $this->addColumn($columns);
+
+        return $this;
+    }
+
+    public function select(Select $subQuery)
+    {
+        $this->select = $subQuery;
 
         return $this;
     }
@@ -64,7 +73,22 @@ class Insert extends StatementBase
         $columns = implode(', ', $this->columns);
         $values = ':' . implode(', :', $this->columns);
 
-        return "$this->type {$this->table->table}($columns) VALUES ($values)";
+        $table = $this->table;
+
+        if($this->table instanceof EntityBase) {
+            $table = $this->table->table;
+        }
+
+        $output = "$this->type {$table}($columns) ";
+
+        if($this->select === null) {
+            $output .= "VALUES ($values)";
+        } else {
+            $output .= $this->select->getSql();
+            $this->params = $this->select->params;
+        }
+
+        return $output;
     }
 
     public function exec(...$params)
