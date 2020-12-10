@@ -19,7 +19,7 @@ class PdoStatementMock extends \PDOStatement
         return true;
     }
 
-    public function fetchAll($fetch_style = null, $fetch_argument = null, $ctor_args = array())
+    public function fetchAll($mode = \PDO::FETCH_BOTH, ...$args): array
     {
         return [];
     }
