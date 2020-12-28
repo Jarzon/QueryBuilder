@@ -19,6 +19,8 @@ class Update extends ConditionalStatementBase
 
         $this->table = $table;
         $this->tableAlias = $tableAlias;
+
+        $this->table->resetParamCount();
     }
 
     /**

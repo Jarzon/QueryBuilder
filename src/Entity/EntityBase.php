@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Jarzon\QueryBuilder\Entity;
 
+use Jarzon\QueryBuilder\Columns\ColumnBase;
 use Jarzon\QueryBuilder\Columns\Text;
 use Jarzon\QueryBuilder\Columns\Numeric;
 use Jarzon\QueryBuilder\Columns\Date;
@@ -17,6 +18,14 @@ abstract class EntityBase
     {
         $this->alias = $alias;
         $this->entityClass = $class;
+    }
+
+    public function resetParamCount() {
+        foreach ($this as $key => $value) {
+            if($this->$key instanceof ColumnBase) {
+                $this->$key->paramCount = 1;
+            }
+        }
     }
 
     public function __toString(): string
