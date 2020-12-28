@@ -112,7 +112,7 @@ class Update extends ConditionalStatementBase
         return $query;
     }
 
-    public function exec(...$params): bool
+    public function exec(...$params): int
     {
         $this->lastStatement = $this->pdo->prepare($this->getSql());
 
@@ -120,6 +120,8 @@ class Update extends ConditionalStatementBase
             $params = $this->params;
         }
 
-        return $this->lastStatement->execute($params);
+        $this->lastStatement->execute($params);
+
+        return $this->lastStatement->rowCount();
     }
 }
