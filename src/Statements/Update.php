@@ -30,7 +30,7 @@ class Update extends ConditionalStatementBase
     public function set($column, $value): Update
     {
         if($column instanceof ColumnInterface) {
-            $column = $column->getColumnName();
+            $column = $column->getColumnParamName();
         }
         elseif ($column instanceof Raw) {
             $column = $column->value;
@@ -48,7 +48,7 @@ class Update extends ConditionalStatementBase
     public function setRaw($column, $valueOrSubQuery): Update
     {
         if($column instanceof ColumnInterface) {
-            $column = $column->getColumnName();
+            $column = $column->getColumnParamName();
         }
         elseif ($column instanceof Raw) {
             $column = $column->value;
