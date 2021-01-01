@@ -204,7 +204,7 @@ class FunctionsTest extends TestCase
         $query = QB::select($users)
             ->columns($users->date->dateAdd('1 DAY'));
 
-        $this->assertEquals("SELECT DATE_ADD(U.date, INTERVAL 1 DAY) AS date FROM users U", $query->getSql());
+        $this->assertEquals("SELECT U.date + INTERVAL 1 DAY AS date FROM users U", $query->getSql());
     }
 
     public function testWhereDateAdd()
@@ -217,7 +217,7 @@ class FunctionsTest extends TestCase
             ->where('NOW()', '>', $users->date->dateAdd('1 MONTH'))
             ->where('NOW()', '<', $users->date->dateAdd('1 YEAR'));
 
-        $this->assertEquals("SELECT U.name FROM users U WHERE NOW() > DATE_ADD(U.date, INTERVAL 1 MONTH) AND NOW() < DATE_ADD(U.date, INTERVAL 1 YEAR)", $query->getSql());
+        $this->assertEquals("SELECT U.name FROM users U WHERE NOW() > U.date + INTERVAL 1 MONTH AND NOW() < U.date + INTERVAL 1 YEAR", $query->getSql());
     }
 
     // STR_TO_DATE(string, dateFormat)

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 namespace Jarzon\QueryBuilder\Tests\Mocks;
-use PDO;
+use \PDO;
 
 class PdoStatementMock extends \PDOStatement
 {
@@ -19,7 +19,12 @@ class PdoStatementMock extends \PDOStatement
         return true;
     }
 
-    public function fetchAll($mode = \PDO::FETCH_BOTH, ...$args): array
+    public function rowCount()
+    {
+        return 0;
+    }
+
+    public function fetchAll($mode = PDO::FETCH_BOTH, ...$args): array
     {
         return [];
     }

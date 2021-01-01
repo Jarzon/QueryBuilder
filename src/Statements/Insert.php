@@ -18,7 +18,9 @@ class Insert extends StatementBase
         $this->pdo = $pdo;
 
         $this->table = $table;
-        $this->table->resetParamCount();
+        if($this->table instanceof EntityBase) {
+            $this->table->resetParamCount();
+        }
     }
 
     public function values(array $values)

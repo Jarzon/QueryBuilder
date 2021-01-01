@@ -20,7 +20,9 @@ class Update extends ConditionalStatementBase
         $this->table = $table;
         $this->tableAlias = $tableAlias;
 
-        $this->table->resetParamCount();
+        if($this->table instanceof EntityBase) {
+            $this->table->resetParamCount();
+        }
     }
 
     /**
