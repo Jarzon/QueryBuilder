@@ -16,7 +16,14 @@ class Date extends ColumnBase
 
     public function dateAdd(string $intervalAddition)
     {
-        $this->output .= new Raw("DATE_ADD({$this->getOutput()}, INTERVAL $intervalAddition)");
+        $this->output .= new Raw("{$this->getOutput()} + INTERVAL $intervalAddition");
+
+        return $this;
+    }
+
+    public function dateSub(string $intervalAddition)
+    {
+        $this->output .= new Raw("{$this->getOutput()} - INTERVAL $intervalAddition");
 
         return $this;
     }
