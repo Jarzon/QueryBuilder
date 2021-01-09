@@ -1,7 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 namespace Jarzon\QueryBuilder\Statements;
 
 use Jarzon\QueryBuilder\Columns\ColumnInterface;
+use Jarzon\QueryBuilder\Entity\EntityBase;
 
 abstract class StatementBase
 {
@@ -11,8 +12,7 @@ abstract class StatementBase
     public array $params = [];
 
     protected string $type = '';
-    /** @var string|ColumnInterface */
-    protected $table = '';
+    protected string|EntityBase $table = '';
     protected ?string $tableAlias;
 
     protected function param($value, $key = '?', bool $raw = false)

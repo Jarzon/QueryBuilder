@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Jarzon\QueryBuilder;
 
-use Jarzon\QueryBuilder\Columns\ColumnInterface;
+use Jarzon\QueryBuilder\Entity\EntityBase;
 use Jarzon\QueryBuilder\Statements\Select;
 use Jarzon\QueryBuilder\Statements\Insert;
 use Jarzon\QueryBuilder\Statements\Update;
@@ -11,12 +11,10 @@ use Jarzon\QueryBuilder\Statements\Delete;
 
 abstract class Builder
 {
-    /** @var string|ColumnInterface */
-    static $table = '';
+    static string|EntityBase $table = '';
     static ?string $tableAlias;
     static object $pdo;
-    /** @var string|ColumnInterface */
-    static $currentTable;
+    static string|EntityBase $currentTable;
     static ?string $local = 'fr_CA';
     static array $currencies = [
         'fr_CA' => ' $',

@@ -8,12 +8,9 @@ use Jarzon\QueryBuilder\Columns\ColumnInterface;
 class BetweenCondition
 {
     protected string $type = 'BETWEEN';
-    /** @var string|ColumnInterface */
-    protected $column;
-    /** @var ColumnInterface|string|int|float */
-    protected $start;
-    /** @var ColumnInterface|string|int|float */
-    protected $end;
+    protected string|ColumnInterface $column;
+    protected ColumnInterface|string|int|float $start;
+    protected ColumnInterface|string|int|float $end;
 
     public function __construct($column, $start, $end, bool $not = false)
     {

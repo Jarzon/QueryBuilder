@@ -21,6 +21,7 @@ abstract class EntityBase
     }
 
     public function resetParamCount() {
+        /** @phpstan-ignore-next-line */
         foreach ($this as $key => $value) {
             if($this->$key instanceof ColumnBase) {
                 $this->$key->paramCount = 1;

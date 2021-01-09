@@ -5,8 +5,7 @@ namespace Jarzon\QueryBuilder;
 
 class Raw
 {
-    /** @var string|int|float */
-    public $value;
+    public string|int|float $value;
 
     public function __construct($value)
     {
