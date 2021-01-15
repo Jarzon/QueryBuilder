@@ -1,5 +1,6 @@
 parameters:
     level: 5
+    checkMissingIterableValueType: false
     paths:
         - %currentWorkingDirectory%/src/
     excludes_analyse:

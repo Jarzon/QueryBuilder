@@ -4,13 +4,14 @@ declare(strict_types=1);
 namespace Jarzon\QueryBuilder\Conditions;
 
 use Jarzon\QueryBuilder\Columns\ColumnInterface;
+use Jarzon\QueryBuilder\Raw;
 
 class BetweenCondition
 {
     protected string $type = 'BETWEEN';
     protected string|ColumnInterface $column;
-    protected ColumnInterface|string|int|float $start;
-    protected ColumnInterface|string|int|float $end;
+    protected Raw|ColumnInterface|string|int|float $start;
+    protected Raw|ColumnInterface|string|int|float $end;
 
     public function __construct($column, $start, $end, bool $not = false)
     {

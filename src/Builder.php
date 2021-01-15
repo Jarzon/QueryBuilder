@@ -29,17 +29,17 @@ abstract class Builder
         'fr_FR' => 'sv_SE',
     ];
 
-    static function setPDO(object $pdo)
+    static function setPDO(object $pdo): void
     {
         self::$pdo = $pdo;
     }
 
-    static function setLocal(string $local)
+    static function setLocal(string $local): void
     {
         self::$local = $local;
     }
 
-    static function getCurrency()
+    static function getCurrency(): string
     {
         return self::$currencies[self::$local];
     }
@@ -89,12 +89,12 @@ abstract class Builder
         return new Delete($table, $tableAlias, self::$pdo);
     }
 
-    static public function raw(string $value)
+    static public function raw(string $value): Raw
     {
         return new Raw($value);
     }
 
-    static function function(string $function, $column, $alias = null)
+    static function function(string $function, $column, $alias = null): string|array
     {
         // No alias
         if($alias === false) {
@@ -116,7 +116,7 @@ abstract class Builder
 
     /** Columns functions */
 
-    static function functionMultipleArgs(string $function, $column, $alias = null)
+    static function functionMultipleArgs(string $function, $column, $alias = null): string|array
     {
         // No alias
         if($alias === false) {
@@ -136,12 +136,12 @@ abstract class Builder
         return ["$function($column)" => $alias ?? $column];
     }
 
-    static function concat(array $columns, $alias = null)
+    static function concat(array $columns, $alias = null): string|array
     {
         return self::functionMultipleArgs('CONCAT', implode(', ', $columns), $alias);
     }
 
-    static function currentDate($alias = null)
+    static function currentDate($alias = null): string|array
     {
         return self::functionMultipleArgs('CURDATE', null, $alias);
     }

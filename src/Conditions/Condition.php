@@ -3,17 +3,15 @@ declare(strict_types=1);
 
 namespace Jarzon\QueryBuilder\Conditions;
 
+use Jarzon\QueryBuilder\Columns\ColumnBase;
 use Jarzon\QueryBuilder\Columns\ColumnInterface;
-use Jarzon\QueryBuilder\Columns\Date;
-use Jarzon\QueryBuilder\Columns\Numeric;
-use Jarzon\QueryBuilder\Columns\Text;
 use Jarzon\QueryBuilder\Raw;
 
 class Condition
 {
     protected ColumnInterface|string $column;
     protected string $operator;
-    protected Numeric|Text|Date|Raw|string|int|float $value;
+    protected ColumnBase|Raw|string|int|float $value;
 
     public function __construct($column, string $operator, $value)
     {
