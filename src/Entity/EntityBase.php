@@ -13,11 +13,13 @@ abstract class EntityBase
     public string $table = '';
     protected string $alias = '';
     public string $entityClass = '';
+    public Date $currentDate;
 
-    public function __construct($alias = '', $class = '')
+    public function __construct(string $alias = '', string $class = '')
     {
         $this->alias = $alias;
         $this->entityClass = $class;
+        $this->currentDate = $this->date('CURRENT_DATE');
     }
 
     public function resetParamCount() {
@@ -39,7 +41,7 @@ abstract class EntityBase
         return property_exists($this, $name);
     }
 
-    protected function getAlias()
+    protected function getAlias(): string
     {
         return $this->alias ?? $this->table;
     }
@@ -51,17 +53,17 @@ abstract class EntityBase
         return $this;
     }
 
-    protected function text($name)
+    protected function text($name): Text
     {
         return new Text($name, $this->getAlias());
     }
 
-    protected function number($name)
+    protected function number($name): Numeric
     {
         return new Numeric($name, $this->getAlias());
     }
 
-    protected function date($name)
+    protected function date($name): Date
     {
         return new Date($name, $this->getAlias());
     }
