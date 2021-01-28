@@ -28,9 +28,13 @@ class Date extends ColumnBase
         return $this;
     }
 
-    public function dateDiff(string $intervalAddition): Date
+    public function dateDiff(string|Date $column): Date
     {
-        $this->output = new Raw("DATEDIFF({$this->getOutput()}, $intervalAddition)");
+        if($column instanceof Date) {
+            $column = $column->getOutput();
+        }
+
+        $this->output = new Raw("DATEDIFF({$this->getOutput()}, $column)");
 
         return $this;
     }
