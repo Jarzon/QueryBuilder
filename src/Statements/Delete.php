@@ -7,7 +7,7 @@ class Delete extends ConditionalStatementBase
 {
     public function __construct($table, ?string $tableAlias, object $pdo)
     {
-        $this->type = 'DELETE';
+        $this->type = 'DELETE FROM';
         $this->pdo = $pdo;
 
         $this->table = $table;
