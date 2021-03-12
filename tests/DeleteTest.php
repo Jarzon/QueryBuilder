@@ -19,6 +19,6 @@ class DeleteTest extends TestCase
         $query = QB::delete($users)
             ->where($users->name, '=', 'test');
 
-        $this->assertEquals("DELETE users WHERE name = :name", $query->getSql());
+        $this->assertEquals("DELETE FROM users WHERE name = :name", $query->getSql());
     }
 }
