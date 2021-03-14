@@ -29,4 +29,11 @@ class Text extends ColumnBase
 
         return $this;
     }
+
+    public function replace(string $find, string $replace)
+    {
+        $this->output = new Raw("REPLACE({$this->getOutput()}, $find, $replace)");
+
+        return $this;
+    }
 }
