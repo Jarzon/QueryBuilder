@@ -32,7 +32,7 @@ class Text extends ColumnBase
 
     public function replace(string $find, string $replace)
     {
-        $this->output = new Raw("REPLACE({$this->getOutput()}, $find, $replace)");
+        $this->output = new Raw("REPLACE({$this->getOutput()}, '$find', '$replace')");
 
         return $this;
     }
