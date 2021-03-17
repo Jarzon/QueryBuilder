@@ -7,9 +7,17 @@ use Jarzon\QueryBuilder\Raw;
 
 class Date extends ColumnBase
 {
-    public function date(): Date
+    public function date(string $format = null): Date
     {
-        $this->output = new Raw("DATE({$this->getOutput()})");
+        $function = 'DATE';
+        $args = '';
+
+        if($format !== null) {
+            $function .= '_FORMAT';
+            $args = ", '$format'";
+        }
+
+        $this->output = new Raw("$function({$this->getOutput()}$args)");
 
         return $this;
     }
