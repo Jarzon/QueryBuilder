@@ -30,6 +30,13 @@ class ColumnBase implements ColumnInterface
         return $output;
     }
 
+    public function cast(string $type)
+    {
+        $this->output = new Raw("CAST({$this->getOutput()} AS $type)");
+
+        return $this;
+    }
+
     public function getOutput(): string|Raw
     {
         return $this->output ?? new Raw($this->getColumnReference());
