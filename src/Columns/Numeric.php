@@ -15,6 +15,13 @@ class Numeric extends ColumnBase
         return $this;
     }
 
+    public function plus($value)
+    {
+        $this->output = new Raw("{$this->getOutput()} + $value");
+
+        return $this;
+    }
+
     public function max()
     {
         $this->output = new Raw("MAX({$this->getOutput()})");
