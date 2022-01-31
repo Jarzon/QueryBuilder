@@ -73,7 +73,7 @@ class Numeric extends ColumnBase
 
     public function time(string $format = '%H:%i', int $multiple = 10000)
     {
-        $this->output = new Raw("TIME_FORMAT({$this->getOutput()}". ($multiple? " * $multiple": '') .", '$format')");
+        $this->output = new Raw("REPLACE(ROUND({$this->getOutput()}, 2), '.', ':')");
 
         return $this;
     }
