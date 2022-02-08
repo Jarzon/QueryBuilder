@@ -12,8 +12,10 @@ class Select extends ConditionalStatementBase
     protected array $columns = ['*'];
     protected array $join = [];
     protected array $orderBy = [];
+
     protected array $groupBy = [];
     protected array $limit = [];
+    protected bool $groupByRollup = false;
 
     public function __construct($table, ?string $tableAlias, object $pdo)
     {
@@ -52,6 +54,10 @@ class Select extends ConditionalStatementBase
             $groupBy = implode(', ', $this->groupBy);
 
             $query .= " GROUP BY $groupBy";
+
+            if($this->groupByRollup) {
+                $query .= " WITH ROLLUP";
+            }
         }
 
         if(count($this->orderBy) > 0) {
@@ -138,13 +144,14 @@ class Select extends ConditionalStatementBase
         return $this;
     }
 
-    public function groupBy($columns)
+    public function groupBy($columns, bool $rollUp = false)
     {
         if(!is_array($columns)) {
             $columns = [$columns];
         }
 
         $this->groupBy = $columns;
+        $this->groupByRollup = $rollUp;
 
         return $this;
     }
