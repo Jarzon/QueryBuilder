@@ -27,7 +27,7 @@ class Delete extends ConditionalStatementBase
         return $query;
     }
 
-    public function exec(...$params)
+    public function exec(...$params): int
     {
         $this->lastStatement = $query = $this->pdo->prepare($this->getSql());
 
@@ -35,6 +35,8 @@ class Delete extends ConditionalStatementBase
             $params = $this->params;
         }
 
-        return $query->execute($params);
+        $query->execute($params);
+
+        return $query->rowCount();
     }
 }
