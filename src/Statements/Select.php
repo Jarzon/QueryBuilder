@@ -230,4 +230,48 @@ class Select extends ConditionalStatementBase
 
         return $query->fetchColumn();
     }
+
+    public function explain(): void
+    {
+        $sql = $this->getSql();
+
+        echo "<h2>SQL</h2>";
+
+        $esql = str_replace('SELECT', "<br><b>SELECT</b>", $sql);
+        $esql = str_replace('FROM', "<br><b>FROM</b>", $esql);
+        $esql = str_replace('WHERE', "<br><b>WHERE</b>", $esql);
+        $esql = str_replace('LEFT JOIN', "<br><b>LEFT JOIN</b>", $esql);
+        $esql = str_replace('ORDER BY', "<br><b>ORDER BY</b>", $esql);
+        $esql = str_replace('LIMIT', "<br><b>LIMIT</b>", $esql);
+
+        echo "$esql<br>";
+
+        foreach ($this->params as $i => $v) {
+            $sql = str_replace($i, $v . '', $sql);
+        }
+
+        $query = $this->pdo->query('EXPLAIN ANALYZE ' . $sql);
+        $query->execute();
+        echo "<h2>ANALYZE</h2>
+        <div>";
+        $lines = explode('->', $query->fetch()->EXPLAIN);
+        foreach ($lines as $v) {
+            $line = explode(': ', $v);
+            if(count($line) <= 1) continue;
+            echo "<b>$line[0]</b>: $line[1]<br>";
+        }
+        echo "</div><br><br>";
+
+        $query = $this->pdo->query('EXPLAIN ' . $sql);
+        $query->execute();
+        echo "<h2>EXPLAIN</h2>
+        <div>";
+        foreach ($query->fetch() as $i => $v) {
+            echo "<div>
+                <b>$i</b>: <span>$v</span>
+                </div>";
+        }
+        echo "</div>";
+        exit;
+    }
 }
