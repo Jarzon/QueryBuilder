@@ -10,7 +10,7 @@ class ColumnBase implements ColumnInterface
     public ?string $tableAlias;
     public string $name = '';
     public ?string $alias = null;
-    public $output = null;
+    public string|Raw|null $output = null;
     public int $paramCount = 1;
 
     public function __construct(string $name, $tableAlias = null)
@@ -19,7 +19,7 @@ class ColumnBase implements ColumnInterface
         $this->tableAlias = $tableAlias;
     }
 
-    public function alias(string $alias)
+    public function alias(string $alias): string
     {
         $this->alias = $alias;
 
@@ -30,7 +30,7 @@ class ColumnBase implements ColumnInterface
         return $output;
     }
 
-    public function cast(string $type)
+    public function cast(string $type): ColumnBase
     {
         $this->output = new Raw("CAST({$this->getOutput()} AS $type)");
 
@@ -49,7 +49,7 @@ class ColumnBase implements ColumnInterface
         return $output;
     }
 
-    public function getColumnOutput()
+    public function getColumnOutput(): string|Raw
     {
         $output = $this->getOutput();
 
@@ -92,7 +92,7 @@ class ColumnBase implements ColumnInterface
 
     /** Functions */
 
-    protected function parseArgs(array &$args)
+    protected function parseArgs(array &$args): array
     {
         foreach ($args as $i => $arg) {
             $args[$i] = $arg instanceof ColumnInterface? $arg->getOutput() :($arg instanceof Raw? $arg: "'$arg'");
@@ -101,14 +101,14 @@ class ColumnBase implements ColumnInterface
         return $args;
     }
 
-    public function concat(array $args)
+    public function concat(array $args): void
     {
         $args = $this->parseArgs($args);
 
         $this->output = new Raw("CONCAT(" . implode(', ', $args) . ")");
     }
 
-    public function preAppend(...$args)
+    public function preAppend(...$args): ColumnBase
     {
         $args[] = $this->getOutput();
 
@@ -117,7 +117,7 @@ class ColumnBase implements ColumnInterface
         return $this;
     }
 
-    public function append(...$args)
+    public function append(...$args): ColumnBase
     {
         array_unshift($args,  $this->getOutput());
 
@@ -126,7 +126,7 @@ class ColumnBase implements ColumnInterface
         return $this;
     }
 
-    public function ifIsNull($value)
+    public function ifIsNull($value): ColumnBase
     {
         $args[] = $this->getOutput();
 
@@ -137,44 +137,44 @@ class ColumnBase implements ColumnInterface
         return $this;
     }
 
-    public function if($value, $operator, $expr1, $expr2)
+    public function if($value, $operator, $expr1, $expr2): ColumnBase
     {
         $this->output = new Raw("IF(" . $this->getColumnReference() . " $operator $value, $expr1, $expr2)");
 
         return $this;
     }
 
-    public function ifIsGreaterThat($value, $expr1, $expr2)
+    public function ifIsGreaterThat($value, $expr1, $expr2): ColumnBase
     {
         return $this->if($value, '>', $expr1, $expr2);
     }
 
-    public function ifIsLowerThat($value, $expr1, $expr2)
+    public function ifIsLowerThat($value, $expr1, $expr2): ColumnBase
     {
         return $this->if($value, '<', $expr1, $expr2);
     }
 
-    public function ifIsGreaterThatOrEqual($value, $expr1, $expr2)
+    public function ifIsGreaterThatOrEqual($value, $expr1, $expr2): ColumnBase
     {
         return $this->if($value, '>=', $expr1, $expr2);
     }
 
-    public function ifIsLowerThatOrEqual($value, $expr1, $expr2)
+    public function ifIsLowerThatOrEqual($value, $expr1, $expr2): ColumnBase
     {
         return $this->if($value, '<=', $expr1, $expr2);
     }
 
-    public function ifIsEqual($value, $expr1, $expr2)
+    public function ifIsEqual($value, $expr1, $expr2): ColumnBase
     {
         return $this->if($value, '=', $expr1, $expr2);
     }
 
-    public function ifIsNotEqual($value, $expr1, $expr2)
+    public function ifIsNotEqual($value, $expr1, $expr2): ColumnBase
     {
         return $this->if($value, '!=', $expr1, $expr2);
     }
 
-    public function case(array $conditions, ?string $else = null)
+    public function case(array $conditions, ?string $else = null): ColumnBase
     {
         $cases = "CASE " . $this->getColumnReference() . " ";
 
