@@ -11,7 +11,7 @@ abstract class ConditionalStatementBase extends StatementBase
 {
     protected array $conditions = [];
 
-    public function where($column, ?string $operator = null, $value = null, $isRaw = false)
+    public function where($column, ?string $operator = null, $value = null, $isRaw = false): ConditionalStatementBase
     {
         $this->chaining();
 
@@ -30,14 +30,14 @@ abstract class ConditionalStatementBase extends StatementBase
         return $this;
     }
 
-    public function whereRaw($column, ?string $operator = null, $value = null)
+    public function whereRaw($column, ?string $operator = null, $value = null): ConditionalStatementBase
     {
         $this->where($column, $operator, $value, true);
 
         return $this;
     }
 
-    public function or($column, string $operator = null, $value = null, $isRaw = false)
+    public function or($column, string $operator = null, $value = null, $isRaw = false): ConditionalStatementBase
     {
         $this->addCondition('OR');
 
@@ -54,7 +54,7 @@ abstract class ConditionalStatementBase extends StatementBase
         return $this;
     }
 
-    public function between($column, $start, $end, $isRaw = false)
+    public function between($column, $start, $end, $isRaw = false): ConditionalStatementBase
     {
         $this->chaining();
 
@@ -63,7 +63,7 @@ abstract class ConditionalStatementBase extends StatementBase
         return $this;
     }
 
-    public function notBetween($column, $start, $end, $isRaw = false)
+    public function notBetween($column, $start, $end, $isRaw = false): ConditionalStatementBase
     {
         $this->chaining();
 
@@ -72,7 +72,7 @@ abstract class ConditionalStatementBase extends StatementBase
         return $this;
     }
 
-    public function in($column, array $list, $isRaw = false)
+    public function in($column, array $list, $isRaw = false): ConditionalStatementBase
     {
         $this->chaining();
 
@@ -81,7 +81,7 @@ abstract class ConditionalStatementBase extends StatementBase
         return $this;
     }
 
-    public function notIn($column, array $list, $isRaw = false)
+    public function notIn($column, array $list, $isRaw = false): ConditionalStatementBase
     {
         $this->chaining();
 
@@ -90,7 +90,7 @@ abstract class ConditionalStatementBase extends StatementBase
         return $this;
     }
 
-    public function isNull($column, $isRaw = false)
+    public function isNull($column, $isRaw = false): ConditionalStatementBase
     {
         $this->chaining();
 
@@ -99,7 +99,7 @@ abstract class ConditionalStatementBase extends StatementBase
         return $this;
     }
 
-    public function isNotNull($column, $isRaw = false)
+    public function isNotNull($column, $isRaw = false): ConditionalStatementBase
     {
         $this->chaining();
 
@@ -108,14 +108,15 @@ abstract class ConditionalStatementBase extends StatementBase
         return $this;
     }
 
-    protected function chaining() {
+    protected function chaining(): void
+    {
         $conditionsCount = count($this->conditions);
         if($conditionsCount > 0 && $this->conditions[$conditionsCount-1] != '(') {
             $this->addCondition('AND');
         }
     }
 
-    protected function addCondition($condition, $isRaw = false)
+    protected function addCondition($condition, $isRaw = false): void
     {
         $this->conditions[] = $condition;
     }

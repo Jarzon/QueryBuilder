@@ -9,15 +9,13 @@ use Jarzon\QueryBuilder\Raw;
 class BetweenCondition
 {
     protected string $type = 'BETWEEN';
-    protected string|ColumnInterface $column;
-    protected Raw|ColumnInterface|string|int|float $start;
-    protected Raw|ColumnInterface|string|int|float $end;
 
-    public function __construct($column, $start, $end, bool $not = false)
-    {
-        $this->column = $column;
-        $this->start = $start;
-        $this->end = $end;
+    public function __construct(
+        protected string|ColumnInterface $column,
+        protected Raw|ColumnInterface|string|int|float $start,
+        protected Raw|ColumnInterface|string|int|float $end,
+        bool $not = false
+    ) {
 
         if($not) {
             $this->type = 'NOT BETWEEN';

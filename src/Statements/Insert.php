@@ -5,6 +5,7 @@ namespace Jarzon\QueryBuilder\Statements;
 
 use Jarzon\QueryBuilder\Columns\ColumnBase;
 use Jarzon\QueryBuilder\Entity\EntityBase;
+use Jarzon\QueryBuilder\Raw;
 
 class Insert extends StatementBase
 {
@@ -12,7 +13,7 @@ class Insert extends StatementBase
     protected ?Select $select = null;
     protected array $values = [];
 
-    public function __construct($table, object $pdo)
+    public function __construct(string|EntityBase $table, object $pdo)
     {
         $this->type = 'INSERT INTO';
         $this->pdo = $pdo;
@@ -23,14 +24,14 @@ class Insert extends StatementBase
         }
     }
 
-    public function values(array $values)
+    public function values(array $values): Insert
     {
         $this->values = $values;
 
         return $this;
     }
 
-    public function columns(...$columns)
+    public function columns(...$columns): Insert
     {
         if(is_array($columns[0])) {
             $columns = $columns[0];
@@ -42,14 +43,14 @@ class Insert extends StatementBase
         return $this;
     }
 
-    public function select(Select $subQuery)
+    public function select(Select $subQuery): Insert
     {
         $this->select = $subQuery;
 
         return $this;
     }
 
-    public function addColumn($columns, $value = null)
+    public function addColumn($columns, $value = null, bool $raw = false): Insert
     {
         if($value !== null) {
             $columns = [$value => $columns];
@@ -59,11 +60,11 @@ class Insert extends StatementBase
             if(!$column instanceof ColumnBase && !$this->table->columnExist($i)) continue;
 
             if($column instanceof ColumnBase) {
-                $value = $this->param($value, $column);
+                $value = $this->param($i, $column, $raw);
                 $this->columns[$value] = $column->getColumnName();
             }
             else if(!empty($column)) {
-                $value = $this->param($column, $i);
+                $value = $this->param($column, $i, $raw);
                 $this->columns[$i] = $i;
             }
         }
@@ -94,7 +95,7 @@ class Insert extends StatementBase
         return $output;
     }
 
-    public function exec(...$params)
+    public function exec(...$params): int
     {
         $this->lastStatement = $this->pdo->prepare($this->getSql());
 

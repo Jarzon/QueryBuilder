@@ -1,7 +1,7 @@
 parameters:
-    level: 5
+    level: 6
     checkMissingIterableValueType: false
     paths:
         - %currentWorkingDirectory%/src/
-    excludes_analyse:
+    excludePaths:
         - %currentWorkingDirectory%/tests/*

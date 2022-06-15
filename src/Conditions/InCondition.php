@@ -3,23 +3,28 @@ declare(strict_types=1);
 
 namespace Jarzon\QueryBuilder\Conditions;
 
+use Jarzon\QueryBuilder\Columns\ColumnInterface;
+
 class InCondition
 {
     protected string $type = 'IN';
-    protected $column;
-    protected array $list = [];
 
-    public function __construct($column, array $list, bool $not = false)
-    {
+    public function __construct(
+        protected string|ColumnInterface $column,
+        protected array $list = [],
+        bool $not = false
+    ) {
+        if($column instanceof ColumnInterface) {
+            $column = $column->getColumnReference();
+        }
         $this->column = $column;
-        $this->list = $list;
 
         if($not) {
             $this->type = 'NOT IN';
         }
     }
 
-    public function getSql()
+    public function getSql(): string
     {
         $list = implode(', ', array_map(function($value) {
             if(is_string($value)) {

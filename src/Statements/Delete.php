@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace Jarzon\QueryBuilder\Statements;
 
+use Jarzon\QueryBuilder\Entity\EntityBase;
+
 class Delete extends ConditionalStatementBase
 {
-    public function __construct($table, ?string $tableAlias, object $pdo)
+    public function __construct(string|EntityBase $table, ?string $tableAlias, object $pdo)
     {
         $this->type = 'DELETE FROM';
         $this->pdo = $pdo;

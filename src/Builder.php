@@ -44,12 +44,12 @@ abstract class Builder
         return self::$currencies[self::$local];
     }
 
-    static function getCurrencyLocal()
+    static function getCurrencyLocal(): string
     {
         return self::$currency_format[self::$local] ?? self::$local;
     }
 
-    static public function setTable($table, $tableAlias = null)
+    static public function setTable(string|EntityBase $table, $tableAlias = null): void
     {
         self::$table = $table;
         self::$tableAlias = $tableAlias;

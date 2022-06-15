@@ -30,16 +30,15 @@ class InsertTest extends TestCase
         $users = new EntityMock();
 
         $query = QB::insert($users)
-            ->columns(['id' => '1', 'name' => 'test', 'email' => 'test@exemple.com'])
-            ->addColumn($users->date, '01/01/2019');
+            ->columns(['email' => 'test@exemple.com'])
+            ->addColumn($users->name, 'test')
+            ->addColumn($users->date, 'NOW()', true);
 
-        $this->assertEquals("INSERT INTO users(id, name, email, date) VALUES (:id, :name, :email, :date)", $query->getSql());
+        $this->assertEquals("INSERT INTO users(email, name, date) VALUES (:email, :name, NOW())", $query->getSql());
 
         $this->assertEquals([
-            ':id' => '1',
-            ':name' => 'test',
             ':email' => 'test@exemple.com',
-            ':date' => '01/01/2019'
+            ':name' => 'test'
         ], $query->params);
     }
 

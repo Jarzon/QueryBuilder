@@ -11,18 +11,17 @@ use Jarzon\QueryBuilder\Columns\Date;
 abstract class EntityBase
 {
     public string $table = '';
-    protected string $alias = '';
-    public string $entityClass = '';
     public Date $currentDate;
 
-    public function __construct(string $alias = '', string $class = '')
-    {
-        $this->alias = $alias;
-        $this->entityClass = $class;
+    public function __construct(
+        protected string $alias = '',
+        public string $entityClass = ''
+    ) {
         $this->currentDate = $this->date('CURRENT_DATE');
     }
 
-    public function resetParamCount() {
+    public function resetParamCount():void
+    {
         /** @phpstan-ignore-next-line */
         foreach ($this as $key => $value) {
             if($this->$key instanceof ColumnBase) {
@@ -46,7 +45,7 @@ abstract class EntityBase
         return $this->alias ?? $this->table;
     }
 
-    protected function table($name)
+    protected function table($name): EntityBase
     {
         $this->table = $name;
 

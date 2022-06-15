@@ -9,16 +9,14 @@ use Jarzon\QueryBuilder\Raw;
 
 class Condition
 {
-    protected ColumnInterface|string $column;
-    protected string $operator;
+    protected string $column;
     protected ColumnBase|Raw|string|int|float $value;
 
-    public function __construct($column, string $operator, $value)
-    {
-        if($value === null) {
-            $value = 'NULL';
-        }
-
+    public function __construct(
+        ColumnInterface|Raw|string $column,
+        protected string $operator,
+        ColumnBase|Raw|string|int|float|null $value
+    ) {
         if($column instanceof ColumnInterface) {
             $column = $column->getColumnReference();
         }
@@ -27,11 +25,10 @@ class Condition
         }
 
         $this->column = $column;
-        $this->operator = $operator;
-        $this->value = $value;
+        $this->value = $value === null? 'NULL' : $value;
     }
 
-    public function getSql()
+    public function getSql(): string
     {
         return "$this->column $this->operator $this->value";
     }

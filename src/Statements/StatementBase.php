@@ -3,6 +3,7 @@ namespace Jarzon\QueryBuilder\Statements;
 
 use Jarzon\QueryBuilder\Columns\ColumnInterface;
 use Jarzon\QueryBuilder\Entity\EntityBase;
+use Jarzon\QueryBuilder\Raw;
 
 abstract class StatementBase
 {
@@ -15,7 +16,7 @@ abstract class StatementBase
     protected string|EntityBase $table = '';
     protected ?string $tableAlias;
 
-    protected function param($value, $key = '?', bool $raw = false)
+    protected function param(string|int|ColumnInterface|null $value, string|ColumnInterface $key = '?', bool $raw = false): string|Int|Raw
     {
         if($value instanceof ColumnInterface) {
             return $value->getColumnOutput();
@@ -46,7 +47,7 @@ abstract class StatementBase
         return $key;
     }
 
-    protected function getTable()
+    protected function getTable(): string
     {
         return $this->table . (isset($this->tableAlias)? " $this->tableAlias" : '');
     }

@@ -12,7 +12,7 @@ class Update extends ConditionalStatementBase
     protected array $columns = [];
     protected ?string $query = null;
 
-    public function __construct($table, ?string $tableAlias, object $pdo)
+    public function __construct(string|EntityBase $table, ?string $tableAlias, object $pdo)
     {
         $this->type = 'UPDATE';
         $this->pdo = $pdo;
@@ -25,11 +25,7 @@ class Update extends ConditionalStatementBase
         }
     }
 
-    /**
-     * @var string|ColumnInterface $column
-     * @var int|float|string $value
-     */
-    public function set($column, $value): Update
+    public function set(string|ColumnInterface|Raw $column, int|float|string $value): Update
     {
         if($column instanceof ColumnInterface) {
             $column = $column->getColumnParamName();
@@ -43,11 +39,7 @@ class Update extends ConditionalStatementBase
         return $this;
     }
 
-    /**
-     * @var string|ColumnInterface $column
-     * @var int|float|string|Select $valueOrSubQuery
-     */
-    public function setRaw($column, $valueOrSubQuery): Update
+    public function setRaw(string|ColumnInterface|Raw $column, int|float|string|Select $valueOrSubQuery): Update
     {
         if($column instanceof ColumnInterface) {
             $column = $column->getColumnParamName();
@@ -116,7 +108,7 @@ class Update extends ConditionalStatementBase
         return $query;
     }
 
-    public function exec(...$params): int
+    public function exec(array ...$params): int
     {
         $this->lastStatement = $this->pdo->prepare($this->getSql());
 

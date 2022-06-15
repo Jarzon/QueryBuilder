@@ -17,7 +17,7 @@ class Select extends ConditionalStatementBase
     protected array $limit = [];
     protected bool $groupByRollup = false;
 
-    public function __construct($table, ?string $tableAlias, object $pdo)
+    public function __construct(string|EntityBase $table, ?string $tableAlias, object $pdo)
     {
         $this->type = 'SELECT';
         $this->pdo = $pdo;
@@ -81,7 +81,7 @@ class Select extends ConditionalStatementBase
         return $query;
     }
 
-    public function columns(...$columns)
+    public function columns(...$columns): Select
     {
         $this->columns = [];
         $this->addColumns(...$columns);
@@ -113,7 +113,7 @@ class Select extends ConditionalStatementBase
         return $columns;
     }
 
-    public function addColumns(...$columns)
+    public function addColumns(...$columns): Select
     {
         foreach ($columns as $column) {
 
@@ -130,7 +130,7 @@ class Select extends ConditionalStatementBase
         return $this;
     }
 
-    public function orderBy($column, string $order = '')
+    public function orderBy($column, string $order = ''): Select
     {
         if($column instanceof ColumnInterface) {
             $column = $column->getColumnReference();
@@ -144,7 +144,7 @@ class Select extends ConditionalStatementBase
         return $this;
     }
 
-    public function groupBy($columns, bool $rollUp = false)
+    public function groupBy($columns, bool $rollUp = false): Select
     {
         if(!is_array($columns)) {
             $columns = [$columns];
@@ -156,7 +156,7 @@ class Select extends ConditionalStatementBase
         return $this;
     }
 
-    public function limit(int $offset, ?int $select = null, $isRaw = false)
+    public function limit(int $offset, ?int $select = null, $isRaw = false): Select
     {
         if($select === null) {
             $this->limit = [$this->param($offset, 'limit1', $isRaw)];
@@ -167,14 +167,14 @@ class Select extends ConditionalStatementBase
         return $this;
     }
 
-    public function leftJoin($table, $firstColumnOrCallback, $operator = null, $secondColumn = null)
+    public function leftJoin($table, $firstColumnOrCallback, $operator = null, $secondColumn = null): Select
     {
         $this->join[] = new Join('LEFT', $table, $firstColumnOrCallback, $operator, $secondColumn);
 
         return $this;
     }
 
-    public function fetchAll(int $fetch_style = 0)
+    public function fetchAll(int $fetch_style = 0): array|false
     {
         $this->lastStatement = $query = $this->pdo->prepare($this->getSql());
 
@@ -183,7 +183,7 @@ class Select extends ConditionalStatementBase
         return $query->fetchAll($fetch_style);
     }
 
-    public function fetch(int $fetch_style = 0)
+    public function fetch(int $fetch_style = 0): object|array|false
     {
         $this->lastStatement = $query = $this->pdo->prepare($this->getSql());
 
@@ -192,7 +192,7 @@ class Select extends ConditionalStatementBase
         return $query->fetch($fetch_style);
     }
 
-    public function fetchClass(?string $class = null)
+    public function fetchClass(?string $class = null): object|false
     {
         $this->lastStatement = $query = $this->pdo->prepare($this->getSql());
 
@@ -207,7 +207,7 @@ class Select extends ConditionalStatementBase
         return $query->fetch();
     }
 
-    public function fetchClassAll(?string $class = null)
+    public function fetchClassAll(?string $class = null): array|false
     {
         $this->lastStatement = $query = $this->pdo->prepare($this->getSql());
 
@@ -222,7 +222,7 @@ class Select extends ConditionalStatementBase
         return $query->fetchAll();
     }
 
-    public function fetchColumn()
+    public function fetchColumn(): string|int|float|false
     {
         $this->lastStatement = $query = $this->pdo->prepare($this->getSql());
 

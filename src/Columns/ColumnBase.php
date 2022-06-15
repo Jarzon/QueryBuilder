@@ -7,16 +7,15 @@ use Jarzon\QueryBuilder\Raw;
 
 class ColumnBase implements ColumnInterface
 {
-    public ?string $tableAlias;
-    public string $name = '';
     public ?string $alias = null;
     public string|Raw|null $output = null;
     public int $paramCount = 1;
 
-    public function __construct(string $name, $tableAlias = null)
-    {
-        $this->name = $name;
-        $this->tableAlias = $tableAlias;
+    public function __construct(
+        public string $name = '',
+        public ?string $tableAlias = null
+    ) {
+
     }
 
     public function alias(string $alias): string
