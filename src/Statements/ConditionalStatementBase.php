@@ -3,15 +3,17 @@ declare(strict_types=1);
 
 namespace Jarzon\QueryBuilder\Statements;
 
+use Jarzon\QueryBuilder\Columns\ColumnInterface;
 use \Jarzon\QueryBuilder\Conditions\Condition;
 use \Jarzon\QueryBuilder\Conditions\BetweenCondition;
 use \Jarzon\QueryBuilder\Conditions\InCondition;
+use Jarzon\QueryBuilder\Raw;
 
 abstract class ConditionalStatementBase extends StatementBase
 {
     protected array $conditions = [];
 
-    public function where($column, ?string $operator = null, $value = null, $isRaw = false): ConditionalStatementBase
+    public function where(ColumnInterface|Raw|string|callable $column, ?string $operator = null, ColumnInterface|Raw|string|int|float $value = null, bool $isRaw = false): static
     {
         $this->chaining();
 
@@ -30,14 +32,14 @@ abstract class ConditionalStatementBase extends StatementBase
         return $this;
     }
 
-    public function whereRaw($column, ?string $operator = null, $value = null): ConditionalStatementBase
+    public function whereRaw(ColumnInterface|Raw|string $column, ?string $operator = null, ColumnInterface|string|int|float $value = null): static
     {
         $this->where($column, $operator, $value, true);
 
         return $this;
     }
 
-    public function or($column, string $operator = null, $value = null, $isRaw = false): ConditionalStatementBase
+    public function or(ColumnInterface|Raw|string|callable $column, string $operator = null, string|int|float $value = null, bool $isRaw = false): static
     {
         $this->addCondition('OR');
 
@@ -54,7 +56,7 @@ abstract class ConditionalStatementBase extends StatementBase
         return $this;
     }
 
-    public function between($column, $start, $end, $isRaw = false): ConditionalStatementBase
+    public function between(ColumnInterface|Raw|string|int|float $column, Raw|ColumnInterface|string|int|float $start, Raw|ColumnInterface|string|int|float $end, bool $isRaw = false): static
     {
         $this->chaining();
 
@@ -63,7 +65,7 @@ abstract class ConditionalStatementBase extends StatementBase
         return $this;
     }
 
-    public function notBetween($column, $start, $end, $isRaw = false): ConditionalStatementBase
+    public function notBetween(ColumnInterface|Raw|string $column, Raw|ColumnInterface|string|int|float $start, Raw|ColumnInterface|string|int|float $end, bool $isRaw = false): static
     {
         $this->chaining();
 
@@ -72,7 +74,7 @@ abstract class ConditionalStatementBase extends StatementBase
         return $this;
     }
 
-    public function in($column, array $list, $isRaw = false): ConditionalStatementBase
+    public function in(ColumnInterface|Raw|string $column, array $list, bool $isRaw = false): static
     {
         $this->chaining();
 
@@ -81,7 +83,7 @@ abstract class ConditionalStatementBase extends StatementBase
         return $this;
     }
 
-    public function notIn($column, array $list, $isRaw = false): ConditionalStatementBase
+    public function notIn(ColumnInterface|Raw|string $column, array $list, bool $isRaw = false): static
     {
         $this->chaining();
 
@@ -90,7 +92,7 @@ abstract class ConditionalStatementBase extends StatementBase
         return $this;
     }
 
-    public function isNull($column, $isRaw = false): ConditionalStatementBase
+    public function isNull(ColumnInterface|Raw|string $column, bool $isRaw = false): static
     {
         $this->chaining();
 
@@ -99,7 +101,7 @@ abstract class ConditionalStatementBase extends StatementBase
         return $this;
     }
 
-    public function isNotNull($column, $isRaw = false): ConditionalStatementBase
+    public function isNotNull(ColumnInterface|Raw|string $column, bool $isRaw = false): static
     {
         $this->chaining();
 
@@ -116,7 +118,7 @@ abstract class ConditionalStatementBase extends StatementBase
         }
     }
 
-    protected function addCondition($condition, $isRaw = false): void
+    protected function addCondition(Condition|BetweenCondition|InCondition|string $condition, bool $isRaw = false): void
     {
         $this->conditions[] = $condition;
     }

@@ -45,24 +45,24 @@ abstract class EntityBase
         return $this->alias ?? $this->table;
     }
 
-    protected function table($name): EntityBase
+    protected function table(string $name): EntityBase
     {
         $this->table = $name;
 
         return $this;
     }
 
-    protected function text($name): Text
+    protected function text(string $name): Text
     {
         return new Text($name, $this->getAlias());
     }
 
-    protected function number($name): Numeric
+    protected function number(string $name): Numeric
     {
         return new Numeric($name, $this->getAlias());
     }
 
-    protected function date($name): Date
+    protected function date(string $name): Date
     {
         return new Date($name, $this->getAlias());
     }

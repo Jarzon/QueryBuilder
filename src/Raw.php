@@ -7,7 +7,7 @@ class Raw
 {
     public string|int|float $value;
 
-    public function __construct($value)
+    public function __construct(string|int|float $value)
     {
         $this->value = $value;
     }

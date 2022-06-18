@@ -15,7 +15,7 @@ class Numeric extends ColumnBase
         return $this;
     }
 
-    public function plus($value): Numeric
+    public function plus(string|int|float $value): Numeric
     {
         $this->output = new Raw("{$this->getOutput()} + $value");
 
@@ -29,7 +29,7 @@ class Numeric extends ColumnBase
         return $this;
     }
 
-    public function sum($over = false): Numeric
+    public function sum(string|false $over = false): Numeric
     {
         $this->output = new Raw("SUM({$this->getOutput()})" . ($over? " over ($over)": ''));
 

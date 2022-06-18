@@ -3,11 +3,14 @@ declare(strict_types=1);
 
 namespace Jarzon\QueryBuilder\Statements;
 
-use \Jarzon\QueryBuilder\Conditions\Condition;
+use Jarzon\QueryBuilder\Columns\ColumnInterface;
+use Jarzon\QueryBuilder\Conditions\Condition;
+use Jarzon\QueryBuilder\Entity\EntityBase;
+use Jarzon\QueryBuilder\Raw;
 
 class Join extends ConditionalStatementBase
 {
-    public function __construct(string $type, $table, $firstColumnOrCallback, $operator = null, $secondColumn = null)
+    public function __construct(string $type, string|EntityBase $table, ColumnInterface|Raw|string|callable $firstColumnOrCallback, string|null $operator = null, ColumnInterface|Raw|string $secondColumn = null)
     {
         // TODO: Add join table alias support
         $this->type = "$type JOIN";

@@ -107,7 +107,7 @@ class ColumnBase implements ColumnInterface
         $this->output = new Raw("CONCAT(" . implode(', ', $args) . ")");
     }
 
-    public function preAppend(...$args): ColumnBase
+    public function preAppend(ColumnBase|Raw|string ...$args): ColumnBase
     {
         $args[] = $this->getOutput();
 
@@ -116,7 +116,7 @@ class ColumnBase implements ColumnInterface
         return $this;
     }
 
-    public function append(...$args): ColumnBase
+    public function append(ColumnBase|Raw|string ...$args): ColumnBase
     {
         array_unshift($args,  $this->getOutput());
 
@@ -125,50 +125,49 @@ class ColumnBase implements ColumnInterface
         return $this;
     }
 
-    public function ifIsNull($value): ColumnBase
+    public function ifIsNull(string|int|float $value): ColumnBase
     {
         $args[] = $this->getOutput();
 
         $args = $this->parseArgs($args);
 
         $this->output = new Raw("IFNULL(" .implode(', ', $args) . ", $value)");
-
         return $this;
     }
 
-    public function if($value, $operator, $expr1, $expr2): ColumnBase
+    public function if(string|int|float $value, string $operator, ColumnBase|string|int|float $expr1, ColumnBase|string|int|float $expr2): ColumnBase
     {
         $this->output = new Raw("IF(" . $this->getColumnReference() . " $operator $value, $expr1, $expr2)");
 
         return $this;
     }
 
-    public function ifIsGreaterThat($value, $expr1, $expr2): ColumnBase
+    public function ifIsGreaterThat(string|int|float $value, ColumnBase|string|int|float $expr1, ColumnBase|string|int|float $expr2): ColumnBase
     {
         return $this->if($value, '>', $expr1, $expr2);
     }
 
-    public function ifIsLowerThat($value, $expr1, $expr2): ColumnBase
+    public function ifIsLowerThat(string|int|float $value, ColumnBase|string|int|float $expr1, ColumnBase|string|int|float $expr2): ColumnBase
     {
         return $this->if($value, '<', $expr1, $expr2);
     }
 
-    public function ifIsGreaterThatOrEqual($value, $expr1, $expr2): ColumnBase
+    public function ifIsGreaterThatOrEqual(string|int|float $value, ColumnBase|string|int|float $expr1, ColumnBase|string|int|float $expr2): ColumnBase
     {
         return $this->if($value, '>=', $expr1, $expr2);
     }
 
-    public function ifIsLowerThatOrEqual($value, $expr1, $expr2): ColumnBase
+    public function ifIsLowerThatOrEqual(string|int|float $value, ColumnBase|string|int|float $expr1, ColumnBase|string|int|float $expr2): ColumnBase
     {
         return $this->if($value, '<=', $expr1, $expr2);
     }
 
-    public function ifIsEqual($value, $expr1, $expr2): ColumnBase
+    public function ifIsEqual(string|int|float $value, ColumnBase|string|int|float $expr1, ColumnBase|string|int|float $expr2): ColumnBase
     {
         return $this->if($value, '=', $expr1, $expr2);
     }
 
-    public function ifIsNotEqual($value, $expr1, $expr2): ColumnBase
+    public function ifIsNotEqual(string|int|float $value, ColumnBase|string|int|float $expr1, ColumnBase|string|int|float $expr2): ColumnBase
     {
         return $this->if($value, '!=', $expr1, $expr2);
     }

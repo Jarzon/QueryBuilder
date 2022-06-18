@@ -6,7 +6,8 @@ class PdoMock extends \PDO
 {
     public function __construct(string $dsn = '', string $username = '', string $passwd = '', array $options = []){}
 
-    public function prepare($statement, $driver_options = null) {
+    public function prepare($statement, $driver_options = null): \PDOStatement|false
+    {
         return new PdoStatementMock();
     }
 }

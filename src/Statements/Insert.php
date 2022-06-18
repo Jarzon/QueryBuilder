@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Jarzon\QueryBuilder\Statements;
 
 use Jarzon\QueryBuilder\Columns\ColumnBase;
+use Jarzon\QueryBuilder\Columns\ColumnInterface;
 use Jarzon\QueryBuilder\Entity\EntityBase;
 use Jarzon\QueryBuilder\Raw;
 
@@ -31,7 +32,7 @@ class Insert extends StatementBase
         return $this;
     }
 
-    public function columns(...$columns): Insert
+    public function columns(ColumnInterface|Raw|string|array ...$columns): Insert
     {
         if(is_array($columns[0])) {
             $columns = $columns[0];
@@ -50,7 +51,7 @@ class Insert extends StatementBase
         return $this;
     }
 
-    public function addColumn($columns, $value = null, bool $raw = false): Insert
+    public function addColumn(ColumnInterface|Raw|string|array $columns, mixed $value = null, bool $raw = false): Insert
     {
         if($value !== null) {
             $columns = [$value => $columns];
@@ -95,7 +96,7 @@ class Insert extends StatementBase
         return $output;
     }
 
-    public function exec(...$params): int
+    public function exec(mixed ...$params): int
     {
         $this->lastStatement = $this->pdo->prepare($this->getSql());
 

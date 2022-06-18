@@ -12,10 +12,10 @@ use Jarzon\QueryBuilder\Statements\Delete;
 abstract class Builder
 {
     static string|EntityBase $table = '';
-    static ?string $tableAlias;
+    static string|null $tableAlias;
     static object $pdo;
     static string|EntityBase $currentTable;
-    static ?string $local = 'fr_CA';
+    static string|null $local = 'fr_CA';
     static array $currencies = [
         'fr_CA' => ' $',
         'en_CA' => '$',
@@ -49,7 +49,7 @@ abstract class Builder
         return self::$currency_format[self::$local] ?? self::$local;
     }
 
-    static public function setTable(string|EntityBase $table, $tableAlias = null): void
+    static public function setTable(string|EntityBase $table, string $tableAlias = null): void
     {
         self::$table = $table;
         self::$tableAlias = $tableAlias;
@@ -57,7 +57,7 @@ abstract class Builder
         static::$currentTable = $tableAlias !== null? $tableAlias: $table;
     }
 
-    static public function select($table, $tableAlias = null): Select
+    static public function select(EntityBase|string|callable $table, string $tableAlias = null): Select
     {
         if(is_callable($table)) {
             $table = $table();
@@ -68,21 +68,21 @@ abstract class Builder
         return new Select($table, $tableAlias, self::$pdo);
     }
 
-    static public function insert($table, $tableAlias = null): Insert
+    static public function insert(EntityBase|string $table, string $tableAlias = null): Insert
     {
         self::setTable($table, $tableAlias);
 
         return new Insert($table, self::$pdo);
     }
 
-    static public function update($table, $tableAlias = null): Update
+    static public function update(EntityBase|string $table, string $tableAlias = null): Update
     {
         self::setTable($table, $tableAlias);
 
         return new Update($table, $tableAlias, self::$pdo);
     }
 
-    static public function delete($table, $tableAlias = null): Delete
+    static public function delete(EntityBase|string $table, string $tableAlias = null): Delete
     {
         self::setTable($table, $tableAlias);
 
@@ -94,7 +94,7 @@ abstract class Builder
         return new Raw($value);
     }
 
-    static function function(string $function, $column, $alias = null): string|array
+    static function function(string $function, string|array $column, string|false|null $alias = null): string|array
     {
         // No alias
         if($alias === false) {
@@ -106,7 +106,7 @@ abstract class Builder
         }
         // Default alias
         else if($alias === null) {
-            if(strpos($column, '.') !== false) {
+            if(str_contains($column, '.')) {
                 $alias = explode('.', $column)[1];
             }
         }
@@ -116,7 +116,7 @@ abstract class Builder
 
     /** Columns functions */
 
-    static function functionMultipleArgs(string $function, $column, $alias = null): string|array
+    static function functionMultipleArgs(string $function, string|array|null $column, string|false|null $alias = null): string|array
     {
         // No alias
         if($alias === false) {
@@ -128,7 +128,7 @@ abstract class Builder
         }
         // Default alias
         else if($alias === null) {
-            if(strpos($column, '.') !== false) {
+            if(str_contains($column, '.')) {
                 $alias = explode('.', $column)[1];
             }
         }
@@ -136,12 +136,12 @@ abstract class Builder
         return ["$function($column)" => $alias ?? $column];
     }
 
-    static function concat(array $columns, $alias = null): string|array
+    static function concat(array $columns, string|false|null $alias = null): string|array
     {
         return self::functionMultipleArgs('CONCAT', implode(', ', $columns), $alias);
     }
 
-    static function currentDate($alias = null): string|array
+    static function currentDate(string|false|null $alias = null): string|array
     {
         return self::functionMultipleArgs('CURDATE', null, $alias);
     }

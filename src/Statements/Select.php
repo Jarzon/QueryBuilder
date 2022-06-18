@@ -81,7 +81,7 @@ class Select extends ConditionalStatementBase
         return $query;
     }
 
-    public function columns(...$columns): Select
+    public function columns(ColumnInterface|Raw|string|array ...$columns): Select
     {
         $this->columns = [];
         $this->addColumns(...$columns);
@@ -91,7 +91,7 @@ class Select extends ConditionalStatementBase
 
     protected function getColumns(): string
     {
-        $columns = implode(', ', array_map(function($key, $name) {
+        return implode(', ', array_map(function($key, $name) {
             if($name === '*') return $name;
 
             $output = $name;
@@ -109,11 +109,9 @@ class Select extends ConditionalStatementBase
 
             return $output;
         }, array_keys($this->columns), $this->columns));
-
-        return $columns;
     }
 
-    public function addColumns(...$columns): Select
+    public function addColumns(ColumnInterface|Raw|string|array ...$columns): Select
     {
         foreach ($columns as $column) {
 
@@ -130,7 +128,7 @@ class Select extends ConditionalStatementBase
         return $this;
     }
 
-    public function orderBy($column, string $order = ''): Select
+    public function orderBy(ColumnInterface|Raw|string $column, string $order = ''): Select
     {
         if($column instanceof ColumnInterface) {
             $column = $column->getColumnReference();
@@ -144,7 +142,7 @@ class Select extends ConditionalStatementBase
         return $this;
     }
 
-    public function groupBy($columns, bool $rollUp = false): Select
+    public function groupBy(ColumnInterface|string|array $columns, bool $rollUp = false): Select
     {
         if(!is_array($columns)) {
             $columns = [$columns];
@@ -156,7 +154,7 @@ class Select extends ConditionalStatementBase
         return $this;
     }
 
-    public function limit(int $offset, ?int $select = null, $isRaw = false): Select
+    public function limit(int $offset, ?int $select = null, bool $isRaw = false): Select
     {
         if($select === null) {
             $this->limit = [$this->param($offset, 'limit1', $isRaw)];
@@ -167,7 +165,7 @@ class Select extends ConditionalStatementBase
         return $this;
     }
 
-    public function leftJoin($table, $firstColumnOrCallback, $operator = null, $secondColumn = null): Select
+    public function leftJoin(string|EntityBase $table, ColumnInterface|Raw|string|callable $firstColumnOrCallback, string|null $operator = null, ColumnInterface|Raw|string $secondColumn = null): Select
     {
         $this->join[] = new Join('LEFT', $table, $firstColumnOrCallback, $operator, $secondColumn);
 
