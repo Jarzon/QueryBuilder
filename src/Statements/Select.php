@@ -181,13 +181,22 @@ class Select extends ConditionalStatementBase
         return $query->fetchAll($fetch_style);
     }
 
-    public function fetch(int $fetch_style = 0): object|array|false
+    public function fetch(int $fetch_style = 0): object|false
     {
         $this->lastStatement = $query = $this->pdo->prepare($this->getSql());
 
         $query->execute($this->params);
 
         return $query->fetch($fetch_style);
+    }
+
+    public function fetchArray(): array|false
+    {
+        $this->lastStatement = $query = $this->pdo->prepare($this->getSql());
+
+        $query->execute($this->params);
+
+        return $query->fetch(\PDO::FETCH_ASSOC);
     }
 
     public function fetchClass(?string $class = null): object|false
