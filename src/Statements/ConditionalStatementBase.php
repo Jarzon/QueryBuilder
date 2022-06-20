@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Jarzon\QueryBuilder\Statements;
 
 use Jarzon\QueryBuilder\Columns\ColumnBase;
-use Jarzon\QueryBuilder\Columns\ColumnInterface;
 use \Jarzon\QueryBuilder\Conditions\Condition;
 use \Jarzon\QueryBuilder\Conditions\BetweenCondition;
 use \Jarzon\QueryBuilder\Conditions\InCondition;
@@ -40,7 +39,7 @@ abstract class ConditionalStatementBase extends StatementBase
         return $this;
     }
 
-    public function or(ColumnBase|Raw|string|callable $column, string $operator = null, string|int|float $value = null, bool $isRaw = false): static
+    public function or(ColumnBase|Raw|string|callable $column, string $operator = null, ColumnBase|string|int|float $value = null, bool $isRaw = false): static
     {
         $this->addCondition('OR');
 
