@@ -81,7 +81,7 @@ class Select extends ConditionalStatementBase
         return $query;
     }
 
-    public function columns(ColumnInterface|Raw|string|array ...$columns): Select
+    public function columns(ColumnInterface|Raw|array|string|int ...$columns): Select
     {
         $this->columns = [];
         $this->addColumns(...$columns);
