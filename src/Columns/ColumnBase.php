@@ -29,7 +29,7 @@ class ColumnBase implements ColumnInterface
         return $output;
     }
 
-    public function cast(string $type): ColumnBase
+    public function cast(string $type): static
     {
         $this->output = new Raw("CAST({$this->getOutput()} AS $type)");
 
@@ -107,7 +107,7 @@ class ColumnBase implements ColumnInterface
         $this->output = new Raw("CONCAT(" . implode(', ', $args) . ")");
     }
 
-    public function preAppend(ColumnBase|Raw|string ...$args): ColumnBase
+    public function preAppend(ColumnBase|Raw|string ...$args): static
     {
         $args[] = $this->getOutput();
 
@@ -116,7 +116,7 @@ class ColumnBase implements ColumnInterface
         return $this;
     }
 
-    public function append(ColumnBase|Raw|string ...$args): ColumnBase
+    public function append(ColumnBase|Raw|string ...$args): static
     {
         array_unshift($args,  $this->getOutput());
 
@@ -125,7 +125,7 @@ class ColumnBase implements ColumnInterface
         return $this;
     }
 
-    public function ifIsNull(string|int|float $value): ColumnBase
+    public function ifIsNull(string|int|float $value): static
     {
         $args[] = $this->getOutput();
 
@@ -135,44 +135,44 @@ class ColumnBase implements ColumnInterface
         return $this;
     }
 
-    public function if(string|int|float $value, string $operator, ColumnBase|string|int|float $expr1, ColumnBase|string|int|float $expr2): ColumnBase
+    public function if(string|int|float $value, string $operator, ColumnBase|string|int|float $expr1, ColumnBase|string|int|float $expr2): static
     {
         $this->output = new Raw("IF(" . $this->getColumnReference() . " $operator $value, $expr1, $expr2)");
 
         return $this;
     }
 
-    public function ifIsGreaterThat(string|int|float $value, ColumnBase|string|int|float $expr1, ColumnBase|string|int|float $expr2): ColumnBase
+    public function ifIsGreaterThat(string|int|float $value, ColumnBase|string|int|float $expr1, ColumnBase|string|int|float $expr2): static
     {
         return $this->if($value, '>', $expr1, $expr2);
     }
 
-    public function ifIsLowerThat(string|int|float $value, ColumnBase|string|int|float $expr1, ColumnBase|string|int|float $expr2): ColumnBase
+    public function ifIsLowerThat(string|int|float $value, ColumnBase|string|int|float $expr1, ColumnBase|string|int|float $expr2): static
     {
         return $this->if($value, '<', $expr1, $expr2);
     }
 
-    public function ifIsGreaterThatOrEqual(string|int|float $value, ColumnBase|string|int|float $expr1, ColumnBase|string|int|float $expr2): ColumnBase
+    public function ifIsGreaterThatOrEqual(string|int|float $value, ColumnBase|string|int|float $expr1, ColumnBase|string|int|float $expr2): static
     {
         return $this->if($value, '>=', $expr1, $expr2);
     }
 
-    public function ifIsLowerThatOrEqual(string|int|float $value, ColumnBase|string|int|float $expr1, ColumnBase|string|int|float $expr2): ColumnBase
+    public function ifIsLowerThatOrEqual(string|int|float $value, ColumnBase|string|int|float $expr1, ColumnBase|string|int|float $expr2): static
     {
         return $this->if($value, '<=', $expr1, $expr2);
     }
 
-    public function ifIsEqual(string|int|float $value, ColumnBase|string|int|float $expr1, ColumnBase|string|int|float $expr2): ColumnBase
+    public function ifIsEqual(string|int|float $value, ColumnBase|string|int|float $expr1, ColumnBase|string|int|float $expr2): static
     {
         return $this->if($value, '=', $expr1, $expr2);
     }
 
-    public function ifIsNotEqual(string|int|float $value, ColumnBase|string|int|float $expr1, ColumnBase|string|int|float $expr2): ColumnBase
+    public function ifIsNotEqual(string|int|float $value, ColumnBase|string|int|float $expr1, ColumnBase|string|int|float $expr2): static
     {
         return $this->if($value, '!=', $expr1, $expr2);
     }
 
-    public function case(array $conditions, ?string $else = null): ColumnBase
+    public function case(array $conditions, ?string $else = null): static
     {
         $cases = "CASE " . $this->getColumnReference() . " ";
 
