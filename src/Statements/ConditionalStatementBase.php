@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Jarzon\QueryBuilder\Statements;
 
+use Jarzon\QueryBuilder\Columns\ColumnBase;
 use Jarzon\QueryBuilder\Columns\ColumnInterface;
 use \Jarzon\QueryBuilder\Conditions\Condition;
 use \Jarzon\QueryBuilder\Conditions\BetweenCondition;
@@ -13,7 +14,7 @@ abstract class ConditionalStatementBase extends StatementBase
 {
     protected array $conditions = [];
 
-    public function where(ColumnInterface|Raw|string|callable $column, ?string $operator = null, ColumnInterface|Raw|string|int|float $value = null, bool $isRaw = false): static
+    public function where(ColumnBase|Raw|string|callable $column, ?string $operator = null, ColumnBase|Raw|string|int|float $value = null, bool $isRaw = false): static
     {
         $this->chaining();
 
@@ -32,14 +33,14 @@ abstract class ConditionalStatementBase extends StatementBase
         return $this;
     }
 
-    public function whereRaw(ColumnInterface|Raw|string $column, ?string $operator = null, ColumnInterface|string|int|float $value = null): static
+    public function whereRaw(ColumnBase|Raw|string $column, ?string $operator = null, ColumnBase|string|int|float $value = null): static
     {
         $this->where($column, $operator, $value, true);
 
         return $this;
     }
 
-    public function or(ColumnInterface|Raw|string|callable $column, string $operator = null, string|int|float $value = null, bool $isRaw = false): static
+    public function or(ColumnBase|Raw|string|callable $column, string $operator = null, string|int|float $value = null, bool $isRaw = false): static
     {
         $this->addCondition('OR');
 
@@ -56,7 +57,7 @@ abstract class ConditionalStatementBase extends StatementBase
         return $this;
     }
 
-    public function between(ColumnInterface|Raw|string|int|float $column, Raw|ColumnInterface|string|int|float $start, Raw|ColumnInterface|string|int|float $end, bool $isRaw = false): static
+    public function between(ColumnBase|Raw|string|int|float $column, ColumnBase|Raw|string|int|float $start, ColumnBase|Raw|string|int|float $end, bool $isRaw = false): static
     {
         $this->chaining();
 
@@ -65,7 +66,7 @@ abstract class ConditionalStatementBase extends StatementBase
         return $this;
     }
 
-    public function notBetween(ColumnInterface|Raw|string $column, Raw|ColumnInterface|string|int|float $start, Raw|ColumnInterface|string|int|float $end, bool $isRaw = false): static
+    public function notBetween(ColumnBase|Raw|string $column, ColumnBase|Raw|string|int|float $start, ColumnBase|Raw|string|int|float $end, bool $isRaw = false): static
     {
         $this->chaining();
 
@@ -74,7 +75,7 @@ abstract class ConditionalStatementBase extends StatementBase
         return $this;
     }
 
-    public function in(ColumnInterface|Raw|string $column, array $list, bool $isRaw = false): static
+    public function in(ColumnBase|Raw|string $column, array $list, bool $isRaw = false): static
     {
         $this->chaining();
 
@@ -83,7 +84,7 @@ abstract class ConditionalStatementBase extends StatementBase
         return $this;
     }
 
-    public function notIn(ColumnInterface|Raw|string $column, array $list, bool $isRaw = false): static
+    public function notIn(ColumnBase|Raw|string $column, array $list, bool $isRaw = false): static
     {
         $this->chaining();
 
@@ -92,7 +93,7 @@ abstract class ConditionalStatementBase extends StatementBase
         return $this;
     }
 
-    public function isNull(ColumnInterface|Raw|string $column, bool $isRaw = false): static
+    public function isNull(ColumnBase|Raw|string $column, bool $isRaw = false): static
     {
         $this->chaining();
 
@@ -101,7 +102,7 @@ abstract class ConditionalStatementBase extends StatementBase
         return $this;
     }
 
-    public function isNotNull(ColumnInterface|Raw|string $column, bool $isRaw = false): static
+    public function isNotNull(ColumnBase|Raw|string $column, bool $isRaw = false): static
     {
         $this->chaining();
 
