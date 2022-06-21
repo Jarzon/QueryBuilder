@@ -16,7 +16,7 @@ abstract class StatementBase
     protected string|EntityBase $table = '';
     protected ?string $tableAlias;
 
-    protected function param(string|int|float|ColumnInterface|null $value, string|ColumnInterface $key = '?', bool $raw = false): string|Int|Raw
+    protected function param(ColumnInterface|string|int|float|bool|null $value, ColumnInterface|string $key = '?', bool $raw = false): string|Int|Raw
     {
         if($value instanceof ColumnInterface) {
             return $value->getColumnOutput();
