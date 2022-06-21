@@ -111,7 +111,7 @@ class Select extends ConditionalStatementBase
         }, array_keys($this->columns), $this->columns));
     }
 
-    public function addColumns(ColumnInterface|Raw|string|array ...$columns): Select
+    public function addColumns(ColumnInterface|Raw|array|string|int ...$columns): Select
     {
         foreach ($columns as $column) {
 
