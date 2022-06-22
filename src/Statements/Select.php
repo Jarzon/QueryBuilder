@@ -229,7 +229,7 @@ class Select extends ConditionalStatementBase
         return $query->fetchAll();
     }
 
-    public function fetchColumn(): string|int|float|false
+    public function fetchColumn(): string|int|float|bool|null
     {
         $this->lastStatement = $query = $this->pdo->prepare($this->getSql());
 
