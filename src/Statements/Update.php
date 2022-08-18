@@ -108,7 +108,7 @@ class Update extends ConditionalStatementBase
         return $query;
     }
 
-    public function exec(array ...$params): int
+    public function exec(mixed ...$params): int
     {
         $this->lastStatement = $this->pdo->prepare($this->getSql());
 
