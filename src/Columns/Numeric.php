@@ -22,6 +22,13 @@ class Numeric extends ColumnBase
         return $this;
     }
 
+    public function devide(string|int|float $value): Numeric
+    {
+        $this->output = new Raw("{$this->getOutput()} DIV $value");
+
+        return $this;
+    }
+
     public function max(): Numeric
     {
         $this->output = new Raw("MAX({$this->getOutput()})");

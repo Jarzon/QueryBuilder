@@ -22,6 +22,13 @@ class Date extends ColumnBase
         return $this;
     }
 
+    public function month(): Date
+    {
+        $this->output = new Raw("MONTH({$this->getOutput()})");
+
+        return $this;
+    }
+
     public function dateAdd(string $intervalAddition): Date
     {
         $this->output = new Raw("{$this->getOutput()} + INTERVAL $intervalAddition");
