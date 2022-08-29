@@ -100,6 +100,20 @@ class ColumnBase implements ColumnInterface
         return $args;
     }
 
+    public function distinct(): static
+    {
+        $this->output = new Raw("DISTINCT {$this->getOutput()}");
+
+        return $this;
+    }
+
+    public function count(): static
+    {
+        $this->output = new Raw("COUNT({$this->getOutput()})");
+
+        return $this;
+    }
+
     public function concat(array $args): void
     {
         $args = $this->parseArgs($args);

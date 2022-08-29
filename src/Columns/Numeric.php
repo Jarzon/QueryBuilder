@@ -71,13 +71,6 @@ class Numeric extends ColumnBase
         return $this;
     }
 
-    public function count(): Numeric
-    {
-        $this->output = new Raw("COUNT({$this->getOutput()})");
-
-        return $this;
-    }
-
     public function time(string $format = '%H:%i', int $multiple = 10000): Numeric
     {
         $this->output = new Raw("REPLACE(ROUND({$this->getOutput()}, 2), '.', ':')");
