@@ -22,7 +22,7 @@ class Numeric extends ColumnBase
         return $this;
     }
 
-    public function devide(string|int|float $value): Numeric
+    public function devide(string|int|float|Raw $value): Numeric
     {
         $this->output = new Raw("{$this->getOutput()} DIV $value");
 
