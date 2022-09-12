@@ -212,7 +212,7 @@ class Select extends ConditionalStatementBase
         return $query->fetchObject($class);
     }
 
-    public function fetchClassAll(?string $class = null): array|false
+    public function fetchClassAll(?string $class = null, int $fetch_style = 0): array|false
     {
         $this->lastStatement = $query = $this->pdo->prepare($this->getSql());
 
@@ -222,7 +222,7 @@ class Select extends ConditionalStatementBase
 
         $query->execute($this->params);
 
-        return $query->fetchAll(\PDO::FETCH_CLASS, $class);
+        return $query->fetchAll($fetch_style | \PDO::FETCH_CLASS, $class);
     }
 
     public function fetchColumn(): string|int|float|bool|null
