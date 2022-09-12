@@ -207,11 +207,9 @@ class Select extends ConditionalStatementBase
             $class = $this->table->entityClass;
         }
 
-        $query->setFetchMode(\PDO::FETCH_CLASS, $class);
-
         $query->execute($this->params);
 
-        return $query->fetch();
+        return $query->fetchObject($class);
     }
 
     public function fetchClassAll(?string $class = null): array|false
@@ -222,11 +220,9 @@ class Select extends ConditionalStatementBase
             $class = $this->table->entityClass;
         }
 
-        $query->setFetchMode(\PDO::FETCH_CLASS, $class);
-
         $query->execute($this->params);
 
-        return $query->fetchAll();
+        return $query->fetchAll(\PDO::FETCH_CLASS, $class);
     }
 
     public function fetchColumn(): string|int|float|bool|null
