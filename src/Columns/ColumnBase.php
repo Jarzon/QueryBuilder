@@ -139,6 +139,13 @@ class ColumnBase implements ColumnInterface
         return $this;
     }
 
+    public function replace(string $find, string $replace): static
+    {
+        $this->output = new Raw("REPLACE({$this->getOutput()}, '$find', '$replace')");
+
+        return $this;
+    }
+
     public function ifIsNull(string|int|float $value): static
     {
         $args[] = $this->getOutput();
