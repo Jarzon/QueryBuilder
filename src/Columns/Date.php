@@ -36,6 +36,20 @@ class Date extends ColumnBase
         return $this;
     }
 
+    public function min(): Date
+    {
+        $this->output = new Raw("MIN({$this->getOutput()})");
+
+        return $this;
+    }
+
+    public function max(): Date
+    {
+        $this->output = new Raw("MAX({$this->getOutput()})");
+
+        return $this;
+    }
+
     public function dateAdd(string $intervalAddition): Date
     {
         $this->output = new Raw("{$this->getOutput()} + INTERVAL $intervalAddition");
