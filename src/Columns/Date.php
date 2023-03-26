@@ -74,4 +74,11 @@ class Date extends ColumnBase
 
         return $this;
     }
+
+    public function avg(): Date
+    {
+        $this->output = new Raw("AVG({$this->getOutput()})");
+
+        return $this;
+    }
 }
