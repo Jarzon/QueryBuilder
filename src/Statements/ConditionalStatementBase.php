@@ -24,6 +24,11 @@ abstract class ConditionalStatementBase extends StatementBase
 
             return $this;
         }
+        elseif ($column instanceof Raw) {
+            $column = $column->value;
+
+            return $this;
+        }
 
         $value = $this->param($value, $column, $isRaw);
 
