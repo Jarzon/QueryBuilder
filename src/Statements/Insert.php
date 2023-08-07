@@ -76,7 +76,6 @@ class Insert extends StatementBase
     public function getSql(): string
     {
         $columns = implode(', ', $this->columns);
-        $values = ':' . implode(', :', $this->columns);
 
         $table = $this->table;
 
@@ -87,6 +86,7 @@ class Insert extends StatementBase
         $output = "$this->type {$table}($columns) ";
 
         if($this->select === null) {
+            $values = $this->columns !== []? (':' . implode(', :', $this->columns)) : '';
             $output .= "VALUES ($values)";
         } else {
             $output .= $this->select->getSql();
