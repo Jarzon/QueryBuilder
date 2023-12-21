@@ -209,6 +209,13 @@ class ColumnBase implements ColumnInterface
         return $this;
     }
 
+    public function groupConcat(string $separator = ',', bool $distinc = true): static
+    {
+        $this->output = new Raw("GROUP_CONCAT(" . ($distinc? 'DISTINCT ' : '') . "{$this->getOutput()} SEPARATOR \"$separator\")");
+
+        return $this;
+    }
+
     public function __toString(): string
     {
         $output = $this->getOutput();
