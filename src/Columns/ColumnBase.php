@@ -59,6 +59,7 @@ class ColumnBase implements ColumnInterface
 
     public function getColumnName(): string
     {
+        if($this->name === 'order') return "`$this->name`";
         return $this->name;
     }
 
