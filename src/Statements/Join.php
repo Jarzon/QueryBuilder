@@ -10,7 +10,7 @@ use Jarzon\QueryBuilder\Raw;
 
 class Join extends ConditionalStatementBase
 {
-    public function __construct(string $type, string|EntityBase $table, ColumnInterface|Raw|string|callable $firstColumnOrCallback, string|null $operator = null, ColumnInterface|Raw|string $secondColumn = null)
+    public function __construct(string $type, string|EntityBase $table, ColumnInterface|Raw|string|callable $firstColumnOrCallback, string|null $operator = null, ColumnInterface|Raw|string|null $secondColumn = null)
     {
         // TODO: Add join table alias support
         $this->type = "$type JOIN";

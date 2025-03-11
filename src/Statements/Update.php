@@ -10,7 +10,7 @@ use Jarzon\QueryBuilder\Raw;
 class Update extends ConditionalStatementBase
 {
     protected array $columns = [];
-    protected ?string $query = null;
+    protected string|null $query = null;
 
     public function __construct(string|EntityBase $table, ?string $tableAlias, object $pdo)
     {

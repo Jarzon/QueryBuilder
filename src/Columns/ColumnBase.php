@@ -7,13 +7,13 @@ use Jarzon\QueryBuilder\Raw;
 
 class ColumnBase implements ColumnInterface
 {
-    public ?string $alias = null;
+    public string|null $alias = null;
     public string|Raw|null $output = null;
     public int $paramCount = 1;
 
     public function __construct(
         public string $name = '',
-        public ?string $tableAlias = null
+        public string|null $tableAlias = null
     ) {
 
     }
@@ -194,7 +194,7 @@ class ColumnBase implements ColumnInterface
         return $this->if($value, '!=', $expr1, $expr2);
     }
 
-    public function case(array $conditions, ?string $else = null): static
+    public function case(array $conditions, string|null $else = null): static
     {
         $cases = "CASE " . $this->getColumnReference() . " ";
 

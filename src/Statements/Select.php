@@ -154,7 +154,7 @@ class Select extends ConditionalStatementBase
         return $this;
     }
 
-    public function limit(int $offset, ?int $select = null, bool $isRaw = false): Select
+    public function limit(int $offset, int|null $select = null, bool $isRaw = false): Select
     {
         if($select === null) {
             $this->limit = [$this->param($offset, 'limit1', $isRaw)];
@@ -199,7 +199,7 @@ class Select extends ConditionalStatementBase
         return $query->fetch(\PDO::FETCH_ASSOC);
     }
 
-    public function fetchClass(?string $class = null): object|false
+    public function fetchClass(string|null $class = null): object|false
     {
         $this->lastStatement = $query = $this->pdo->prepare($this->getSql());
 
@@ -212,7 +212,7 @@ class Select extends ConditionalStatementBase
         return $query->fetchObject($class);
     }
 
-    public function fetchClassAll(?string $class = null, int $fetch_style = 0): array|false
+    public function fetchClassAll(string|null $class = null, int $fetch_style = 0): array|false
     {
         $this->lastStatement = $query = $this->pdo->prepare($this->getSql());
 

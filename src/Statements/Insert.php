@@ -11,7 +11,7 @@ use Jarzon\QueryBuilder\Raw;
 class Insert extends StatementBase
 {
     protected array $columns = [];
-    protected ?Select $select = null;
+    protected Select|null $select = null;
     protected array $values = [];
 
     public function __construct(string|EntityBase $table, object $pdo)
