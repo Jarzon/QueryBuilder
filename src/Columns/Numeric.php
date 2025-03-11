@@ -87,7 +87,7 @@ class Numeric extends ColumnBase
         return $this;
     }
 
-    public function currency(string $value = null): Numeric
+    public function currency(string|null $value = null): Numeric
     {
         if($value !== null) {
             $this->output = $value;

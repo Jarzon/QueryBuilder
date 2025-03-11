@@ -165,7 +165,7 @@ class Select extends ConditionalStatementBase
         return $this;
     }
 
-    public function leftJoin(string|EntityBase $table, ColumnInterface|Raw|string|callable $firstColumnOrCallback, string|null $operator = null, ColumnInterface|Raw|string $secondColumn = null): Select
+    public function leftJoin(string|EntityBase $table, ColumnInterface|Raw|string|callable $firstColumnOrCallback, string|null $operator = null, ColumnInterface|Raw|string|null $secondColumn = null): Select
     {
         $this->join[] = new Join('LEFT', $table, $firstColumnOrCallback, $operator, $secondColumn);
 

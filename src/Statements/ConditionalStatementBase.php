@@ -13,7 +13,7 @@ abstract class ConditionalStatementBase extends StatementBase
 {
     protected array $conditions = [];
 
-    public function where(ColumnBase|Raw|string|callable $column, ?string $operator = null, ColumnBase|Raw|string|int|float $value = null, bool $isRaw = false): static
+    public function where(ColumnBase|Raw|string|callable $column, string|null $operator = null, ColumnBase|Raw|string|int|float|null $value = null, bool $isRaw = false): static
     {
         $this->chaining();
 
@@ -44,7 +44,7 @@ abstract class ConditionalStatementBase extends StatementBase
         return $this;
     }
 
-    public function or(ColumnBase|Raw|string|callable $column, string $operator = null, ColumnBase|string|int|float $value = null, bool $isRaw = false): static
+    public function or(ColumnBase|Raw|string|callable $column, string|null $operator = null, ColumnBase|string|int|float|null $value = null, bool $isRaw = false): static
     {
         $this->addCondition('OR');
 

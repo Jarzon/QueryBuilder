@@ -7,7 +7,7 @@ use Jarzon\QueryBuilder\Raw;
 
 class Date extends ColumnBase
 {
-    public function date(string $format = null): Date
+    public function date(string|null $format = null): Date
     {
         $function = 'DATE';
         $args = '';

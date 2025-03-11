@@ -49,7 +49,7 @@ abstract class Builder
         return self::$currency_format[self::$local] ?? self::$local;
     }
 
-    static public function setTable(string|EntityBase $table, string $tableAlias = null): void
+    static public function setTable(string|EntityBase $table, string|null $tableAlias = null): void
     {
         self::$table = $table;
         self::$tableAlias = $tableAlias;
@@ -57,7 +57,7 @@ abstract class Builder
         static::$currentTable = $tableAlias !== null? $tableAlias: $table;
     }
 
-    static public function select(EntityBase|string|callable $table, string $tableAlias = null): Select
+    static public function select(EntityBase|string|callable $table, string|null $tableAlias = null): Select
     {
         if(is_callable($table)) {
             $table = $table();
@@ -68,21 +68,21 @@ abstract class Builder
         return new Select($table, $tableAlias, self::$pdo);
     }
 
-    static public function insert(EntityBase|string $table, string $tableAlias = null): Insert
+    static public function insert(EntityBase|string $table, string|null $tableAlias = null): Insert
     {
         self::setTable($table, $tableAlias);
 
         return new Insert($table, self::$pdo);
     }
 
-    static public function update(EntityBase|string $table, string $tableAlias = null): Update
+    static public function update(EntityBase|string $table, string|null $tableAlias = null): Update
     {
         self::setTable($table, $tableAlias);
 
         return new Update($table, $tableAlias, self::$pdo);
     }
 
-    static public function delete(EntityBase|string $table, string $tableAlias = null): Delete
+    static public function delete(EntityBase|string $table, string|null $tableAlias = null): Delete
     {
         self::setTable($table, $tableAlias);
 
