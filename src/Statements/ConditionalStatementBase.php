@@ -37,7 +37,7 @@ abstract class ConditionalStatementBase extends StatementBase
         return $this;
     }
 
-    public function whereRaw(ColumnBase|Raw|string $column, string|null $operator = null, ColumnBase|string|int|float $value = null): static
+    public function whereRaw(ColumnBase|Raw|string $column, string|null $operator = null, ColumnBase|string|int|float|null $value = null): static
     {
         $this->where($column, $operator, $value, true);
 
