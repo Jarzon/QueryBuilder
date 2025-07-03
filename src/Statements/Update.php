@@ -73,7 +73,7 @@ class Update extends ConditionalStatementBase
     {
         if(!$isRaw) {
             $columns = array_filter($columns, function($column) {
-                return !$this->table instanceof EntityBase || ($this->table instanceof EntityBase && $this->table->columnExist($column));
+                return !$this->table instanceof EntityBase || $this->table->columnExist($column);
             }, ARRAY_FILTER_USE_KEY);
 
             array_walk($columns, function(&$value, $column) {

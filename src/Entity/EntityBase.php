@@ -40,6 +40,15 @@ abstract class EntityBase
         return property_exists($this, $name);
     }
 
+    public function columnIsNotEmpty(string $name, string|int $value): bool
+    {
+        if ($this->{$name} instanceof Text) {
+            return $value !== '';
+        } else {
+            return !empty($value);
+        }
+    }
+
     protected function getAlias(): string
     {
         return $this->alias ?? $this->table;

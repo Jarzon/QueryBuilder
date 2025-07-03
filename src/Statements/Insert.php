@@ -64,7 +64,7 @@ class Insert extends StatementBase
                 $value = $this->param($i, $column, $raw);
                 $this->columns[$value] = $column->getColumnName();
             }
-            else if(!empty($column)) {
+            else if($this->table->columnIsNotEmpty($i, $column)) {
                 $value = $this->param($column, $i, $raw);
                 $this->columns[$i] = $i;
             }
