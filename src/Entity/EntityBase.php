@@ -40,7 +40,7 @@ abstract class EntityBase
         return property_exists($this, $name);
     }
 
-    public function columnIsNotEmpty(string $name, string|int $value): bool
+    public function columnIsNotEmpty(string $name, string|int|bool $value): bool
     {
         if ($this->{$name} instanceof Text) {
             return $value !== '';
