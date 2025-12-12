@@ -78,6 +78,13 @@ class Numeric extends ColumnBase
         return $this;
     }
 
+    public function timeRaw(): Numeric
+    {
+        $this->output = new Raw("ROUND(FLOOR({$this->getOutput()}) + (({$this->getOutput()} - FLOOR({$this->getOutput()})) / 60 * 100), 2)");
+
+        return $this;
+    }
+
     public function formatNumber(int $round = 2): Numeric
     {
         $local = Builder::getCurrencyLocal();
