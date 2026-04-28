@@ -46,7 +46,7 @@ abstract class ConditionalStatementBase extends StatementBase
 
     public function or(ColumnBase|Raw|string|callable $column, string|null $operator = null, ColumnBase|string|int|float|null $value = null, bool $isRaw = false): static
     {
-        $this->addCondition('OR');
+        $this->chaining('OR');
 
         if($operator === null && is_callable($column) && $column instanceof \Closure) {
             $this->addCondition('(');
@@ -115,11 +115,11 @@ abstract class ConditionalStatementBase extends StatementBase
         return $this;
     }
 
-    protected function chaining(): void
+    protected function chaining(string $cond = 'AND'): void
     {
         $conditionsCount = count($this->conditions);
         if($conditionsCount > 0 && $this->conditions[$conditionsCount-1] != '(') {
-            $this->addCondition('AND');
+            $this->addCondition($cond);
         }
     }
 
