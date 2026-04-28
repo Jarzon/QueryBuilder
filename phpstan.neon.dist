@@ -3,4 +3,12 @@ parameters:
     paths:
         - %currentWorkingDirectory%/src/
     excludePaths:
-        - %currentWorkingDirectory%/tests/*
+        - %currentWorkingDirectory%/src/*/assets/*
+        - %currentWorkingDirectory%/src/*/config/*
+        - %currentWorkingDirectory%/src/*/migrations/*
+        - %currentWorkingDirectory%/src/*/seeds/*
+        - %currentWorkingDirectory%/src/*/view/*
+        - %currentWorkingDirectory%/src/*/Tests/*
+
+includes:
+    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
