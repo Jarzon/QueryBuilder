@@ -9,7 +9,7 @@ use Jarzon\QueryBuilder\Raw;
 
 class Condition
 {
-    protected string $column;
+    protected string|Raw $column;
     protected ColumnBase|Raw|string|int|float $value;
 
     public function __construct(
@@ -18,7 +18,7 @@ class Condition
         ColumnBase|Raw|string|int|float|null $value
     ) {
         if($column instanceof ColumnInterface) {
-            $column = $column->getColumnReference();
+            $column = $column->getOutput();
         }
         elseif ($column instanceof Raw) {
             $column = $column->value;

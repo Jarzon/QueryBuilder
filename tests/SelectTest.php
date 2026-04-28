@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Jarzon\QueryBuilder\Tests;
 
+use Jarzon\QueryBuilder\Statements\ConditionalStatementBase;
 use PHPUnit\Framework\TestCase;
 use \Jarzon\QueryBuilder\Tests\Mocks\PdoMock;
 use Jarzon\QueryBuilder\Builder as QB;
@@ -130,6 +131,24 @@ class SelectTest extends TestCase
             });
 
         $this->assertEquals("SELECT * FROM users U WHERE ( U.name != Root OR U.date < :date ) OR ( U.name != :name OR U.date < :date2 )", $query->getSql());
+    }
+
+    public function testSubConditionWithAdvancedColumn()
+    {
+        QB::setPDO(new PdoMock());
+
+        $u = new EntityMock('U');
+
+        $query = QB::select($u)
+            ->columns($u->id)
+            ->where(function (ConditionalStatementBase $q) use ($u) {
+                $q
+                    ->whereRaw($u->name, '=', '""')
+                    ->where($u->date->date('d'), '=', '20');
+            })
+        ;
+
+        $this->assertEquals("SELECT U.id FROM users U WHERE ( U.name = \"\" AND DATE_FORMAT(U.date, 'd') = :date )", $query->getSql());
     }
 
     public function testBetweenCondition()
