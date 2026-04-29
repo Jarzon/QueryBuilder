@@ -18,7 +18,7 @@ class Condition
         ColumnBase|Raw|string|int|float|null $value
     ) {
         if($column instanceof ColumnInterface) {
-            $column = $column->getOutput();
+            $column = $column->getColumnOutput();
         }
         elseif ($column instanceof Raw) {
             $column = $column->value;

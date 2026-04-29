@@ -144,11 +144,12 @@ class SelectTest extends TestCase
             ->where(function (ConditionalStatementBase $q) use ($u) {
                 $q
                     ->whereRaw($u->name, '=', '""')
+                    ->where($u->date->date('d'), '=', '20')
                     ->where($u->date->date('d'), '=', '20');
             })
         ;
 
-        $this->assertEquals("SELECT U.id FROM users U WHERE ( U.name = \"\" AND DATE_FORMAT(U.date, 'd') = :date )", $query->getSql());
+        $this->assertEquals("SELECT U.id FROM users U WHERE ( U.name = \"\" AND DATE_FORMAT(U.date, 'd') = :date AND DATE_FORMAT(U.date, 'd') = :date2 )", $query->getSql());
     }
 
     public function testBetweenCondition()
