@@ -96,6 +96,11 @@ class Insert extends StatementBase
         return $output;
     }
 
+    public function rowCount(): int
+    {
+        return $this->lastStatement->rowCount();
+    }
+
     public function exec(mixed ...$params): int
     {
         $this->lastStatement = $this->pdo->prepare($this->getSql());
