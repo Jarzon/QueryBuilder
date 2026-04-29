@@ -22,6 +22,13 @@ class Date extends ColumnBase
         return $this;
     }
 
+    public function day(): Date
+    {
+        $this->output = new Raw("DAY({$this->getOutput()})");
+
+        return $this;
+    }
+
     public function month(): Date
     {
         $this->output = new Raw("MONTH({$this->getOutput()})");
